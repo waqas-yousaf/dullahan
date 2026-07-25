@@ -112,9 +112,18 @@
         </div>
 
         <div class="field">
-            <label for="content">Content</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                <label for="content" style="margin: 0;">Content</label>
+                <button type="button" id="btn-toggle-editor-mode" class="btn secondary" style="padding: 4px 8px; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
+                    <span class="material-icons" style="font-size: 16px;">code</span>
+                    <span id="editor-mode-text">View Code</span>
+                </button>
+            </div>
             <input id="content" name="content" type="hidden" value="{{ old('content', $post->content) }}" required>
-            <div id="dulluhan-editor">{!! old('content', $post->content) !!}</div>
+            <div id="editor-container-wrapper" style="position: relative;">
+                <div id="dulluhan-editor">{!! old('content', $post->content) !!}</div>
+                <textarea id="dulluhan-html-editor" style="display: none; font-family: monospace; font-size: 14px; min-height: 320px; resize: vertical; width: 100%; border: 1px solid var(--line); border-radius: 0 0 6px 6px; padding: 12px; background: var(--panel); color: var(--text);"></textarea>
+            </div>
             <div id="content-client-error" class="error" hidden>Content must be at least 10 characters.</div>
             @error('content') <div class="error">{{ $message }}</div> @enderror
         </div>
@@ -249,8 +258,18 @@
             }
         });
 
+        let htmlMode = false;
+        const btnToggleMode = document.getElementById('btn-toggle-editor-mode');
+        const editorModeText = document.getElementById('editor-mode-text');
+        const htmlEditor = document.getElementById('dulluhan-html-editor');
+        const editorContainer = document.getElementById('dulluhan-editor');
+
         function syncContent() {
-            contentInput.value = quill.root.innerHTML;
+            if (htmlMode) {
+                contentInput.value = htmlEditor.value;
+            } else {
+                contentInput.value = quill.root.innerHTML;
+            }
         }
 
         function collectFormData() {
@@ -384,12 +403,46 @@
         });
 
         form.querySelectorAll('input, select, textarea').forEach(input => {
-            input.addEventListener('input', markAutosavePending);
-            input.addEventListener('change', markAutosavePending);
+            if (input !== htmlEditor) {
+                input.addEventListener('input', markAutosavePending);
+                input.addEventListener('change', markAutosavePending);
+            }
         });
+
+        if (btnToggleMode && htmlEditor) {
+            btnToggleMode.addEventListener('click', function () {
+                const toolbar = form.querySelector('.ql-toolbar');
+                htmlMode = !htmlMode;
+
+                if (htmlMode) {
+                    htmlEditor.value = quill.root.innerHTML;
+                    editorContainer.style.display = 'none';
+                    htmlEditor.style.display = 'block';
+                    if (toolbar) toolbar.style.display = 'none';
+                    editorModeText.textContent = 'Rich Text';
+                    btnToggleMode.querySelector('.material-icons').textContent = 'edit';
+                } else {
+                    quill.root.innerHTML = htmlEditor.value;
+                    syncContent();
+                    htmlEditor.style.display = 'none';
+                    editorContainer.style.display = 'block';
+                    if (toolbar) toolbar.style.display = 'block';
+                    editorModeText.textContent = 'View Code';
+                    btnToggleMode.querySelector('.material-icons').textContent = 'code';
+                }
+            });
+
+            htmlEditor.addEventListener('input', function () {
+                contentInput.value = htmlEditor.value;
+                markAutosavePending();
+            });
+        }
 
         form.addEventListener('submit', event => {
             autosavePending = false;
+            if (htmlMode) {
+                quill.root.innerHTML = htmlEditor.value;
+            }
             syncContent();
             const text = quill.getText().trim();
             contentError.hidden = text.length >= 10;
