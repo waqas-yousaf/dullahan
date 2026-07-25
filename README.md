@@ -15,13 +15,6 @@ Install the package with Composer:
 composer require waqas-yousaf/dulluhan
 ```
 
-For local development from `D:\Projects\dulluhan`, register the path repository in the host Laravel app first:
-
-```bash
-composer config repositories.dulluhan path ../dulluhan
-composer require waqas-yousaf/dulluhan
-```
-
 Laravel package auto-discovery registers the service provider automatically.
 
 Publish optional overrides:
