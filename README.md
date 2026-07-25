@@ -32,8 +32,11 @@ php artisan dulluhan:install
 ```
 
 The default admin panel is available at `/spanel`. The public API is available at `/api/dulluhan/posts` and `/api/dulluhan/posts/{slug}`.
+The dashboard includes author-box profile editing and password changes for the logged-in Dulluhan author.
 
 The posts API can be filtered with `?type=news` and `?category=announcements`.
+Each API post includes an `author_box` payload with public author profile fields when enabled from the dashboard.
+The admin post editor includes SEO fields for slug, meta title, meta description, keywords, canonical URL, Open Graph values, robots, and schema JSON.
 
 ## Configuration
 

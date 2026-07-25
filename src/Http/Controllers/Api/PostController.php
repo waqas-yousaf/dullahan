@@ -20,6 +20,8 @@ class PostController extends Controller
             ->latest('published_at')
             ->paginate(config('dulluhan.pagination.posts_per_page', 12));
 
+        $posts->through(fn (Post $post) => $this->postPayload($post));
+
         return response()->json($posts);
     }
 
@@ -31,6 +33,26 @@ class PostController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return response()->json(['data' => $post]);
+        return response()->json(['data' => $this->postPayload($post)]);
+    }
+
+    private function postPayload(Post $post): array
+    {
+        return [
+            'id' => $post->id,
+            'title' => $post->title,
+            'slug' => $post->slug,
+            'post_type' => $post->post_type,
+            'excerpt' => $post->excerpt,
+            'content' => $post->content,
+            'status' => $post->status,
+            'featured_image' => $post->featured_image,
+            'published_at' => $post->published_at,
+            'created_at' => $post->created_at,
+            'updated_at' => $post->updated_at,
+            'categories' => $post->categories,
+            'seo' => $post->seoOptions(),
+            'author_box' => $post->author?->authorBox(),
+        ];
     }
 }

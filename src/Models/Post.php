@@ -21,6 +21,15 @@ class Post extends Model
         'content',
         'status',
         'featured_image',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'canonical_url',
+        'og_title',
+        'og_description',
+        'og_image',
+        'robots',
+        'schema_markup',
         'published_at',
         'autosaved_at',
     ];
@@ -30,6 +39,7 @@ class Post extends Model
         return [
             'published_at' => 'datetime',
             'autosaved_at' => 'datetime',
+            'schema_markup' => 'array',
         ];
     }
 
@@ -64,6 +74,38 @@ class Post extends Model
             ->where(function (Builder $query): void {
                 $query->whereNull('published_at')->orWhere('published_at', '<=', now());
             });
+    }
+
+    public function seoOptions(): array
+    {
+        return [
+            'meta_title' => $this->meta_title ?: $this->title,
+            'meta_description' => $this->meta_description ?: $this->excerpt,
+            'meta_keywords' => $this->meta_keywords,
+            'canonical_url' => $this->canonical_url,
+            'og_title' => $this->og_title ?: $this->meta_title ?: $this->title,
+            'og_description' => $this->og_description ?: $this->meta_description ?: $this->excerpt,
+            'og_image' => $this->og_image ?: $this->featured_image,
+            'robots' => $this->robots ?: 'index,follow',
+            'schema_markup' => $this->schema_markup,
+        ];
+    }
+
+    public function setSchemaMarkupAttribute(mixed $value): void
+    {
+        if (is_string($value)) {
+            $value = trim($value);
+            $this->attributes['schema_markup'] = $value === '' ? null : $value;
+
+            return;
+        }
+
+        $this->attributes['schema_markup'] = $value ? json_encode($value) : null;
+    }
+
+    public function setSlugAttribute(?string $value): void
+    {
+        $this->attributes['slug'] = $value ? Str::slug($value) : null;
     }
 
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string

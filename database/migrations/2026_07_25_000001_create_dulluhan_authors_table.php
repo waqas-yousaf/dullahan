@@ -14,7 +14,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('job_title')->nullable();
+            $table->text('bio')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('website_url')->nullable();
+            $table->json('social_links')->nullable();
+            $table->boolean('show_author_box')->default(true);
             $table->json('metadata')->nullable();
             $table->rememberToken();
             $table->timestamps();

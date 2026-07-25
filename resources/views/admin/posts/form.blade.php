@@ -26,6 +26,13 @@
             @error('title') <div class="error">{{ $message }}</div> @enderror
         </div>
 
+        <div class="field">
+            <label for="slug">Slug</label>
+            <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" maxlength="255" placeholder="generated-from-title">
+            <div class="muted">Leave empty to generate it from the title.</div>
+            @error('slug') <div class="error">{{ $message }}</div> @enderror
+        </div>
+
         <div class="grid">
             <div class="field">
                 <label for="post_type">Post type</label>
@@ -89,6 +96,76 @@
             <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}">
             @error('published_at') <div class="error">{{ $message }}</div> @enderror
         </div>
+
+        <section class="panel" style="padding:16px;margin:22px 0 0;">
+            <h2 style="margin-top:0;">SEO Options</h2>
+            <div class="grid">
+                <div class="field">
+                    <label for="meta_title">Meta title</label>
+                    <input id="meta_title" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" maxlength="70">
+                    <div class="muted">Best around 50-60 characters.</div>
+                    @error('meta_title') <div class="error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="field">
+                    <label for="canonical_url">Canonical URL</label>
+                    <input id="canonical_url" name="canonical_url" type="url" value="{{ old('canonical_url', $post->canonical_url) }}">
+                    @error('canonical_url') <div class="error">{{ $message }}</div> @enderror
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="meta_description">Meta description</label>
+                <textarea id="meta_description" name="meta_description" maxlength="170">{{ old('meta_description', $post->meta_description) }}</textarea>
+                <div class="muted">Best around 140-160 characters.</div>
+                @error('meta_description') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="field">
+                <label for="meta_keywords">Meta keywords</label>
+                <input id="meta_keywords" name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords) }}" maxlength="255">
+                @error('meta_keywords') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="grid">
+                <div class="field">
+                    <label for="og_title">Open Graph title</label>
+                    <input id="og_title" name="og_title" value="{{ old('og_title', $post->og_title) }}" maxlength="95">
+                    @error('og_title') <div class="error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="field">
+                    <label for="og_image">Open Graph image URL</label>
+                    <input id="og_image" name="og_image" type="url" value="{{ old('og_image', $post->og_image) }}">
+                    @error('og_image') <div class="error">{{ $message }}</div> @enderror
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="og_description">Open Graph description</label>
+                <textarea id="og_description" name="og_description" maxlength="200">{{ old('og_description', $post->og_description) }}</textarea>
+                @error('og_description') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="field">
+                <label for="robots">Robots</label>
+                <select id="robots" name="robots">
+                    @foreach (['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'] as $robotsOption)
+                        <option value="{{ $robotsOption }}" @selected(old('robots', $post->robots ?: 'index,follow') === $robotsOption)>{{ $robotsOption }}</option>
+                    @endforeach
+                </select>
+                @error('robots') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="field">
+                <label for="schema_markup">Schema JSON</label>
+                @php
+                    $schemaMarkup = old('schema_markup', is_array($post->schema_markup) ? json_encode($post->schema_markup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $post->schema_markup);
+                @endphp
+                <textarea id="schema_markup" name="schema_markup" placeholder='{"@context":"https://schema.org","@type":"Article"}'>{{ $schemaMarkup }}</textarea>
+                @error('schema_markup') <div class="error">{{ $message }}</div> @enderror
+            </div>
+        </section>
 
         <button class="btn" type="submit">Save Post</button>
     </form>
