@@ -41,7 +41,7 @@ Whether you want to build a headless blog using modern frontend frameworks (like
 ## Requirements
 
 - PHP `^8.3`
-- Laravel `11.x` or `12.x`
+- Laravel `11.x` or `12.x` supported
 
 ## Installation
 
