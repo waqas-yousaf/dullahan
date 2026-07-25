@@ -1,0 +1,35 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "waqas-yousaf/dulluhan",
+    "description": "A Laravel package for managing and publishing rich editorial posts.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Waqas Yousaf"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "illuminate/database": "^10.0|^11.0|^12.0",
+        "illuminate/filesystem": "^10.0|^11.0|^12.0",
+        "illuminate/routing": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/validation": "^10.0|^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "YourVendor\\Dulluhan\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "YourVendor\\Dulluhan\\DulluhanServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
