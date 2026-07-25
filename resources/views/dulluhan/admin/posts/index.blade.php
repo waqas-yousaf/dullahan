@@ -95,13 +95,19 @@
                     <td>{{ $post->author?->name ?? 'Unknown' }}</td>
                     <td>{{ $post->autosaved_at?->diffForHumans() ?? $post->updated_at?->diffForHumans() }}</td>
                     <td>
-                        <div class="actions">
-                            <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank">View</a>
-                            <a class="btn info" href="{{ route('dulluhan.admin.posts.edit', $post) }}">Edit</a>
-                            <form method="post" action="{{ route('dulluhan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')">
+                        <div class="actions" style="display: flex; align-items: center; gap: 6px; flex-wrap: nowrap;">
+                            <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank" title="View" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                                <span class="material-icons" style="font-size: 18px;">visibility</span>
+                            </a>
+                            <a class="btn info" href="{{ route('dulluhan.admin.posts.edit', $post) }}" title="Edit" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                                <span class="material-icons" style="font-size: 18px;">edit</span>
+                            </a>
+                            <form method="post" action="{{ route('dulluhan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')" style="margin: 0; display: inline-flex;">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn danger" type="submit">Delete</button>
+                                <button class="btn danger" type="submit" title="Delete" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 18px;">delete</span>
+                                </button>
                             </form>
                         </div>
                     </td>
