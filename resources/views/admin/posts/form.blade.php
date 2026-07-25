@@ -67,6 +67,14 @@
         <div class="field">
             <label for="featured_image">Featured image URL</label>
             <input id="featured_image" name="featured_image" type="url" value="{{ old('featured_image', $post->featured_image) }}">
+            <div class="actions" style="margin-top:10px;">
+                <input id="featured_image_file" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml" style="display:none;">
+                <button id="featured_image_upload" class="btn secondary" type="button">Upload Featured Image</button>
+                <span id="featured_image_upload_status" class="muted"></span>
+            </div>
+            <div id="featured_image_preview_wrap" style="margin-top:12px;{{ old('featured_image', $post->featured_image) ? '' : 'display:none;' }}">
+                <img id="featured_image_preview" src="{{ old('featured_image', $post->featured_image) }}" alt="" style="display:block;width:min(360px,100%);aspect-ratio:16/9;object-fit:cover;border:1px solid #e5e7eb;border-radius:8px;">
+            </div>
             @error('featured_image') <div class="error">{{ $message }}</div> @enderror
         </div>
 
@@ -189,6 +197,12 @@
         const form = document.getElementById('dulluhan-post-form');
         const contentError = document.getElementById('content-client-error');
         const autosaveStatus = document.getElementById('autosave-status');
+        const featuredImageInput = document.getElementById('featured_image');
+        const featuredImageFile = document.getElementById('featured_image_file');
+        const featuredImageUpload = document.getElementById('featured_image_upload');
+        const featuredImageUploadStatus = document.getElementById('featured_image_upload_status');
+        const featuredImagePreviewWrap = document.getElementById('featured_image_preview_wrap');
+        const featuredImagePreview = document.getElementById('featured_image_preview');
         const uploadUrl = @json(route('dulluhan.admin.uploads.images'));
         let autosaveUrl = @json($post->exists ? route('dulluhan.admin.posts.autosave.existing', $post) : route('dulluhan.admin.posts.autosave'));
         let postExists = @json($post->exists);
@@ -310,6 +324,33 @@
                 .catch(() => alert('Image upload failed.'));
         }
 
+        function uploadFeaturedImage(file) {
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('image', file);
+            featuredImageUploadStatus.textContent = 'Uploading...';
+
+            fetch(uploadUrl, {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Upload failed');
+                    return response.json();
+                })
+                .then(({ url }) => {
+                    featuredImageInput.value = url;
+                    featuredImagePreview.src = url;
+                    featuredImagePreviewWrap.style.display = 'block';
+                    featuredImageUploadStatus.textContent = 'Uploaded';
+                    markAutosavePending();
+                })
+                .catch(() => {
+                    featuredImageUploadStatus.textContent = 'Upload failed';
+                });
+        }
+
         quill.root.addEventListener('drop', event => {
             const file = [...event.dataTransfer.files].find(item => item.type.startsWith('image/'));
             if (!file) return;
@@ -319,6 +360,13 @@
 
         quill.on('text-change', syncContent);
         quill.on('text-change', markAutosavePending);
+
+        featuredImageUpload.addEventListener('click', () => featuredImageFile.click());
+        featuredImageFile.addEventListener('change', () => uploadFeaturedImage(featuredImageFile.files[0]));
+        featuredImageInput.addEventListener('input', () => {
+            featuredImagePreview.src = featuredImageInput.value;
+            featuredImagePreviewWrap.style.display = featuredImageInput.value ? 'block' : 'none';
+        });
 
         form.querySelectorAll('input, select, textarea').forEach(input => {
             input.addEventListener('input', markAutosavePending);
