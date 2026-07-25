@@ -19,6 +19,7 @@ class StorePostRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('dulluhan_posts', 'slug')->ignore($post?->getKey())],
+            'author_id' => ['required', 'integer', 'exists:dulluhan_authors,id'],
             'content' => ['required', 'string', 'min:10'],
             'status' => ['required', Rule::in(['draft', 'published'])],
             'post_type' => ['required', Rule::in(array_keys(config('dulluhan.post_types', ['post' => 'Post'])))],

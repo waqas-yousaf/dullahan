@@ -54,6 +54,7 @@ The dashboard includes author-box profile editing and password changes for the l
 The posts API can be filtered with `?type=news` and `?category=announcements`.
 Each API post includes an `author_box` payload with public author profile fields when enabled from the dashboard.
 The admin post editor includes SEO fields for slug, meta title, meta description, keywords, canonical URL, Open Graph values, robots, and schema JSON.
+The admin panel shows the host Laravel app name in the sidebar and Dulluhan plus its package version in the footer.
 
 ## Configuration
 
@@ -81,6 +82,16 @@ DULLUHAN_RECAPTCHA_SECRET_KEY="your-secret-key"
 ```
 
 For reCAPTCHA v3, set `DULLUHAN_RECAPTCHA_VERSION=v3` and optionally tune `DULLUHAN_RECAPTCHA_MINIMUM_SCORE`.
+
+Protect the public API with API keys and optional domain restrictions:
+
+```dotenv
+DULLUHAN_API_SECURITY_ENABLED=true
+DULLUHAN_API_KEYS="first-key,second-key"
+DULLUHAN_API_ALLOWED_DOMAINS="example.com,www.example.com"
+```
+
+Requests should send the key in the `X-Dulluhan-Api-Key` header. The API documentation page is available inside the admin panel at `/spanel/api-documentation`.
 
 Post types are configured in `config/dulluhan.php`:
 

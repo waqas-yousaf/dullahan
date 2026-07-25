@@ -35,6 +35,16 @@
 
         <div class="grid">
             <div class="field">
+                <label for="author_id">Author</label>
+                <select id="author_id" name="author_id" required>
+                    @foreach ($authors as $author)
+                        <option value="{{ $author->id }}" @selected((int) old('author_id', $post->author_id) === (int) $author->id)>{{ $author->name }} ({{ $author->email }})</option>
+                    @endforeach
+                </select>
+                @error('author_id') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="field">
                 <label for="post_type">Post type</label>
                 <select id="post_type" name="post_type" required>
                     @foreach ($postTypes as $value => $label)

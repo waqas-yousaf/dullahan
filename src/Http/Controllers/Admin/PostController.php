@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use YourVendor\Dulluhan\Http\Requests\StorePostRequest;
+use YourVendor\Dulluhan\Models\Author;
 use YourVendor\Dulluhan\Models\Category;
 use YourVendor\Dulluhan\Models\Post;
 
@@ -27,12 +28,14 @@ class PostController extends Controller
     {
         return view('dulluhan::admin.posts.form', [
             'post' => new Post([
+                'author_id' => Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->id(),
                 'status' => 'draft',
                 'post_type' => config('dulluhan.default_post_type', 'post'),
             ]),
             'action' => route('dulluhan.admin.posts.store'),
             'method' => 'POST',
             'categories' => Category::query()->orderBy('name')->get(),
+            'authors' => Author::query()->orderBy('name')->get(),
             'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }
@@ -44,7 +47,6 @@ class PostController extends Controller
         unset($data['categories']);
 
         $post = new Post($data);
-        $post->author_id = Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->id();
         $post->save();
         $post->categories()->sync($categoryIds);
 
@@ -58,6 +60,7 @@ class PostController extends Controller
             'action' => route('dulluhan.admin.posts.update', $post),
             'method' => 'PUT',
             'categories' => Category::query()->orderBy('name')->get(),
+            'authors' => Author::query()->orderBy('name')->get(),
             'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }

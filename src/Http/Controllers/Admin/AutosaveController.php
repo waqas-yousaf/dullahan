@@ -18,6 +18,7 @@ class AutosaveController extends Controller
         $data = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('dulluhan_posts', 'slug')->ignore($post?->getKey())],
+            'author_id' => ['nullable', 'integer', 'exists:dulluhan_authors,id'],
             'content' => ['nullable', 'string'],
             'excerpt' => ['nullable', 'string'],
             'status' => ['nullable', Rule::in(['draft', 'published'])],

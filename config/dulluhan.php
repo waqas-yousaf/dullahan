@@ -6,8 +6,16 @@ return [
 
     'middleware' => [
         'web' => ['web'],
-        'api' => ['api'],
+        'api' => ['api', 'dulluhan.api'],
         'admin' => ['dulluhan.admin'],
+    ],
+
+    'api_security' => [
+        'enabled' => env('DULLUHAN_API_SECURITY_ENABLED', false),
+        'keys' => array_filter(array_map('trim', explode(',', env('DULLUHAN_API_KEYS', '')))),
+        'allowed_domains' => array_filter(array_map('trim', explode(',', env('DULLUHAN_API_ALLOWED_DOMAINS', '')))),
+        'header' => 'X-Dulluhan-Api-Key',
+        'query_parameter' => 'api_key',
     ],
 
     'auth' => [

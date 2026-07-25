@@ -15,7 +15,9 @@
         .nav { display: grid; gap: 8px; }
         .nav a, .nav button { border: 0; width: 100%; padding: 10px 12px; border-radius: 6px; background: transparent; color: #d1d5db; text-align: left; font: inherit; cursor: pointer; }
         .nav a:hover, .nav button:hover { background: #1f2937; color: #fff; }
-        .main { padding: 28px; }
+        .main { padding: 28px; display: flex; flex-direction: column; min-width: 0; }
+        .content { flex: 1; }
+        .footer { color: var(--muted); font-size: 13px; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); }
         .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
         h1 { margin: 0; font-size: 28px; letter-spacing: 0; }
         .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 20px; }
@@ -48,11 +50,13 @@
 <body>
     <div class="shell">
         <aside class="sidebar">
-            <div class="brand">Dulluhan <span style="font-size: 11px; font-weight: normal; opacity: 0.6; margin-left: 4px;">v{{ \YourVendor\Dulluhan\DulluhanServiceProvider::version() }}</span></div>
+            <div class="brand">{{ config('app.name', 'Laravel') }}</div>
             <nav class="nav">
                 <a href="{{ route('dulluhan.admin.dashboard') }}">Dashboard</a>
                 <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
                 <a href="{{ route('dulluhan.admin.categories.index') }}">Categories</a>
+                <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
+                <a href="{{ route('dulluhan.admin.api.documentation') }}">API Docs</a>
                 <a href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
                 <form method="post" action="{{ route('dulluhan.admin.logout') }}">
                     @csrf
@@ -61,10 +65,15 @@
             </nav>
         </aside>
         <main class="main">
-            @if (session('status'))
-                <div class="alert">{{ session('status') }}</div>
-            @endif
-            @yield('content')
+            <div class="content">
+                @if (session('status'))
+                    <div class="alert">{{ session('status') }}</div>
+                @endif
+                @yield('content')
+            </div>
+            <footer class="footer">
+                Dulluhan v{{ \YourVendor\Dulluhan\DulluhanServiceProvider::version() }}
+            </footer>
         </main>
     </div>
     @stack('scripts')

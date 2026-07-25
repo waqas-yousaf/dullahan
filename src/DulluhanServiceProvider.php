@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use YourVendor\Dulluhan\Console\InstallCommand;
+use YourVendor\Dulluhan\Http\Middleware\DulluhanApiAccess;
 use YourVendor\Dulluhan\Http\Middleware\DulluhanAdminAuth;
 use YourVendor\Dulluhan\Models\Author;
 use YourVendor\Dulluhan\View\Components\PostCard;
@@ -33,6 +34,7 @@ class DulluhanServiceProvider extends ServiceProvider
         $this->injectAuthConfiguration();
 
         $router->aliasMiddleware('dulluhan.admin', DulluhanAdminAuth::class);
+        $router->aliasMiddleware('dulluhan.api', DulluhanApiAccess::class);
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
