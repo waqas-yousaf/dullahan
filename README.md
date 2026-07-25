@@ -1,6 +1,42 @@
 # Dulluhan
 
-Dulluhan is a Laravel package for a session-isolated editorial admin panel, Quill-powered post editing, direct public image uploads, public Blade components, and a headless posts API.
+Dulluhan is a lightweight, high-performance, and feature-rich **Laravel Headless CMS & Editorial Blog Package**. It provides a fully session-isolated administration panel, a state-of-the-art rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.
+
+Whether you want to build a headless blog using modern frontend frameworks (like Next.js, Nuxt, or Astro) or render posts server-side using Laravel's native Blade templates, Dulluhan has everything you need to manage, publish, and distribute your content.
+
+## Features
+
+### 🖋️ Quill-Powered Rich Text Editor
+- **Modern Editing Interface**: Powered by Quill editor with support for font formats, media embeds, formulas, code blocks, and custom styling.
+- **Drag & Drop Uploads**: Seamless image uploads directly into the editor with drag-and-drop support, storing assets in your configured public path.
+- **Auto-Save Mechanism**: Asynchronous background drafts autosaving while typing.
+
+### 🔒 Session-Isolated Admin Panel
+- **Isolated Authentication**: Dedicated guard and session isolation ensures your editorial admin panel is completely separate from standard host application users.
+- **Google reCAPTCHA Integration**: Out-of-the-box bot protection supporting both reCAPTCHA v2 and v3 (with customizable minimum scoring).
+- **Profile & Password Management**: Authors can update bios, roles, avatar URLs, social media links, and change their login credentials directly from their dashboard.
+
+### 🌐 Secure Headless JSON API
+- **Fast Content Retrieval**: Fast, paginated JSON endpoints for listing and viewing posts.
+- **Robust API Security**: Protect endpoints with API key authorization (using request headers or query parameters) and optional domain origin whitelisting.
+- **Taxonomy Filtering**: Clean endpoints with support for filtering by post types (`post`, `article`, `news`, `page`) and category slugs.
+
+### 🚀 Advanced SEO & Schema Markup
+- **Full SEO Controls**: Comprehensive meta fields including Meta Title, Meta Description, Keywords, Canonical URL, and Robots instructions (`index,follow`, `noindex`, etc.).
+- **Open Graph Ready**: Custom Open Graph Title, Description, and Image configurations for perfect social media sharing.
+- **Structured Data (JSON-LD)**: Input fields for custom Schema JSON to boost search engine visibility and rich snippet ranking.
+
+### 🗺️ Dynamic XML Sitemap
+- **SEO-Optimized Sitemaps**: Automatic XML sitemap generation for indexing search engines, updating in real-time as content changes.
+- **SEO Elements**: Includes custom prioritized weightings, update frequencies, custom URL structures, and featured images for media-rich index nodes.
+
+### 📦 Flexible Rendering (Blade Components)
+- **Pre-Built Blade Components**: Easily render post lists and cards on your frontend using `<x-dulluhan-post-list>` and `<x-dulluhan-post-card>`.
+- **Query & Property Filtering**: Pass Eloquent builders or collections directly and filter by category, post type, search terms, and limit/pagination settings.
+
+### 👥 Authors & Categories Management
+- **Multi-Author Support**: Create and manage multiple editorial writers, assign authorship to posts, and display custom public bio boxes.
+- **Custom Post Types**: Register custom post types and taxonomies (e.g. posts, articles, documentation) directly in the configuration.
 
 ## Requirements
 
