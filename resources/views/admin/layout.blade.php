@@ -44,6 +44,45 @@
         .checkbox-grid input { width: auto; }
         .ql-editor { min-height: 320px; background: #fff; }
         @media (max-width: 760px) { .shell { grid-template-columns: 1fr; } .sidebar { position: static; } .main { padding: 18px; } .topbar { align-items: flex-start; flex-direction: column; } }
+        
+        /* Pagination */
+        nav[role="navigation"] svg { width: 16px !important; height: 16px !important; display: inline-block; vertical-align: middle; }
+        nav[role="navigation"] p { margin: 0; font-size: 14px; color: var(--muted); }
+        nav[role="navigation"] > div:first-child { display: none; }
+        nav[role="navigation"] > div:last-child { display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 12px; }
+        nav[role="navigation"] .relative.z-0 { display: inline-flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+        nav[role="navigation"] .relative.z-0 a, 
+        nav[role="navigation"] .relative.z-0 span { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-width: 36px; 
+            height: 36px; 
+            padding: 0 12px; 
+            background: var(--panel); 
+            border: 0;
+            border-right: 1px solid var(--line); 
+            font-size: 14px; 
+            font-weight: 500;
+            text-decoration: none; 
+            color: var(--text);
+        }
+        nav[role="navigation"] .relative.z-0 a:last-child, 
+        nav[role="navigation"] .relative.z-0 span:last-child { 
+            border-right: 0; 
+        }
+        nav[role="navigation"] .relative.z-0 a:hover { 
+            background: var(--bg); 
+        }
+        nav[role="navigation"] .relative.z-0 span[aria-current="page"] { 
+            background: var(--accent); 
+            color: white; 
+            font-weight: 600; 
+        }
+        nav[role="navigation"] .relative.z-0 span[aria-disabled="true"] { 
+            color: var(--muted); 
+            cursor: not-allowed; 
+        }
     </style>
     @stack('head')
 </head>
