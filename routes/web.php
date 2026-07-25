@@ -27,6 +27,7 @@ Route::prefix(config('dulluhan.route_prefix', 'spanel'))
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
             Route::get('/', DashboardController::class)->name('dashboard');
             Route::put('author-box', [AuthorBoxController::class, 'update'])->name('author-box.update');
+            Route::get('password', [PasswordController::class, 'edit'])->name('password.edit');
             Route::put('password', [PasswordController::class, 'update'])->name('password.update');
             Route::post('posts/autosave', AutosaveController::class)->name('posts.autosave');
             Route::post('posts/{post}/autosave', AutosaveController::class)->name('posts.autosave.existing');

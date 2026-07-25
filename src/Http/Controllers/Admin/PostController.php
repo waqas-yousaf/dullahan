@@ -15,16 +15,40 @@ class PostController extends Controller
 {
     public function index(\Illuminate\Http\Request $request): View
     {
-        $posts = Post::query()
-            ->with(['author', 'categories'])
-            ->when($request->input('category'), function ($query, $categoryId) {
-                $query->whereHas('categories', fn ($q) => $q->where('id', $categoryId));
-            })
-            ->latest()
-            ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15));
+        $query = Post::query()
+            ->with(['author', 'categories']);
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        if ($categoryId = $request->input('category')) {
+            $query->whereHas('categories', fn ($q) => $q->where('dulluhan_categories.id', $categoryId));
+        }
+
+        if ($authorId = $request->input('author')) {
+            $query->where('author_id', $authorId);
+        }
+
+        if ($postType = $request->input('type')) {
+            $query->where('post_type', $postType);
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        $posts = $query->latest()
+            ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15))
+            ->withQueryString();
 
         return view('dulluhan::admin.posts.index', [
             'posts' => $posts,
+            'categories' => Category::query()->orderBy('name')->get(),
+            'authors' => Author::query()->orderBy('name')->get(),
             'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }

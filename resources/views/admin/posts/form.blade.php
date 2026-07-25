@@ -10,6 +10,9 @@
         <h1>{{ $post->exists ? 'Edit Post' : 'New Post' }}</h1>
         <div class="actions">
             <span id="autosave-status" class="muted">{{ $post->autosaved_at ? 'Autosaved ' . $post->autosaved_at->diffForHumans() : 'Autosave ready' }}</span>
+            @if ($post->exists && $post->status === 'published')
+                <a class="btn secondary" href="{{ $post->publicUrl() }}" target="_blank">View Post</a>
+            @endif
             <a class="btn secondary" href="{{ route('dulluhan.admin.posts.index') }}">All Posts</a>
         </div>
     </div>
@@ -28,7 +31,12 @@
 
         <div class="field">
             <label for="slug">Slug</label>
-            <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" maxlength="255" placeholder="generated-from-title">
+            <div style="display: flex; gap: 8px;">
+                <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" maxlength="255" placeholder="generated-from-title" {!! $post->exists ? 'readonly style="background: var(--bg);"' : '' !!}>
+                @if ($post->exists)
+                    <button id="btn-edit-slug" class="btn secondary" type="button" style="height: 38px; white-space: nowrap;">Edit Slug</button>
+                @endif
+            </div>
             <div class="muted">Leave empty to generate it from the title.</div>
             @error('slug') <div class="error">{{ $message }}</div> @enderror
         </div>
@@ -192,6 +200,17 @@
     <script>
         const contentInput = document.getElementById('content');
         const form = document.getElementById('dulluhan-post-form');
+        const btnEditSlug = document.getElementById('btn-edit-slug');
+        const slugInput = document.getElementById('slug');
+
+        if (btnEditSlug && slugInput) {
+            btnEditSlug.addEventListener('click', () => {
+                slugInput.removeAttribute('readonly');
+                slugInput.style.background = '';
+                slugInput.focus();
+                btnEditSlug.style.display = 'none';
+            });
+        }
         const contentError = document.getElementById('content-client-error');
         const autosaveStatus = document.getElementById('autosave-status');
         const featuredImageInput = document.getElementById('featured_image');

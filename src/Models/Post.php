@@ -107,6 +107,16 @@ class Post extends Model
         $this->attributes['slug'] = $value ? Str::slug($value) : null;
     }
 
+    public function publicUrl(): string
+    {
+        if ($this->canonical_url) {
+            return $this->canonical_url;
+        }
+
+        $pattern = config('dulluhan.sitemap.post_url_pattern', '/blog/{slug}');
+        return url(str_replace('{slug}', $this->slug, $pattern));
+    }
+
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $base = Str::slug($title) ?: 'post';
