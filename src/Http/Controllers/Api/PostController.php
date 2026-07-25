@@ -43,7 +43,7 @@ class PostController extends Controller
             'title' => $post->title,
             'slug' => $post->slug,
             'post_type' => $post->post_type,
-            'excerpt' => $post->excerpt,
+            'excerpt' => \Illuminate\Support\Str::limit(strip_tags($post->content), 150),
             'content' => $post->content,
             'status' => $post->status,
             'featured_image' => $post->featured_image,

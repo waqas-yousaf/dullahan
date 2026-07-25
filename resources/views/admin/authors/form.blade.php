@@ -6,7 +6,7 @@
         <a class="btn secondary" href="{{ route('dulluhan.admin.authors.index') }}">All Authors</a>
     </div>
 
-    <form class="panel" method="post" action="{{ $action }}">
+    <form class="panel" method="post" action="{{ $action }}" enctype="multipart/form-data">
         @csrf
         @if ($method !== 'POST')
             @method($method)
@@ -51,9 +51,19 @@
             @error('bio') <div class="error">{{ $message }}</div> @enderror
         </div>
 
+        <div class="field">
+            <label for="avatar">Avatar Image</label>
+            @if ($author->avatar)
+                <div style="margin-bottom: 8px;">
+                    <img src="{{ $author->avatar }}" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line);">
+                </div>
+            @endif
+            <input id="avatar" name="avatar" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml">
+            @error('avatar') <div class="error">{{ $message }}</div> @enderror
+        </div>
+
         <div class="grid">
             @foreach ([
-                'avatar' => 'Avatar URL',
                 'website_url' => 'Website URL',
                 'facebook_url' => 'Facebook URL',
                 'x_url' => 'X URL',

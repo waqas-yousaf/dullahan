@@ -61,6 +61,9 @@
                             <td>{{ $item->posts_count }}</td>
                             <td>
                                 <div class="actions">
+                                    <a class="btn secondary" href="{{ route('dulluhan.admin.posts.index', ['category' => $item->id]) }}" title="View posts in category" style="padding: 6px 8px; display: inline-flex; align-items: center;">
+                                        <span class="material-icons" style="font-size: 18px;">chevron_right</span>
+                                    </a>
                                     <a class="btn secondary" href="{{ route('dulluhan.admin.categories.edit', $item) }}">Edit</a>
                                     <form method="post" action="{{ route('dulluhan.admin.categories.destroy', $item) }}" onsubmit="return confirm('Delete this category?')">
                                         @csrf

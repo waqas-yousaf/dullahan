@@ -26,7 +26,6 @@ Route::prefix(config('dulluhan.route_prefix', 'spanel'))
         Route::middleware(config('dulluhan.middleware.admin', ['web', 'dulluhan.admin']))->group(function (): void {
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
             Route::get('/', DashboardController::class)->name('dashboard');
-            Route::get('api-documentation', ApiDocumentationController::class)->name('api.documentation');
             Route::put('author-box', [AuthorBoxController::class, 'update'])->name('author-box.update');
             Route::put('password', [PasswordController::class, 'update'])->name('password.update');
             Route::post('posts/autosave', AutosaveController::class)->name('posts.autosave');

@@ -17,7 +17,6 @@ class Post extends Model
         'title',
         'slug',
         'post_type',
-        'excerpt',
         'content',
         'status',
         'featured_image',
@@ -80,11 +79,11 @@ class Post extends Model
     {
         return [
             'meta_title' => $this->meta_title ?: $this->title,
-            'meta_description' => $this->meta_description ?: $this->excerpt,
+            'meta_description' => $this->meta_description ?: Str::limit(strip_tags($this->content), 150),
             'meta_keywords' => $this->meta_keywords,
             'canonical_url' => $this->canonical_url,
             'og_title' => $this->og_title ?: $this->meta_title ?: $this->title,
-            'og_description' => $this->og_description ?: $this->meta_description ?: $this->excerpt,
+            'og_description' => $this->og_description ?: $this->meta_description ?: Str::limit(strip_tags($this->content), 150),
             'og_image' => $this->og_image ?: $this->featured_image,
             'robots' => $this->robots ?: 'index,follow',
             'schema_markup' => $this->schema_markup,

@@ -20,7 +20,6 @@ class AutosaveController extends Controller
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('dulluhan_posts', 'slug')->ignore($post?->getKey())],
             'author_id' => ['nullable', 'integer', 'exists:dulluhan_authors,id'],
             'content' => ['nullable', 'string'],
-            'excerpt' => ['nullable', 'string'],
             'status' => ['nullable', Rule::in(['draft', 'published'])],
             'post_type' => ['nullable', Rule::in(array_keys(config('dulluhan.post_types', ['post' => 'Post'])))],
             'featured_image' => ['nullable', 'url'],

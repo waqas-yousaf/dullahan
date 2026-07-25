@@ -26,7 +26,7 @@
 
     <section class="panel" style="margin-top: 22px;">
         <h2 style="margin-top: 0;">Author Box</h2>
-        <form method="post" action="{{ route('dulluhan.admin.author-box.update') }}">
+        <form method="post" action="{{ route('dulluhan.admin.author-box.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -42,13 +42,18 @@
                 @error('bio') <div class="error">{{ $message }}</div> @enderror
             </div>
 
-            <div class="grid">
-                <div class="field">
-                    <label for="avatar">Avatar URL</label>
-                    <input id="avatar" name="avatar" type="url" value="{{ old('avatar', $author->avatar) }}">
-                    @error('avatar') <div class="error">{{ $message }}</div> @enderror
-                </div>
+            <div class="field">
+                <label for="avatar">Avatar Image</label>
+                @if ($author->avatar)
+                    <div style="margin-bottom: 8px;">
+                        <img src="{{ $author->avatar }}" alt="" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line);">
+                    </div>
+                @endif
+                <input id="avatar" name="avatar" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml">
+                @error('avatar') <div class="error">{{ $message }}</div> @enderror
+            </div>
 
+            <div class="grid">
                 <div class="field">
                     <label for="website_url">Website URL</label>
                     <input id="website_url" name="website_url" type="url" value="{{ old('website_url', $author->website_url) }}">

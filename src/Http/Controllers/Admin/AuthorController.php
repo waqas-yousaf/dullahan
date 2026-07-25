@@ -36,6 +36,23 @@ class AuthorController extends Controller
         $data['show_author_box'] = $request->boolean('show_author_box');
         $data['social_links'] = [];
 
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', \Illuminate\Support\Str::ascii($name)), '-');
+            $filename = 'avatar-' . now()->format('YmdHis') . '-' . ($safeName ?: 'avatar') . '.' . $extension;
+            $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+            $publicPath = public_path($relativePath);
+
+            \Illuminate\Support\Facades\File::ensureDirectoryExists($publicPath, 0755, true);
+            $file->move($publicPath, $filename);
+
+            $data['avatar'] = asset($relativePath . '/' . $filename);
+        } else {
+            $data['avatar'] = null;
+        }
+
         Author::query()->create($data);
 
         return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Author created.');
@@ -62,6 +79,23 @@ class AuthorController extends Controller
 
         $data['show_author_box'] = $request->boolean('show_author_box');
 
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', \Illuminate\Support\Str::ascii($name)), '-');
+            $filename = 'avatar-' . now()->format('YmdHis') . '-' . ($safeName ?: 'avatar') . '.' . $extension;
+            $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+            $publicPath = public_path($relativePath);
+
+            \Illuminate\Support\Facades\File::ensureDirectoryExists($publicPath, 0755, true);
+            $file->move($publicPath, $filename);
+
+            $data['avatar'] = asset($relativePath . '/' . $filename);
+        } else {
+            $data['avatar'] = $author->avatar;
+        }
+
         $author->fill($data)->save();
 
         return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Author updated.');
@@ -84,13 +118,15 @@ class AuthorController extends Controller
 
     private function validated(Request $request, ?Author $author = null): array
     {
+        $mimes = implode(',', config('dulluhan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
+
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('dulluhan_authors', 'email')->ignore($author?->getKey())],
             'password' => [$author ? 'nullable' : 'required', 'string', 'min:8', 'confirmed'],
             'job_title' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:2000'],
-            'avatar' => ['nullable', 'url'],
+            'avatar' => ['nullable', 'image', 'mimes:' . $mimes, 'max:' . config('dulluhan.uploads.max_kb', 4096)],
             'website_url' => ['nullable', 'url'],
             'facebook_url' => ['nullable', 'url'],
             'x_url' => ['nullable', 'url'],

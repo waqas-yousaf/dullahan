@@ -13,13 +13,18 @@ use WaqasYousaf\Dulluhan\Models\Post;
 
 class PostController extends Controller
 {
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
+        $posts = Post::query()
+            ->with(['author', 'categories'])
+            ->when($request->input('category'), function ($query, $categoryId) {
+                $query->whereHas('categories', fn ($q) => $q->where('id', $categoryId));
+            })
+            ->latest()
+            ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15));
+
         return view('dulluhan::admin.posts.index', [
-            'posts' => Post::query()
-                ->with(['author', 'categories'])
-                ->latest()
-                ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15)),
+            'posts' => $posts,
             'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }

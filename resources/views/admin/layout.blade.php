@@ -362,6 +362,7 @@
             cursor: not-allowed;
         }
     </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @stack('head')
 </head>
 
@@ -374,7 +375,6 @@
                 <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
                 <a href="{{ route('dulluhan.admin.categories.index') }}">Categories</a>
                 <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
-                <a href="{{ route('dulluhan.admin.api.documentation') }}">API Docs</a>
                 <a href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
                 <form method="post" action="{{ route('dulluhan.admin.logout') }}">
                     @csrf

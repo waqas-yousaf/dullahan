@@ -79,26 +79,23 @@
         </div>
 
         <div class="field">
-            <label>Categories</label>
-            <div class="checkbox-grid">
-                @php
-                    $selectedCategories = collect(old('categories', $post->categories->pluck('id')->all()))->map(fn ($id) => (int) $id)->all();
-                @endphp
-                @forelse ($categories as $category)
-                    <label>
-                        <input type="checkbox" name="categories[]" value="{{ $category->id }}" @checked(in_array($category->id, $selectedCategories, true))>
-                        {{ $category->name }}
-                    </label>
-                @empty
-                    <span class="muted">Create categories first to assign them here.</span>
-                @endforelse
-            </div>
+            <label for="categories">Categories</label>
+            @php
+                $selectedCategories = collect(old('categories', $post->categories->pluck('id')->all()))->map(fn ($id) => (int) $id)->all();
+            @endphp
+            @if ($categories->isEmpty())
+                <div><span class="muted">Create categories first to assign them here.</span></div>
+            @else
+                <select id="categories" name="categories[]" class="multiselect" multiple style="min-height: 120px; width: 100%;">
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategories, true))>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="muted" style="margin-top: 4px; font-size: 12px;">Hold down Ctrl (Windows) or Command (Mac) to select multiple categories.</div>
+            @endif
             @error('categories') <div class="error">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="field">
-            <label for="excerpt">Excerpt</label>
-            <textarea id="excerpt" name="excerpt">{{ old('excerpt', $post->excerpt) }}</textarea>
         </div>
 
         <div class="field">

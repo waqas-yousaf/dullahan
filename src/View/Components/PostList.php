@@ -51,7 +51,6 @@ class PostList extends Component
                 $query->where(function (Builder $query) use ($search): void {
                     $query
                         ->where('title', 'like', "%{$search}%")
-                        ->orWhere('excerpt', 'like', "%{$search}%")
                         ->orWhere('content', 'like', "%{$search}%");
                 });
             })
@@ -83,7 +82,6 @@ class PostList extends Component
 
                 return $posts->filter(function ($post) use ($needle): bool {
                     return str_contains(mb_strtolower((string) $post->title), $needle)
-                        || str_contains(mb_strtolower((string) $post->excerpt), $needle)
                         || str_contains(mb_strtolower((string) $post->content), $needle);
                 });
             })
