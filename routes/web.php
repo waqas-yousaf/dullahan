@@ -28,8 +28,11 @@ Route::prefix(config('dulluhan.route_prefix', 'spanel'))
             Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
             Route::post('posts/autosave', AutosaveController::class)->name('posts.autosave');
             Route::post('posts/{post}/autosave', AutosaveController::class)->name('posts.autosave.existing');
+            Route::get('posts/export', [PostController::class, 'export'])->name('posts.export');
             Route::resource('posts', PostController::class)->except(['show']);
+            Route::get('categories/export', [CategoryController::class, 'export'])->name('categories.export');
             Route::resource('categories', CategoryController::class)->except(['show', 'create']);
+            Route::get('authors/export', [AuthorController::class, 'export'])->name('authors.export');
             Route::resource('authors', AuthorController::class)->except(['show']);
             Route::post('uploads/images', UploadController::class)->name('uploads.images');
         });

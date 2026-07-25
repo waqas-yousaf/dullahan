@@ -3,7 +3,10 @@
 @section('content')
     <div class="topbar">
         <h1>Categories</h1>
-        <a class="btn secondary" href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
+        <div class="actions">
+            <a class="btn secondary" href="{{ route('dulluhan.admin.categories.export') }}">Export CSV</a>
+            <a class="btn secondary" href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
+        </div>
     </div>
 
     <div class="grid" style="align-items:start;">

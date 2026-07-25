@@ -3,7 +3,10 @@
 @section('content')
     <div class="topbar">
         <h1>Authors</h1>
-        <a class="btn" href="{{ route('dulluhan.admin.authors.create') }}">New Author</a>
+        <div class="actions">
+            <a class="btn secondary" href="{{ route('dulluhan.admin.authors.export') }}">Export CSV</a>
+            <a class="btn" href="{{ route('dulluhan.admin.authors.create') }}">New Author</a>
+        </div>
     </div>
 
     <table>

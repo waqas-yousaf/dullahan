@@ -3,7 +3,10 @@
 @section('content')
     <div class="topbar">
         <h1>Posts</h1>
-        <a class="btn" href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
+        <div class="actions">
+            <a class="btn secondary" href="{{ route('dulluhan.admin.posts.export') }}">Export CSV</a>
+            <a class="btn" href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
+        </div>
     </div>
 
     <form method="get" action="{{ route('dulluhan.admin.posts.index') }}" class="panel" style="margin-bottom: 22px; padding: 16px;">

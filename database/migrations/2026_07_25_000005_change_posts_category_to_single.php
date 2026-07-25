@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,7 +13,16 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->after('author_id')->constrained('dulluhan_categories')->nullOnDelete();
         });
 
-        Schema::dropIfExists('dulluhan_category_post');
+        if (Schema::hasTable('dulluhan_category_post')) {
+            $pivots = DB::table('dulluhan_category_post')->orderBy('id')->get();
+            foreach ($pivots as $pivot) {
+                DB::table('dulluhan_posts')
+                    ->where('id', $pivot->post_id)
+                    ->whereNull('category_id')
+                    ->update(['category_id' => $pivot->category_id]);
+            }
+            Schema::dropIfExists('dulluhan_category_post');
+        }
     }
 
     public function down(): void

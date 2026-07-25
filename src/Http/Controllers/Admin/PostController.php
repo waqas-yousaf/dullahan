@@ -104,4 +104,38 @@ class PostController extends Controller
 
         return redirect()->route('dulluhan.admin.posts.index')->with('status', 'Post deleted.');
     }
+
+    public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $response = new \Symfony\Component\HttpFoundation\StreamedResponse(function () {
+            $handle = fopen('php://output', 'w');
+            
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            fputcsv($handle, ['ID', 'Title', 'Slug', 'Post Type', 'Status', 'Author', 'Category', 'Published At', 'Created At']);
+            
+            Post::query()->with(['author', 'category'])->chunk(100, function ($posts) use ($handle) {
+                foreach ($posts as $post) {
+                    fputcsv($handle, [
+                        $post->id,
+                        $post->title,
+                        $post->slug,
+                        $post->post_type,
+                        $post->status,
+                        $post->author?->name ?? 'N/A',
+                        $post->category?->name ?? 'N/A',
+                        $post->published_at?->toIso8601String() ?? 'N/A',
+                        $post->created_at->toIso8601String(),
+                    ]);
+                }
+            });
+            
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="dulluhan-posts-' . now()->format('YmdHis') . '.csv"',
+        ]);
+
+        return $response;
+    }
 }

@@ -5,8 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Dulluhan' }}</title>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('dulluhan-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <style>
-        :root {
+        :root, html[data-theme="light"] {
             color-scheme: light;
             --bg: #f8fafc;
             --panel: #ffffff;
@@ -17,17 +23,15 @@
             --danger: #e11d48;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                color-scheme: dark;
-                --bg: #0b0f19;
-                --panel: #111827;
-                --text: #f8fafc;
-                --muted: #94a3b8;
-                --line: #1e293b;
-                --accent: #14b8a6;
-                --danger: #f43f5e;
-            }
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0b0f19;
+            --panel: #111827;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --line: #1e293b;
+            --accent: #14b8a6;
+            --danger: #f43f5e;
         }
 
         * {
@@ -303,18 +307,23 @@
             background: var(--panel) !important;
             border-color: var(--line) !important;
         }
+
         .ql-container.ql-snow {
             border-color: var(--line) !important;
         }
+
         .ql-snow .ql-stroke {
             stroke: var(--text) !important;
         }
+
         .ql-snow .ql-fill {
             fill: var(--text) !important;
         }
+
         .ql-snow .ql-picker {
             color: var(--text) !important;
         }
+
         .ql-snow .ql-picker-options {
             background-color: var(--panel) !important;
             border-color: var(--line) !important;
@@ -441,10 +450,15 @@
                 <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
                 <a href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
                 <a href="{{ route('dulluhan.admin.categories.index') }}">Categories</a>
-                @if (Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email === config('dulluhan.admin.email'))
-                    <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
+                @if (Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email ===
+                config('dulluhan.admin.email'))
+                <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
                 @endif
-                <a href="{{ route('dulluhan.admin.profile.edit') }}">Profile Settings</a>
+                <a href="{{ route('dulluhan.admin.profile.edit') }}">Profile</a>
+                <button type="button" id="theme-toggle" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons" style="font-size: 18px;" id="theme-icon">dark_mode</span>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
                 <form method="post" action="{{ route('dulluhan.admin.logout') }}">
                     @csrf
                     <button type="submit">Logout</button>
@@ -463,6 +477,37 @@
             </footer>
         </main>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            function updateThemeUI(theme) {
+                if (theme === 'dark') {
+                    themeIcon.textContent = 'light_mode';
+                    themeText.textContent = 'Light Mode';
+                } else {
+                    themeIcon.textContent = 'dark_mode';
+                    themeText.textContent = 'Dark Mode';
+                }
+            }
+
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            updateThemeUI(currentTheme);
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function () {
+                    const existing = document.documentElement.getAttribute('data-theme');
+                    const nextTheme = existing === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('dulluhan-theme', nextTheme);
+                    updateThemeUI(nextTheme);
+                });
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 

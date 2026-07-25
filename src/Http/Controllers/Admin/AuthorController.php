@@ -129,6 +129,45 @@ class AuthorController extends Controller
         return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Author deleted.');
     }
 
+    public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        abort_unless(
+            Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email === config('dulluhan.admin.email'),
+            403,
+            'Only the system administrator can export authors.'
+        );
+
+        $response = new \Symfony\Component\HttpFoundation\StreamedResponse(function () {
+            $handle = fopen('php://output', 'w');
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            fputcsv($handle, ['ID', 'Name', 'Email', 'Role/Title', 'Bio', 'Avatar URL', 'Website URL', 'Show Author Box', 'Created At']);
+            
+            Author::query()->chunk(100, function ($authors) use ($handle) {
+                foreach ($authors as $author) {
+                    fputcsv($handle, [
+                        $author->id,
+                        $author->name,
+                        $author->email,
+                        $author->job_title ?? '',
+                        $author->bio ?? '',
+                        $author->avatar ?? '',
+                        $author->website_url ?? '',
+                        $author->show_author_box ? 'Yes' : 'No',
+                        $author->created_at->toIso8601String(),
+                    ]);
+                }
+            });
+            
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="dulluhan-authors-' . now()->format('YmdHis') . '.csv"',
+        ]);
+
+        return $response;
+    }
+
     private function validated(Request $request, ?Author $author = null): array
     {
         $mimes = implode(',', config('dulluhan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));

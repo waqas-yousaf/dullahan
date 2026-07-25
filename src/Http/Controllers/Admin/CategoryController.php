@@ -52,6 +52,36 @@ class CategoryController extends Controller
         return redirect()->route('dulluhan.admin.categories.index')->with('status', 'Category deleted.');
     }
 
+    public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $response = new \Symfony\Component\HttpFoundation\StreamedResponse(function () {
+            $handle = fopen('php://output', 'w');
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            fputcsv($handle, ['ID', 'Name', 'Slug', 'Description', 'Posts Count', 'Created At']);
+            
+            Category::query()->withCount('posts')->chunk(100, function ($categories) use ($handle) {
+                foreach ($categories as $cat) {
+                    fputcsv($handle, [
+                        $cat->id,
+                        $cat->name,
+                        $cat->slug,
+                        $cat->description ?? '',
+                        $cat->posts_count,
+                        $cat->created_at->toIso8601String(),
+                    ]);
+                }
+            });
+            
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="dulluhan-categories-' . now()->format('YmdHis') . '.csv"',
+        ]);
+
+        return $response;
+    }
+
     private function validated(Request $request, ?Category $category = null): array
     {
         return $request->validate([

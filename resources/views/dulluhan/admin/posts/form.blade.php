@@ -86,21 +86,29 @@
             @error('featured_image') <div class="error">{{ $message }}</div> @enderror
         </div>
 
-        <div class="field">
-            <label for="category_id">Category</label>
-            @if ($categories->isEmpty())
-                <div><span class="muted">Create categories first to assign them here.</span></div>
-            @else
-                <select id="category_id" name="category_id" style="width: 100%;">
-                    <option value="">No Category</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" @selected(old('category_id', $post->category_id) == $category->id)>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-            @endif
-            @error('category_id') <div class="error">{{ $message }}</div> @enderror
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+                <label for="category_id">Category</label>
+                @if ($categories->isEmpty())
+                    <div><span class="muted">Create categories first to assign them here.</span></div>
+                @else
+                    <select id="category_id" name="category_id" style="width: 100%;">
+                        <option value="">No Category</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected(old('category_id', $post->category_id) == $category->id)>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
+                @error('category_id') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="field">
+                <label for="published_at">Publish at</label>
+                <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}">
+                @error('published_at') <div class="error">{{ $message }}</div> @enderror
+            </div>
         </div>
 
         <div class="field">
@@ -109,12 +117,6 @@
             <div id="dulluhan-editor">{!! old('content', $post->content) !!}</div>
             <div id="content-client-error" class="error" hidden>Content must be at least 10 characters.</div>
             @error('content') <div class="error">{{ $message }}</div> @enderror
-        </div>
-
-        <div class="field">
-            <label for="published_at">Publish at</label>
-            <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}">
-            @error('published_at') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <section class="panel" style="padding:16px;margin:22px 0 0;">
