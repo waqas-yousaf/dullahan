@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use YourVendor\Dulluhan\Http\Controllers\Admin\ApiDocumentationController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\AuthorBoxController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\AuthorController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\AuthController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\AutosaveController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\CategoryController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\DashboardController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\PasswordController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\PostController;
-use YourVendor\Dulluhan\Http\Controllers\Admin\UploadController;
-use YourVendor\Dulluhan\Http\Controllers\SitemapController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\ApiDocumentationController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthorBoxController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthorController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AutosaveController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\CategoryController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\DashboardController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\PasswordController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\PostController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\UploadController;
+use WaqasYousaf\Dulluhan\Http\Controllers\SitemapController;
 
 Route::get(config('dulluhan.sitemap.path', 'dulluhan-sitemap.xml'), SitemapController::class)
     ->name('dulluhan.sitemap');

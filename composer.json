@@ -1,7 +1,7 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "waqas-yousaf/dulluhan",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "description": "A Laravel package for managing and publishing rich editorial posts, featuring headless Posts and Authors features.",
     "type": "library",
     "license": "MIT",
@@ -12,24 +12,24 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/contracts": "^10.0|^11.0|^12.0",
-        "illuminate/database": "^10.0|^11.0|^12.0",
-        "illuminate/filesystem": "^10.0|^11.0|^12.0",
-        "illuminate/http": "^10.0|^11.0|^12.0",
-        "illuminate/routing": "^10.0|^11.0|^12.0",
-        "illuminate/support": "^10.0|^11.0|^12.0",
-        "illuminate/validation": "^10.0|^11.0|^12.0"
+        "php": "^8.3",
+        "illuminate/contracts": "^11.0|^12.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/filesystem": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/routing": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "illuminate/validation": "^11.0|^12.0"
     },
     "autoload": {
         "psr-4": {
-            "YourVendor\\Dulluhan\\": "src/"
+            "WaqasYousaf\\Dulluhan\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "YourVendor\\Dulluhan\\DulluhanServiceProvider"
+                "WaqasYousaf\\Dulluhan\\DulluhanServiceProvider"
             ]
         }
     },

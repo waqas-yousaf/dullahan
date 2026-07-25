@@ -1,10 +1,10 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers;
+namespace WaqasYousaf\Dulluhan\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use YourVendor\Dulluhan\Models\Post;
+use WaqasYousaf\Dulluhan\Models\Post;
 
 class SitemapController extends Controller
 {

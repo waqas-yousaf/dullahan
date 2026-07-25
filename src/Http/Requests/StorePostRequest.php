@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Requests;
+namespace WaqasYousaf\Dulluhan\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

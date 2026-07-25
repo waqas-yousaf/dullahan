@@ -1,11 +1,11 @@
 <?php
 
-namespace YourVendor\Dulluhan\Console;
+namespace WaqasYousaf\Dulluhan\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use YourVendor\Dulluhan\Models\Author;
+use WaqasYousaf\Dulluhan\Models\Author;
 
 class InstallCommand extends Command
 {

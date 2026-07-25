@@ -1,10 +1,10 @@
 <?php
 
-namespace YourVendor\Dulluhan\View\Components;
+namespace WaqasYousaf\Dulluhan\View\Components;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use YourVendor\Dulluhan\Models\Post;
+use WaqasYousaf\Dulluhan\Models\Post;
 
 class PostCard extends Component
 {

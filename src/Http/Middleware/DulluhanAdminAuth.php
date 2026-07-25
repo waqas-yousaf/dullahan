@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Middleware;
+namespace WaqasYousaf\Dulluhan\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

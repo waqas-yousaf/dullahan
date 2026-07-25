@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use YourVendor\Dulluhan\Http\Controllers\Api\PostController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Api\PostController;
 
 Route::prefix(config('dulluhan.api_prefix', 'api/dulluhan'))
     ->name('dulluhan.api.')

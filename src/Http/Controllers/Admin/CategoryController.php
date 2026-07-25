@@ -1,13 +1,13 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use YourVendor\Dulluhan\Models\Category;
+use WaqasYousaf\Dulluhan\Models\Category;
 
 class CategoryController extends Controller
 {

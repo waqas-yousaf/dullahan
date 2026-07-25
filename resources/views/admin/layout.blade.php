@@ -72,7 +72,7 @@
                 @yield('content')
             </div>
             <footer class="footer">
-                Dulluhan v{{ \YourVendor\Dulluhan\DulluhanServiceProvider::version() }}
+                Dulluhan v{{ \WaqasYousaf\Dulluhan\DulluhanServiceProvider::version() }}
             </footer>
         </main>
     </div>

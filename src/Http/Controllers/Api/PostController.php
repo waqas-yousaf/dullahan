@@ -1,10 +1,10 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers\Api;
+namespace WaqasYousaf\Dulluhan\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use YourVendor\Dulluhan\Models\Post;
+use WaqasYousaf\Dulluhan\Models\Post;
 
 class PostController extends Controller
 {

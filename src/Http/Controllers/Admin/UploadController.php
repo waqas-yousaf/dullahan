@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

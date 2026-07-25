@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Dulluhan\Models;
+namespace WaqasYousaf\Dulluhan\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;

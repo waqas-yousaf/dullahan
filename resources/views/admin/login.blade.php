@@ -45,7 +45,7 @@
         @endif
 
         <button type="submit">Sign in</button>
-        <div class="footer">Dulluhan v{{ \YourVendor\Dulluhan\DulluhanServiceProvider::version() }}</div>
+        <div class="footer">Dulluhan v{{ \WaqasYousaf\Dulluhan\DulluhanServiceProvider::version() }}</div>
     </form>
 
     @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key') && config('dulluhan.recaptcha.version') === 'v3')

@@ -4,8 +4,8 @@ Dulluhan is a Laravel package for a session-isolated editorial admin panel, Quil
 
 ## Requirements
 
-- PHP `^8.2`
-- Laravel `10.x`, `11.x`, or `12.x`
+- PHP `^8.3`
+- Laravel `11.x` or `12.x`
 
 ## Installation
 
@@ -185,7 +185,7 @@ The `posts` prop may be a collection, paginator, array, or Eloquent query builde
 
 ```blade
 <x-dulluhan-post-list
-    :posts="\YourVendor\Dulluhan\Models\Post::query()->with('categories', 'author')"
+    :posts="\WaqasYousaf\Dulluhan\Models\Post::query()->with('categories', 'author')"
     category="announcements"
     :paginate="true"
     :per-page="9"

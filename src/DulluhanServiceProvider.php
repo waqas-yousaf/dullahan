@@ -1,16 +1,16 @@
 <?php
 
-namespace YourVendor\Dulluhan;
+namespace WaqasYousaf\Dulluhan;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use YourVendor\Dulluhan\Console\InstallCommand;
-use YourVendor\Dulluhan\Http\Middleware\DulluhanApiAccess;
-use YourVendor\Dulluhan\Http\Middleware\DulluhanAdminAuth;
-use YourVendor\Dulluhan\Models\Author;
-use YourVendor\Dulluhan\View\Components\PostCard;
-use YourVendor\Dulluhan\View\Components\PostList;
+use WaqasYousaf\Dulluhan\Console\InstallCommand;
+use WaqasYousaf\Dulluhan\Http\Middleware\DulluhanApiAccess;
+use WaqasYousaf\Dulluhan\Http\Middleware\DulluhanAdminAuth;
+use WaqasYousaf\Dulluhan\Models\Author;
+use WaqasYousaf\Dulluhan\View\Components\PostCard;
+use WaqasYousaf\Dulluhan\View\Components\PostList;
 
 class DulluhanServiceProvider extends ServiceProvider
 {

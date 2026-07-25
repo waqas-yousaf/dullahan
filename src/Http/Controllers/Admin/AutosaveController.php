@@ -1,13 +1,13 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use YourVendor\Dulluhan\Models\Post;
+use WaqasYousaf\Dulluhan\Models\Post;
 
 class AutosaveController extends Controller
 {

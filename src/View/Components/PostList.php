@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\Dulluhan\View\Components;
+namespace WaqasYousaf\Dulluhan\View\Components;
 
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder;

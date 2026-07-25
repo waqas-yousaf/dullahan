@@ -1,15 +1,15 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use YourVendor\Dulluhan\Http\Requests\StorePostRequest;
-use YourVendor\Dulluhan\Models\Author;
-use YourVendor\Dulluhan\Models\Category;
-use YourVendor\Dulluhan\Models\Post;
+use WaqasYousaf\Dulluhan\Http\Requests\StorePostRequest;
+use WaqasYousaf\Dulluhan\Models\Author;
+use WaqasYousaf\Dulluhan\Models\Category;
+use WaqasYousaf\Dulluhan\Models\Post;
 
 class PostController extends Controller
 {

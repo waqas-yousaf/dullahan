@@ -1,11 +1,11 @@
 <?php
 
-namespace YourVendor\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use YourVendor\Dulluhan\Models\Post;
+use WaqasYousaf\Dulluhan\Models\Post;
 
 class DashboardController extends Controller
 {
