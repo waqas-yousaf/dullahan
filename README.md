@@ -15,6 +15,13 @@ Install the package with Composer:
 composer require waqas-yousaf/dulluhan
 ```
 
+For local development from `D:\Projects\dulluhan`, register the path repository in the host Laravel app first:
+
+```bash
+composer config repositories.dulluhan path ../dulluhan
+composer require waqas-yousaf/dulluhan
+```
+
 Laravel package auto-discovery registers the service provider automatically.
 
 Publish optional overrides:
@@ -30,6 +37,16 @@ Run the installer:
 ```bash
 php artisan dulluhan:install
 ```
+
+If Artisan does not list `dulluhan:install` after installing the package, rebuild Laravel package discovery:
+
+```bash
+composer dump-autoload
+php artisan package:discover
+php artisan list dulluhan
+```
+
+The host Laravel app must be able to write to `bootstrap/cache`, `storage/logs`, the configured database, and `public/uploads/dulluhan`.
 
 The default admin panel is available at `/spanel`. The public API is available at `/api/dulluhan/posts` and `/api/dulluhan/posts/{slug}`.
 The dashboard includes author-box profile editing and password changes for the logged-in Dulluhan author.
@@ -106,3 +123,43 @@ The `posts` prop may be a collection, paginator, array, or Eloquent query builde
     :per-page="9"
 />
 ```
+
+## API Routes
+
+Dulluhan exposes headless JSON API endpoints for retrieving posts. The API base prefix can be customized using `DULLUHAN_API_PREFIX` (defaults to `api/dulluhan`).
+
+### 1. List Posts
+Retrieve a paginated list of published posts.
+
+- **Endpoint**: `GET /api/dulluhan/posts`
+- **Query Parameters**:
+  - `type` (string, optional): Filter posts by post type (e.g. `post`, `article`, `news`, `page`).
+  - `category` (string, optional): Filter posts by category slug (e.g. `announcements`).
+- **Response Format**: Standard Laravel pagination payload where each item contains:
+  - `id`: Post unique ID.
+  - `title`: Post title.
+  - `slug`: Unique post slug.
+  - `post_type`: Type of post.
+  - `excerpt`: Brief summary of the post.
+  - `content`: Quill HTML content.
+  - `status`: Post status (`published` / `draft`).
+  - `featured_image`: Path to the featured image.
+  - `published_at`: Publication timestamp.
+  - `created_at` / `updated_at`: Timestamps.
+  - `categories`: Array of associated categories.
+  - `seo`: SEO metadata object containing:
+    - `meta_title`, `meta_description`, `meta_keywords`, `canonical_url`, `og_title`, `og_description`, `og_image`, `robots`, `schema_json`.
+  - `author_box`: Object with author public profile (if enabled):
+    - `name`, `job_title`, `bio`, `avatar`, `website_url`, `social_links` (array).
+
+### 2. View Post
+Retrieve detailed information for a single published post.
+
+- **Endpoint**: `GET /api/dulluhan/posts/{slug}`
+- **Parameters**:
+  - `{slug}` (string, required): The unique URL slug of the post.
+- **Response Format**: A wrapper object containing `data` with all the post fields described above. Returns `404 Not Found` if the post is a draft or does not exist.
+
+## Credits & Author
+
+Developed by Waqas Yousaf. Follow me on Twitter/X: [@imakewebapps](https://x.com/imakewebapps).

@@ -7,7 +7,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Waqas Yousaf"
+            "name": "Waqas Yousaf",
+            "homepage": "https://github.com/waqas-yousaf/dulluhan"
         }
     ],
     "require": {

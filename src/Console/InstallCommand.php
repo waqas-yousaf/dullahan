@@ -18,6 +18,8 @@ class InstallCommand extends Command
         $this->info('Installing Dulluhan...');
 
         $this->call('migrate', [
+            '--path' => __DIR__ . '/../../database/migrations',
+            '--realpath' => true,
             '--force' => $this->option('force'),
         ]);
 
