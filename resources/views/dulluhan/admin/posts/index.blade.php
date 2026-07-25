@@ -96,8 +96,8 @@
                     <td>{{ $post->autosaved_at?->diffForHumans() ?? $post->updated_at?->diffForHumans() }}</td>
                     <td>
                         <div class="actions">
-                            <a class="btn secondary" href="{{ $post->publicUrl() }}" target="_blank">View</a>
-                            <a class="btn secondary" href="{{ route('dulluhan.admin.posts.edit', $post) }}">Edit</a>
+                            <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank">View</a>
+                            <a class="btn info" href="{{ route('dulluhan.admin.posts.edit', $post) }}">Edit</a>
                             <form method="post" action="{{ route('dulluhan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')">
                                 @csrf
                                 @method('DELETE')

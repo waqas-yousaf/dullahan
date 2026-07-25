@@ -195,6 +195,16 @@
             color: white;
         }
 
+        .btn.info {
+            background: #0284c7;
+            color: white;
+        }
+
+        .btn.success {
+            background: #059669;
+            color: white;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -455,10 +465,6 @@
                 <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
                 @endif
                 <a href="{{ route('dulluhan.admin.profile.edit') }}">Profile</a>
-                <button type="button" id="theme-toggle" style="display: flex; align-items: center; gap: 8px;">
-                    <span class="material-icons" style="font-size: 18px;" id="theme-icon">dark_mode</span>
-                    <span id="theme-text">Dark Mode</span>
-                </button>
                 <form method="post" action="{{ route('dulluhan.admin.logout') }}">
                     @csrf
                     <button type="submit">Logout</button>
@@ -472,8 +478,12 @@
                 @endif
                 @yield('content')
             </div>
-            <footer class="footer">
-                Dulluhan v{{ \WaqasYousaf\Dulluhan\DulluhanServiceProvider::version() }}
+            <footer class="footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <span>Dulluhan v{{ \WaqasYousaf\Dulluhan\DulluhanServiceProvider::version() }}</span>
+                <button type="button" id="theme-toggle" style="background: none; border: none; padding: 0; margin: 0; color: inherit; font: inherit; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <span class="material-icons" style="font-size: 14px;" id="theme-icon">dark_mode</span>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
             </footer>
         </main>
     </div>
