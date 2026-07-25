@@ -33,12 +33,10 @@ class AutosaveController extends Controller
             'robots' => ['nullable', Rule::in(['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'])],
             'schema_markup' => ['nullable', 'json'],
             'published_at' => ['nullable', 'date'],
-            'categories' => ['nullable', 'array'],
-            'categories.*' => ['integer', 'exists:dulluhan_categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:dulluhan_categories,id'],
         ]);
 
-        $categoryIds = $data['categories'] ?? null;
-        unset($data['categories'], $data['status'], $data['published_at']);
+        unset($data['status'], $data['published_at']);
 
         $post ??= new Post();
         $post->fill(array_merge([
@@ -54,10 +52,6 @@ class AutosaveController extends Controller
 
         $post->autosaved_at = now();
         $post->save();
-
-        if (is_array($categoryIds)) {
-            $post->categories()->sync($categoryIds);
-        }
 
         return response()->json([
             'id' => $post->getKey(),

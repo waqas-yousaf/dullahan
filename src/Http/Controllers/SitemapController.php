@@ -33,7 +33,7 @@ class SitemapController extends Controller
 
     private function urlNode(Post $post): string
     {
-        $loc = $post->canonical_url ?: $this->postUrl($post);
+        $loc = $post->publicUrl();
         $lastmod = ($post->updated_at ?? $post->published_at ?? now())->toAtomString();
         $changefreq = config('dulluhan.sitemap.changefreq', 'weekly');
         $priority = config('dulluhan.sitemap.priority', '0.7');
@@ -64,17 +64,5 @@ class SitemapController extends Controller
             . '<image:loc>' . e($image) . '</image:loc>'
             . '<image:title>' . e($post->title) . '</image:title>'
             . '</image:image>';
-    }
-
-    private function postUrl(Post $post): string
-    {
-        $pattern = config('dulluhan.sitemap.post_url_pattern', '/blog/{slug}');
-        $path = str_replace(
-            ['{slug}', '{type}', '{id}'],
-            [$post->slug, $post->post_type, $post->getKey()],
-            $pattern
-        );
-
-        return url($path);
     }
 }

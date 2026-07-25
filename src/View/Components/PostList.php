@@ -57,7 +57,7 @@ class PostList extends Component
             ->when($this->postType, fn (Builder $query) => $query->whereIn('post_type', $this->values($this->postType)))
             ->when($this->status, fn (Builder $query, string $status) => $query->where('status', $status))
             ->when($this->category, function (Builder $query): void {
-                $query->whereHas('categories', function (Builder $query): void {
+                $query->whereHas('category', function (Builder $query): void {
                     $values = $this->values($this->category);
 
                     $query->whereIn('id', array_filter($values, 'is_numeric'))
@@ -91,10 +91,11 @@ class PostList extends Component
                 $values = $this->values($this->category);
 
                 return $posts->filter(function ($post) use ($values): bool {
-                    return $post->categories
-                        ->contains(fn ($category) => in_array((string) $category->id, $values, true)
-                            || in_array($category->slug, $values, true)
-                            || in_array($category->name, $values, true));
+                    return $post->category && (
+                        in_array((string) $post->category->id, $values, true)
+                        || in_array($post->category->slug, $values, true)
+                        || in_array($post->category->name, $values, true)
+                    );
                 });
             })
             ->values();

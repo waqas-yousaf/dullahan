@@ -1,14 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\ApiDocumentationController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthorBoxController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthorController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AutosaveController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\CategoryController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\DashboardController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\PasswordController;
+use WaqasYousaf\Dulluhan\Http\Controllers\Admin\ProfileController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\PostController;
 use WaqasYousaf\Dulluhan\Http\Controllers\Admin\UploadController;
 use WaqasYousaf\Dulluhan\Http\Controllers\SitemapController;

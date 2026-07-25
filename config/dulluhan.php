@@ -21,7 +21,7 @@ return [
     'sitemap' => [
         'enabled' => env('DULLUHAN_SITEMAP_ENABLED', true),
         'path' => env('DULLUHAN_SITEMAP_PATH', 'blog-sitemap.xml'),
-        'post_url_pattern' => env('DULLUHAN_POST_URL_PATTERN', '/blog/{slug}'),
+        'post_url_pattern' => env('DULLUHAN_POST_URL_PATTERN', '/blog/{category}/{slug}'),
         'changefreq' => env('DULLUHAN_SITEMAP_CHANGEFREQ', 'weekly'),
         'priority' => env('DULLUHAN_SITEMAP_PRIORITY', '0.7'),
         'include_images' => env('DULLUHAN_SITEMAP_INCLUDE_IMAGES', true),

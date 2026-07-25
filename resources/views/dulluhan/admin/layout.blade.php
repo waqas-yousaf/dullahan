@@ -8,17 +8,31 @@
     <style>
         :root {
             color-scheme: light;
-            --bg: #f6f7f9;
-            --panel: #fff;
-            --text: #111827;
-            --muted: #6b7280;
-            --line: #e5e7eb;
+            --bg: #f8fafc;
+            --panel: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
             --accent: #0f766e;
-            --danger: #b91c1c;
+            --danger: #e11d48;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color-scheme: dark;
+                --bg: #0b0f19;
+                --panel: #111827;
+                --text: #f8fafc;
+                --muted: #94a3b8;
+                --line: #1e293b;
+                --accent: #14b8a6;
+                --danger: #f43f5e;
+            }
         }
 
         * {
             box-sizing: border-box;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease, box-shadow 0.2s ease;
         }
 
         body {
@@ -26,6 +40,8 @@
             background: var(--bg);
             color: var(--text);
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         a {
@@ -147,15 +163,32 @@
             background: var(--accent);
             color: white;
             font: inherit;
+            font-weight: 500;
             cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .btn:hover {
+            opacity: 0.95;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
         }
 
         .btn.secondary {
-            background: #374151;
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--line);
+        }
+
+        .btn.secondary:hover {
+            background: var(--bg);
         }
 
         .btn.danger {
             background: var(--danger);
+            color: white;
         }
 
         table {
@@ -199,6 +232,16 @@
             border-radius: 6px;
             padding: 10px 12px;
             font: inherit;
+            background: var(--panel);
+            color: var(--text);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.15);
         }
 
         textarea {
@@ -216,12 +259,13 @@
         }
 
         .alert {
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            color: #10b981;
             border-radius: 8px;
             padding: 12px 14px;
             margin-bottom: 18px;
+            font-weight: 500;
         }
 
         .actions {
@@ -251,7 +295,29 @@
 
         .ql-editor {
             min-height: 320px;
-            background: #fff;
+            background: var(--panel);
+            color: var(--text);
+        }
+
+        .ql-toolbar.ql-snow {
+            background: var(--panel) !important;
+            border-color: var(--line) !important;
+        }
+        .ql-container.ql-snow {
+            border-color: var(--line) !important;
+        }
+        .ql-snow .ql-stroke {
+            stroke: var(--text) !important;
+        }
+        .ql-snow .ql-fill {
+            fill: var(--text) !important;
+        }
+        .ql-snow .ql-picker {
+            color: var(--text) !important;
+        }
+        .ql-snow .ql-picker-options {
+            background-color: var(--panel) !important;
+            border-color: var(--line) !important;
         }
 
         @media (max-width: 760px) {

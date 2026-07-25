@@ -14,6 +14,7 @@ class Post extends Model
 
     protected $fillable = [
         'author_id',
+        'category_id',
         'title',
         'slug',
         'post_type',
@@ -60,10 +61,9 @@ class Post extends Model
         return $this->belongsTo(Author::class, 'author_id');
     }
 
-    public function categories(): BelongsToMany
+    public function category(): BelongsTo
     {
-        return $this->belongsToMany(Category::class, 'dulluhan_category_post', 'post_id', 'category_id')
-            ->withTimestamps();
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function scopePublished(Builder $query): Builder
@@ -113,8 +113,16 @@ class Post extends Model
             return $this->canonical_url;
         }
 
-        $pattern = config('dulluhan.sitemap.post_url_pattern', '/blog/{slug}');
-        return url(str_replace('{slug}', $this->slug, $pattern));
+        $pattern = config('dulluhan.sitemap.post_url_pattern', '/blog/{category}/{slug}');
+        $categorySlug = $this->category ? $this->category->slug : 'uncategorized';
+
+        $path = str_replace(
+            ['{category}', '{slug}'],
+            [$categorySlug, $this->slug],
+            $pattern
+        );
+
+        return url($path);
     }
 
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string

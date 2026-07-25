@@ -1,4 +1,4 @@
-# Dulluhan 0.4.1
+# Dulluhan
 
 Dulluhan is a lightweight, high-performance, and feature-rich **Laravel Headless CMS & Editorial Blog Package**. It provides a fully session-isolated administration panel, a state-of-the-art rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.
 

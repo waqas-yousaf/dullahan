@@ -11,11 +11,11 @@ class PostController extends Controller
     public function index(): JsonResponse
     {
         $posts = Post::query()
-            ->with(['author', 'categories'])
+            ->with(['author', 'category'])
             ->published()
             ->when(request('type'), fn ($query, string $type) => $query->where('post_type', $type))
             ->when(request('category'), function ($query, string $category): void {
-                $query->whereHas('categories', fn ($query) => $query->where('slug', $category));
+                $query->whereHas('category', fn ($query) => $query->where('slug', $category));
             })
             ->latest('published_at')
             ->paginate(config('dulluhan.pagination.posts_per_page', 12));
@@ -28,7 +28,7 @@ class PostController extends Controller
     public function show(string $slug): JsonResponse
     {
         $post = Post::query()
-            ->with(['author', 'categories'])
+            ->with(['author', 'category'])
             ->published()
             ->where('slug', $slug)
             ->firstOrFail();
@@ -43,16 +43,14 @@ class PostController extends Controller
             'title' => $post->title,
             'slug' => $post->slug,
             'post_type' => $post->post_type,
-            'status' => $post->status,
             'featured_image' => $post->featured_image,
             'published_at' => $post->published_at,
-            'created_at' => $post->created_at,
             'updated_at' => $post->updated_at,
-            'categories' => $post->categories->map(fn ($category) => [
-                'id' => $category->id,
-                'name' => $category->name,
-                'slug' => $category->slug,
-            ]),
+            'category' => $post->category ? [
+                'id' => $post->category->id,
+                'name' => $post->category->name,
+                'slug' => $post->category->slug,
+            ] : null,
             'author' => $post->author ? [
                 'name' => $post->author->name,
                 'avatar' => $post->author->avatar,
@@ -69,12 +67,14 @@ class PostController extends Controller
             'post_type' => $post->post_type,
             'excerpt' => \Illuminate\Support\Str::limit(strip_tags($post->content), 150),
             'content' => $post->content,
-            'status' => $post->status,
             'featured_image' => $post->featured_image,
             'published_at' => $post->published_at,
-            'created_at' => $post->created_at,
             'updated_at' => $post->updated_at,
-            'categories' => $post->categories,
+            'category' => $post->category ? [
+                'id' => $post->category->id,
+                'name' => $post->category->name,
+                'slug' => $post->category->slug,
+            ] : null,
             'seo' => $post->seoOptions(),
             'author_box' => $post->author?->authorBox(),
         ];

@@ -34,8 +34,7 @@ class StorePostRequest extends FormRequest
             'robots' => ['nullable', Rule::in(['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'])],
             'schema_markup' => ['nullable', 'json'],
             'published_at' => ['nullable', 'date'],
-            'categories' => ['nullable', 'array'],
-            'categories.*' => ['integer', 'exists:dulluhan_categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:dulluhan_categories,id'],
         ];
     }
 }

@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index(\Illuminate\Http\Request $request): View
     {
         $query = Post::query()
-            ->with(['author', 'categories']);
+            ->with(['author', 'category']);
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -26,7 +26,7 @@ class PostController extends Controller
         }
 
         if ($categoryId = $request->input('category')) {
-            $query->whereHas('categories', fn ($q) => $q->where('dulluhan_categories.id', $categoryId));
+            $query->where('category_id', $categoryId);
         }
 
         if ($authorId = $request->input('author')) {
@@ -72,12 +72,8 @@ class PostController extends Controller
     public function store(StorePostRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $categoryIds = $data['categories'] ?? [];
-        unset($data['categories']);
-
         $post = new Post($data);
         $post->save();
-        $post->categories()->sync($categoryIds);
 
         return redirect()->route('dulluhan.admin.posts.edit', $post)->with('status', 'Post created.');
     }
@@ -85,7 +81,7 @@ class PostController extends Controller
     public function edit(Post $post): View
     {
         return view('dulluhan::admin.posts.form', [
-            'post' => $post->load('categories'),
+            'post' => $post->load('category'),
             'action' => route('dulluhan.admin.posts.update', $post),
             'method' => 'PUT',
             'categories' => Category::query()->orderBy('name')->get(),
@@ -97,11 +93,7 @@ class PostController extends Controller
     public function update(StorePostRequest $request, Post $post): RedirectResponse
     {
         $data = $request->validated();
-        $categoryIds = $data['categories'] ?? [];
-        unset($data['categories']);
-
         $post->fill($data)->save();
-        $post->categories()->sync($categoryIds);
 
         return redirect()->route('dulluhan.admin.posts.edit', $post)->with('status', 'Post updated.');
     }

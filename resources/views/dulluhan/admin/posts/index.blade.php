@@ -82,11 +82,11 @@
                     </td>
                     <td>{{ $postTypes[$post->post_type] ?? ucfirst($post->post_type) }}</td>
                     <td>
-                        @forelse ($post->categories as $category)
-                            <span class="muted">{{ $category->name }}{{ ! $loop->last ? ',' : '' }}</span>
-                        @empty
+                        @if ($post->category)
+                            <span class="muted">{{ $post->category->name }}</span>
+                        @else
                             <span class="muted">Uncategorized</span>
-                        @endforelse
+                        @endif
                     </td>
                     <td>{{ ucfirst($post->status) }}</td>
                     <td>{{ $post->author?->name ?? 'Unknown' }}</td>

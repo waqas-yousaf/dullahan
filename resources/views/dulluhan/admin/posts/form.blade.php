@@ -87,23 +87,20 @@
         </div>
 
         <div class="field">
-            <label for="categories">Categories</label>
-            @php
-                $selectedCategories = collect(old('categories', $post->categories->pluck('id')->all()))->map(fn ($id) => (int) $id)->all();
-            @endphp
+            <label for="category_id">Category</label>
             @if ($categories->isEmpty())
                 <div><span class="muted">Create categories first to assign them here.</span></div>
             @else
-                <select id="categories" name="categories[]" class="multiselect" multiple style="min-height: 120px; width: 100%;">
+                <select id="category_id" name="category_id" style="width: 100%;">
+                    <option value="">No Category</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" @selected(in_array($category->id, $selectedCategories, true))>
+                        <option value="{{ $category->id }}" @selected(old('category_id', $post->category_id) == $category->id)>
                             {{ $category->name }}
                         </option>
                     @endforeach
                 </select>
-                <div class="muted" style="margin-top: 4px; font-size: 12px;">Hold down Ctrl (Windows) or Command (Mac) to select multiple categories.</div>
             @endif
-            @error('categories') <div class="error">{{ $message }}</div> @enderror
+            @error('category_id') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div class="field">
