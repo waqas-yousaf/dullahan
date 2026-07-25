@@ -13,6 +13,19 @@ use WaqasYousaf\Dulluhan\Models\Author;
 
 class AuthorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            abort_unless(
+                Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email === config('dulluhan.admin.email'),
+                403,
+                'Only the system administrator can manage authors.'
+            );
+
+            return $next($request);
+        });
+    }
+
     public function index(): View
     {
         return view('dulluhan::admin.authors.index', [

@@ -375,8 +375,10 @@
                 <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
                 <a href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
                 <a href="{{ route('dulluhan.admin.categories.index') }}">Categories</a>
-                <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
-                <a href="{{ route('dulluhan.admin.password.edit') }}">Change Password</a>
+                @if (Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email === config('dulluhan.admin.email'))
+                    <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
+                @endif
+                <a href="{{ route('dulluhan.admin.profile.edit') }}">Profile Settings</a>
                 <form method="post" action="{{ route('dulluhan.admin.logout') }}">
                     @csrf
                     <button type="submit">Logout</button>

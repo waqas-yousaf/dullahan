@@ -38,7 +38,7 @@ class DulluhanServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'dulluhan');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/dulluhan', 'dulluhan');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         Blade::component('dulluhan-post-card', PostCard::class);
@@ -49,7 +49,7 @@ class DulluhanServiceProvider extends ServiceProvider
         ], 'dulluhan-config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/dulluhan'),
+            __DIR__ . '/../resources/views/dulluhan' => resource_path('views/vendor/dulluhan'),
         ], 'dulluhan-views');
 
         $this->publishes([
