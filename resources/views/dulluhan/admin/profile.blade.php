@@ -35,13 +35,26 @@
         <div class="grid">
             <div class="field">
                 <label for="password">New password</label>
-                <input id="password" name="password" type="password" minlength="8" autocomplete="new-password">
+                <div style="display: flex; gap: 8px;">
+                    <input id="password" name="password" type="password" minlength="8" autocomplete="new-password">
+                    <button type="button" class="btn secondary" id="btn-toggle-password" style="padding: 0 10px;" title="Show/Hide Password">
+                        <span class="material-icons" style="font-size: 20px;">visibility</span>
+                    </button>
+                    <button type="button" class="btn secondary" id="btn-generate-password" style="padding: 0 10px;" title="Generate Password">
+                        <span class="material-icons" style="font-size: 20px;">vpn_key</span>
+                    </button>
+                </div>
                 @error('password') <div class="error">{{ $message }}</div> @enderror
             </div>
 
             <div class="field">
                 <label for="password_confirmation">Confirm new password</label>
-                <input id="password_confirmation" name="password_confirmation" type="password" minlength="8" autocomplete="new-password">
+                <div style="display: flex; gap: 8px;">
+                    <input id="password_confirmation" name="password_confirmation" type="password" minlength="8" autocomplete="new-password">
+                    <button type="button" class="btn secondary" id="btn-toggle-password-conf" style="padding: 0 10px;" title="Show/Hide Confirm Password">
+                        <span class="material-icons" style="font-size: 20px;">visibility</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -125,3 +138,57 @@
         <button class="btn" type="submit" style="margin-top: 16px;">Save Settings</button>
     </form>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('password_confirmation');
+        const toggleBtn = document.getElementById('btn-toggle-password');
+        const toggleConfBtn = document.getElementById('btn-toggle-password-conf');
+        const generateBtn = document.getElementById('btn-generate-password');
+
+        function toggleVisibility(input, button) {
+            const icon = button.querySelector('.material-icons');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', () => toggleVisibility(passwordInput, toggleBtn));
+        }
+
+        if (toggleConfBtn && confirmInput) {
+            toggleConfBtn.addEventListener('click', () => toggleVisibility(confirmInput, toggleConfBtn));
+        }
+
+        if (generateBtn && passwordInput && confirmInput) {
+            generateBtn.addEventListener('click', function () {
+                const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+                let password = "";
+                const array = new Uint32Array(16);
+                window.crypto.getRandomValues(array);
+                for (let i = 0; i < 16; i++) {
+                    password += chars[array[i] % chars.length];
+                }
+                
+                passwordInput.value = password;
+                confirmInput.value = password;
+                
+                passwordInput.type = 'text';
+                confirmInput.type = 'text';
+                
+                const icon = toggleBtn.querySelector('.material-icons');
+                const iconConf = toggleConfBtn.querySelector('.material-icons');
+                if (icon) icon.textContent = 'visibility_off';
+                if (iconConf) iconConf.textContent = 'visibility_off';
+            });
+        }
+    });
+</script>
+@endpush
