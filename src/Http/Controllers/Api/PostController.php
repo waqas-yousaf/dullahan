@@ -48,8 +48,15 @@ class PostController extends Controller
             'published_at' => $post->published_at,
             'created_at' => $post->created_at,
             'updated_at' => $post->updated_at,
-            'categories' => $post->categories,
-            'author_box' => $post->author?->authorBox(),
+            'categories' => $post->categories->map(fn ($category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'slug' => $category->slug,
+            ]),
+            'author' => $post->author ? [
+                'name' => $post->author->name,
+                'avatar' => $post->author->avatar,
+            ] : null,
         ];
     }
 
