@@ -4,7 +4,7 @@ namespace WaqasYousaf\Dulluhan\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Category extends Model
@@ -26,10 +26,9 @@ class Category extends Model
         });
     }
 
-    public function posts(): BelongsToMany
+    public function posts(): HasMany
     {
-        return $this->belongsToMany(Post::class, 'dulluhan_category_post', 'category_id', 'post_id')
-            ->withTimestamps();
+        return $this->hasMany(Post::class, 'category_id');
     }
 
     public static function uniqueSlug(string $name, ?int $ignoreId = null): string
