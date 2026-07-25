@@ -15,7 +15,7 @@ class DashboardController extends Controller
             'totalPosts' => Post::query()->count(),
             'publishedPosts' => Post::query()->where('status', 'published')->count(),
             'draftPosts' => Post::query()->where('status', 'draft')->count(),
-            'recentPosts' => Post::query()->with('author')->latest()->limit(5)->get(),
+            'recentPosts' => Post::query()->with('author')->orderByDesc('id')->limit(5)->get(),
             'author' => Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user(),
         ]);
     }

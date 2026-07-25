@@ -41,7 +41,7 @@ class PostController extends Controller
             $query->where('status', $status);
         }
 
-        $posts = $query->latest()
+        $posts = $query->orderByDesc('id')
             ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15))
             ->withQueryString();
 
