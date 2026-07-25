@@ -15,10 +15,33 @@ return [
         'provider' => 'dulluhan_authors',
     ],
 
+    'recaptcha' => [
+        'enabled' => env('DULLUHAN_RECAPTCHA_ENABLED', false),
+        'version' => env('DULLUHAN_RECAPTCHA_VERSION', 'v2'),
+        'site_key' => env('DULLUHAN_RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('DULLUHAN_RECAPTCHA_SECRET_KEY'),
+        'minimum_score' => env('DULLUHAN_RECAPTCHA_MINIMUM_SCORE', 0.5),
+        'verify_url' => 'https://www.google.com/recaptcha/api/siteverify',
+    ],
+
     'uploads' => [
         'path' => 'uploads/dulluhan',
         'max_kb' => 4096,
         'mimes' => ['jpeg', 'png', 'jpg', 'webp', 'svg'],
+    ],
+
+    'post_types' => [
+        'post' => 'Post',
+        'article' => 'Article',
+        'news' => 'News',
+        'page' => 'Page',
+    ],
+
+    'default_post_type' => 'post',
+
+    'autosave' => [
+        'enabled' => true,
+        'interval_ms' => 30000,
     ],
 
     'admin' => [

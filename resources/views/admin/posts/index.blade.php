@@ -10,9 +10,11 @@
         <thead>
             <tr>
                 <th>Title</th>
+                <th>Type</th>
+                <th>Categories</th>
                 <th>Status</th>
                 <th>Author</th>
-                <th>Published</th>
+                <th>Saved</th>
                 <th></th>
             </tr>
         </thead>
@@ -23,9 +25,17 @@
                         <strong>{{ $post->title }}</strong>
                         <div class="muted">{{ $post->slug }}</div>
                     </td>
+                    <td>{{ $postTypes[$post->post_type] ?? ucfirst($post->post_type) }}</td>
+                    <td>
+                        @forelse ($post->categories as $category)
+                            <span class="muted">{{ $category->name }}{{ ! $loop->last ? ',' : '' }}</span>
+                        @empty
+                            <span class="muted">Uncategorized</span>
+                        @endforelse
+                    </td>
                     <td>{{ ucfirst($post->status) }}</td>
                     <td>{{ $post->author?->name ?? 'Unknown' }}</td>
-                    <td>{{ $post->published_at?->format('M j, Y H:i') ?? 'Not scheduled' }}</td>
+                    <td>{{ $post->autosaved_at?->diffForHumans() ?? $post->updated_at?->diffForHumans() }}</td>
                     <td>
                         <div class="actions">
                             <a class="btn secondary" href="{{ route('dulluhan.admin.posts.edit', $post) }}">Edit</a>
@@ -38,7 +48,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="muted">No posts yet.</td></tr>
+                <tr><td colspan="7" class="muted">No posts yet.</td></tr>
             @endforelse
         </tbody>
     </table>

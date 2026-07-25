@@ -13,11 +13,13 @@ return new class extends Migration
             $table->foreignId('author_id')->constrained('dulluhan_authors')->cascadeOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
+            $table->string('post_type')->default('post')->index();
             $table->text('excerpt')->nullable();
             $table->longText('content');
             $table->string('status')->default('draft')->index();
             $table->string('featured_image')->nullable();
             $table->timestamp('published_at')->nullable()->index();
+            $table->timestamp('autosaved_at')->nullable();
             $table->timestamps();
         });
     }

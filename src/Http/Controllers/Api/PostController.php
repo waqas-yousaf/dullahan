@@ -11,8 +11,12 @@ class PostController extends Controller
     public function index(): JsonResponse
     {
         $posts = Post::query()
-            ->with('author')
+            ->with(['author', 'categories'])
             ->published()
+            ->when(request('type'), fn ($query, string $type) => $query->where('post_type', $type))
+            ->when(request('category'), function ($query, string $category): void {
+                $query->whereHas('categories', fn ($query) => $query->where('slug', $category));
+            })
             ->latest('published_at')
             ->paginate(config('dulluhan.pagination.posts_per_page', 12));
 
@@ -22,7 +26,7 @@ class PostController extends Controller
     public function show(string $slug): JsonResponse
     {
         $post = Post::query()
-            ->with('author')
+            ->with(['author', 'categories'])
             ->published()
             ->where('slug', $slug)
             ->firstOrFail();

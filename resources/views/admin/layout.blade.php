@@ -37,6 +37,9 @@
         .error { color: var(--danger); font-size: 14px; margin-top: 6px; }
         .alert { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; }
         .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .checkbox-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+        .checkbox-grid label { display: flex; gap: 8px; align-items: center; margin: 0; font-weight: 500; }
+        .checkbox-grid input { width: auto; }
         .ql-editor { min-height: 320px; background: #fff; }
         @media (max-width: 760px) { .shell { grid-template-columns: 1fr; } .sidebar { position: static; } .main { padding: 18px; } .topbar { align-items: flex-start; flex-direction: column; } }
     </style>
@@ -49,6 +52,7 @@
             <nav class="nav">
                 <a href="{{ route('dulluhan.admin.dashboard') }}">Dashboard</a>
                 <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
+                <a href="{{ route('dulluhan.admin.categories.index') }}">Categories</a>
                 <a href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
                 <form method="post" action="{{ route('dulluhan.admin.logout') }}">
                     @csrf

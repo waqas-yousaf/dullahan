@@ -5,6 +5,7 @@ namespace YourVendor\Dulluhan\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -15,17 +16,20 @@ class Post extends Model
         'author_id',
         'title',
         'slug',
+        'post_type',
         'excerpt',
         'content',
         'status',
         'featured_image',
         'published_at',
+        'autosaved_at',
     ];
 
     protected function casts(): array
     {
         return [
             'published_at' => 'datetime',
+            'autosaved_at' => 'datetime',
         ];
     }
 
@@ -45,6 +49,12 @@ class Post extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(Author::class, 'author_id');
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'dulluhan_category_post', 'post_id', 'category_id')
+            ->withTimestamps();
     }
 
     public function scopePublished(Builder $query): Builder

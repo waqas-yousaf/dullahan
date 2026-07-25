@@ -18,8 +18,11 @@ class StorePostRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string', 'min:10'],
             'status' => ['required', Rule::in(['draft', 'published'])],
+            'post_type' => ['required', Rule::in(array_keys(config('dulluhan.post_types', ['post' => 'Post'])))],
             'featured_image' => ['nullable', 'url'],
             'published_at' => ['nullable', 'date'],
+            'categories' => ['nullable', 'array'],
+            'categories.*' => ['integer', 'exists:dulluhan_categories,id'],
         ];
     }
 }

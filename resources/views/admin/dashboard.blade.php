@@ -17,7 +17,7 @@
         @forelse ($recentPosts as $post)
             <p>
                 <a href="{{ route('dulluhan.admin.posts.edit', $post) }}"><strong>{{ $post->title }}</strong></a>
-                <span class="muted">by {{ $post->author?->name ?? 'Unknown' }} · {{ ucfirst($post->status) }}</span>
+                <span class="muted">by {{ $post->author?->name ?? 'Unknown' }} - {{ ucfirst($post->status) }} - {{ $post->autosaved_at ? 'autosaved ' . $post->autosaved_at->diffForHumans() : 'saved ' . $post->updated_at->diffForHumans() }}</span>
             </p>
         @empty
             <p class="muted">No posts yet.</p>

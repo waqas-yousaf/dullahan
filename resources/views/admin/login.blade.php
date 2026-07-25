@@ -12,10 +12,16 @@
         input { width: 100%; box-sizing: border-box; border: 1px solid #d1d5db; border-radius: 6px; padding: 11px 12px; font: inherit; }
         button { width: 100%; border: 0; border-radius: 6px; padding: 11px 12px; margin-top: 18px; background: #0f766e; color: white; font: inherit; cursor: pointer; }
         .error { color: #b91c1c; font-size: 14px; margin-top: 6px; }
+        .recaptcha { margin-top: 16px; }
     </style>
+    @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key') && config('dulluhan.recaptcha.version') === 'v3')
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('dulluhan.recaptcha.site_key') }}"></script>
+    @elseif (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key'))
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
 </head>
 <body>
-    <form method="post" action="{{ route('dulluhan.admin.login.store') }}">
+    <form id="dulluhan-login-form" method="post" action="{{ route('dulluhan.admin.login.store') }}">
         @csrf
         <h1>Dulluhan</h1>
         <label for="email">Email</label>
@@ -26,7 +32,34 @@
         <input id="password" name="password" type="password" required>
         @error('password') <div class="error">{{ $message }}</div> @enderror
 
+        @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key'))
+            @if (config('dulluhan.recaptcha.version') === 'v3')
+                <input id="g-recaptcha-response" type="hidden" name="g-recaptcha-response">
+            @else
+                <div class="recaptcha">
+                    <div class="g-recaptcha" data-sitekey="{{ config('dulluhan.recaptcha.site_key') }}"></div>
+                </div>
+            @endif
+            @error('g-recaptcha-response') <div class="error">{{ $message }}</div> @enderror
+        @endif
+
         <button type="submit">Sign in</button>
     </form>
+
+    @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key') && config('dulluhan.recaptcha.version') === 'v3')
+        <script>
+            const loginForm = document.getElementById('dulluhan-login-form');
+            loginForm.addEventListener('submit', event => {
+                event.preventDefault();
+                grecaptcha.ready(() => {
+                    grecaptcha.execute(@json(config('dulluhan.recaptcha.site_key')), { action: 'dulluhan_login' })
+                        .then(token => {
+                            document.getElementById('g-recaptcha-response').value = token;
+                            loginForm.submit();
+                        });
+                });
+            });
+        </script>
+    @endif
 </body>
 </html>

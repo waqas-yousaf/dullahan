@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use YourVendor\Dulluhan\Http\Requests\StorePostRequest;
+use YourVendor\Dulluhan\Models\Category;
 use YourVendor\Dulluhan\Models\Post;
 
 class PostController extends Controller
@@ -15,26 +16,37 @@ class PostController extends Controller
     {
         return view('dulluhan::admin.posts.index', [
             'posts' => Post::query()
-                ->with('author')
+                ->with(['author', 'categories'])
                 ->latest()
                 ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15)),
+            'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }
 
     public function create(): View
     {
         return view('dulluhan::admin.posts.form', [
-            'post' => new Post(['status' => 'draft']),
+            'post' => new Post([
+                'status' => 'draft',
+                'post_type' => config('dulluhan.default_post_type', 'post'),
+            ]),
             'action' => route('dulluhan.admin.posts.store'),
             'method' => 'POST',
+            'categories' => Category::query()->orderBy('name')->get(),
+            'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }
 
     public function store(StorePostRequest $request): RedirectResponse
     {
-        $post = new Post($request->validated());
+        $data = $request->validated();
+        $categoryIds = $data['categories'] ?? [];
+        unset($data['categories']);
+
+        $post = new Post($data);
         $post->author_id = Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->id();
         $post->save();
+        $post->categories()->sync($categoryIds);
 
         return redirect()->route('dulluhan.admin.posts.edit', $post)->with('status', 'Post created.');
     }
@@ -42,15 +54,22 @@ class PostController extends Controller
     public function edit(Post $post): View
     {
         return view('dulluhan::admin.posts.form', [
-            'post' => $post,
+            'post' => $post->load('categories'),
             'action' => route('dulluhan.admin.posts.update', $post),
             'method' => 'PUT',
+            'categories' => Category::query()->orderBy('name')->get(),
+            'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
         ]);
     }
 
     public function update(StorePostRequest $request, Post $post): RedirectResponse
     {
-        $post->fill($request->validated())->save();
+        $data = $request->validated();
+        $categoryIds = $data['categories'] ?? [];
+        unset($data['categories']);
+
+        $post->fill($data)->save();
+        $post->categories()->sync($categoryIds);
 
         return redirect()->route('dulluhan.admin.posts.edit', $post)->with('status', 'Post updated.');
     }
