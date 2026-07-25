@@ -64,7 +64,7 @@ return [
     'admin' => [
         'name' => env('DULLUHAN_ADMIN_NAME', 'Dulluhan Admin'),
         'email' => env('DULLUHAN_ADMIN_EMAIL', 'admin@example.com'),
-        'password' => env('DULLUHAN_ADMIN_PASSWORD', 'password'),
+        'password' => env('DULLUHAN_ADMIN_PASSWORD'),
     ],
 
     'pagination' => [

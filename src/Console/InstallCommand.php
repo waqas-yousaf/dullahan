@@ -5,6 +5,7 @@ namespace WaqasYousaf\Dulluhan\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use WaqasYousaf\Dulluhan\Models\Author;
 
 class InstallCommand extends Command
@@ -29,11 +30,14 @@ class InstallCommand extends Command
         File::ensureDirectoryExists($publicPath, 0755, true);
         @chmod($publicPath, 0755);
 
+        $configuredPassword = config('dulluhan.admin.password');
+        $password = $configuredPassword ?: Str::password(16);
+
         $admin = Author::query()->firstOrCreate(
             ['email' => config('dulluhan.admin.email')],
             [
                 'name' => config('dulluhan.admin.name'),
-                'password' => Hash::make(config('dulluhan.admin.password')),
+                'password' => Hash::make($password),
             ]
         );
 
@@ -41,6 +45,11 @@ class InstallCommand extends Command
         $this->info('Dulluhan is ready.');
         $this->line('Admin URL: ' . url(config('dulluhan.route_prefix', 'spanel')));
         $this->line('Admin email: ' . $admin->email);
+        if ($admin->wasRecentlyCreated) {
+            $this->line('Admin password: ' . $password);
+        } else {
+            $this->line('Admin password: unchanged; author already exists.');
+        }
         $this->line('Uploads path: public/' . $relativePath);
 
         return self::SUCCESS;

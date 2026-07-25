@@ -180,7 +180,7 @@ Values used during `php artisan dulluhan:install` to initialize the default auth
 - **`admin.email`** (Env: `DULLUHAN_ADMIN_EMAIL`): Admin email username.
   - *Default*: `'admin@example.com'`
 - **`admin.password`** (Env: `DULLUHAN_ADMIN_PASSWORD`): Admin initial password.
-  - *Default*: `'password'`
+  - *Default*: random 16-character password generated at install time and printed once.
 
 ### 10. Listing Pagination
 - **`pagination.posts_per_page`**: Limit of posts fetched per page by the public headless API.
