@@ -1,4 +1,4 @@
-# Dulluhan
+# Dulluhan 0.4.1
 
 Dulluhan is a lightweight, high-performance, and feature-rich **Laravel Headless CMS & Editorial Blog Package**. It provides a fully session-isolated administration panel, a state-of-the-art rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.
 
@@ -41,7 +41,7 @@ Whether you want to build a headless blog using modern frontend frameworks (like
 ## Requirements
 
 - PHP `^8.3`
-- Laravel `11.x` or `12.x` supported
+- Laravel `11.x` or `12.x`
 
 ## Installation
 
