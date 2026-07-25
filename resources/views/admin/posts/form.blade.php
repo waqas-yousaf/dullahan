@@ -162,7 +162,7 @@
                 @php
                     $schemaMarkup = old('schema_markup', is_array($post->schema_markup) ? json_encode($post->schema_markup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $post->schema_markup);
                 @endphp
-                <textarea id="schema_markup" name="schema_markup" placeholder='{"@context":"https://schema.org","@type":"Article"}'>{{ $schemaMarkup }}</textarea>
+                <textarea id="schema_markup" name="schema_markup" placeholder='{"@@context":"https://schema.org","@@type":"Article"}'>{{ $schemaMarkup }}</textarea>
                 @error('schema_markup') <div class="error">{{ $message }}</div> @enderror
             </div>
         </section>
