@@ -58,51 +58,108 @@ The admin panel shows the host Laravel app name in the sidebar and Dulluhan plus
 
 ## Configuration
 
-Use environment variables to set the initial admin account:
+The package comes with a `dulluhan.php` configuration file. If you haven't published it, run `php artisan vendor:publish --tag=dulluhan-config` to copy it to your host application's config directory.
 
-```dotenv
-DULLUHAN_ADMIN_NAME="Dulluhan Admin"
-DULLUHAN_ADMIN_EMAIL="admin@example.com"
-DULLUHAN_ADMIN_PASSWORD="password"
-```
+Below is a detailed guide to all available configuration parameters and their respective Environment (`.env`) overrides.
 
-The admin route prefix can be changed with:
+### 1. General Settings
+- **`route_prefix`** (Env: `DULLUHAN_ROUTE_PREFIX`): The base URL prefix for accessing the editorial admin panel.
+  - *Default*: `'spanel'`
+- **`api_prefix`** (Env: `DULLUHAN_API_PREFIX`): The URL prefix for the headless JSON API endpoints.
+  - *Default*: `'api/dulluhan'`
 
-```dotenv
-DULLUHAN_ROUTE_PREFIX=spanel
-```
+### 2. Middleware Control
+- **`middleware`**: Customize the middleware stacks applied to routes:
+  - **`web`**: Applied to the general package frontend/web endpoints. *Default*: `['web']`.
+  - **`api`**: Applied to public headless endpoints. *Default*: `['api', 'dulluhan.api']`.
+  - **`admin`**: Applied to the session-isolated admin panel. *Default*: `['dulluhan.admin']`.
 
-Enable reCAPTCHA on auth pages with:
+### 3. API Security & Access Keys
+Protect your public headless endpoints from unauthorized access by requiring API keys and restricting client origins.
+- **`api_security.enabled`** (Env: `DULLUHAN_API_SECURITY_ENABLED`): Set to `true` to require credentials.
+  - *Default*: `false`
+- **`api_security.keys`** (Env: `DULLUHAN_API_KEYS`): A comma-separated list of keys authorized to query the API.
+  - *Example*: `DULLUHAN_API_KEYS="secret-key-1,secret-key-2"`
+- **`api_security.allowed_domains`** (Env: `DULLUHAN_API_ALLOWED_DOMAINS`): A comma-separated list of domains allowed to request the API.
+  - *Example*: `DULLUHAN_API_ALLOWED_DOMAINS="example.com,www.example.com"`
+- **`api_security.header`**: The request header key to look for the API key.
+  - *Default*: `'X-Dulluhan-Api-Key'`
+- **`api_security.query_parameter`**: Fallback query parameter name for the API key.
+  - *Default*: `'api_key'`
 
-```dotenv
-DULLUHAN_RECAPTCHA_ENABLED=true
-DULLUHAN_RECAPTCHA_VERSION=v2
-DULLUHAN_RECAPTCHA_SITE_KEY="your-site-key"
-DULLUHAN_RECAPTCHA_SECRET_KEY="your-secret-key"
-```
+*Note: The API documentation page detailing request headers and key configuration is accessible inside the admin panel at `/spanel/api-documentation`.*
 
-For reCAPTCHA v3, set `DULLUHAN_RECAPTCHA_VERSION=v3` and optionally tune `DULLUHAN_RECAPTCHA_MINIMUM_SCORE`.
+### 4. Dynamic XML Sitemap
+Automatically compile and serve an XML sitemap of all published posts for SEO indexing.
+- **`sitemap.enabled`** (Env: `DULLUHAN_SITEMAP_ENABLED`): Toggles sitemap compilation.
+  - *Default*: `true`
+- **`sitemap.path`** (Env: `DULLUHAN_SITEMAP_PATH`): The sitemap XML route endpoint.
+  - *Default*: `'blog-sitemap.xml'`
+- **`sitemap.post_url_pattern`** (Env: `DULLUHAN_POST_URL_PATTERN`): The URL structure to construct sitemap links if a post doesn't specify a custom Canonical URL.
+  - *Default*: `'/blog/{slug}'`
+- **`sitemap.changefreq`** (Env: `DULLUHAN_SITEMAP_CHANGEFREQ`): The `<changefreq>` frequency tag value.
+  - *Default*: `'weekly'`
+- **`sitemap.priority`** (Env: `DULLUHAN_SITEMAP_PRIORITY`): The `<priority>` index score.
+  - *Default*: `'0.7'`
+- **`sitemap.include_images`** (Env: `DULLUHAN_SITEMAP_INCLUDE_IMAGES`): Appends post featured images (if present) to the XML sitemap node.
+  - *Default*: `true`
 
-Protect the public API with API keys and optional domain restrictions:
+### 5. Google reCAPTCHA
+Secure the admin login/authentication forms.
+- **`recaptcha.enabled`** (Env: `DULLUHAN_RECAPTCHA_ENABLED`): Toggles CAPTCHA validation.
+  - *Default*: `false`
+- **`recaptcha.version`** (Env: `DULLUHAN_RECAPTCHA_VERSION`): Target reCAPTCHA version, supporting `'v2'` or `'v3'`.
+  - *Default*: `'v2'`
+- **`recaptcha.site_key`** (Env: `DULLUHAN_RECAPTCHA_SITE_KEY`): Public client key.
+- **`recaptcha.secret_key`** (Env: `DULLUHAN_RECAPTCHA_SECRET_KEY`): Secret verification key.
+- **`recaptcha.minimum_score`** (Env: `DULLUHAN_RECAPTCHA_MINIMUM_SCORE`): Threshold for spam rejection on v3 actions.
+  - *Default*: `0.5`
+- **`recaptcha.verify_url`**: The validation endpoint.
+  - *Default*: `'https://www.google.com/recaptcha/api/siteverify'`
 
-```dotenv
-DULLUHAN_API_SECURITY_ENABLED=true
-DULLUHAN_API_KEYS="first-key,second-key"
-DULLUHAN_API_ALLOWED_DOMAINS="example.com,www.example.com"
-```
+### 6. Media Uploads
+- **`uploads.path`**: Local destination subdirectory inside the host's `public/` directory where editor images are stored.
+  - *Default*: `'uploads/dulluhan'` (resolves to `public/uploads/dulluhan`)
+- **`uploads.max_kb`**: Maximum allowed image upload size in kilobytes.
+  - *Default*: `4096` (4MB)
+- **`uploads.mimes`**: Array of allowed image extensions.
+  - *Default*: `['jpeg', 'png', 'jpg', 'webp', 'svg']`
 
-Requests should send the key in the `X-Dulluhan-Api-Key` header. The API documentation page is available inside the admin panel at `/spanel/api-documentation`.
+### 7. Post Types & Taxonomy
+- **`post_types`**: Associative array mapping key identifiers to human-readable names for post organization.
+  ```php
+  'post_types' => [
+      'post' => 'Post',
+      'article' => 'Article',
+      'news' => 'News',
+      'page' => 'Page',
+  ]
+  ```
+- **`default_post_type`**: The fallback post type pre-selected when creating new posts.
+  - *Default*: `'post'`
 
-Post types are configured in `config/dulluhan.php`:
+### 8. Auto-Save Intervals
+- **`autosave.enabled`**: Automatically saves drafts in the background while typing.
+  - *Default*: `true`
+- **`autosave.interval_ms`**: Background auto-save interval frequency in milliseconds.
+  - *Default*: `30000` (30 seconds)
 
-```php
-'post_types' => [
-    'post' => 'Post',
-    'article' => 'Article',
-    'news' => 'News',
-    'page' => 'Page',
-],
-```
+### 9. Default Administrator Account
+Values used during `php artisan dulluhan:install` to initialize the default author.
+- **`admin.name`** (Env: `DULLUHAN_ADMIN_NAME`): Admin full name.
+  - *Default*: `'Dulluhan Admin'`
+- **`admin.email`** (Env: `DULLUHAN_ADMIN_EMAIL`): Admin email username.
+  - *Default*: `'admin@example.com'`
+- **`admin.password`** (Env: `DULLUHAN_ADMIN_PASSWORD`): Admin initial password.
+  - *Default*: `'password'`
+
+### 10. Listing Pagination
+- **`pagination.posts_per_page`**: Limit of posts fetched per page by the public headless API.
+  - *Default*: `12`
+- **`pagination.admin_posts_per_page`**: Number of posts shown per page inside the admin panel management grid.
+  - *Default*: `15`
+
+
 
 ## Blade Components
 

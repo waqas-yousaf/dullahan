@@ -11,6 +11,10 @@ use YourVendor\Dulluhan\Http\Controllers\Admin\DashboardController;
 use YourVendor\Dulluhan\Http\Controllers\Admin\PasswordController;
 use YourVendor\Dulluhan\Http\Controllers\Admin\PostController;
 use YourVendor\Dulluhan\Http\Controllers\Admin\UploadController;
+use YourVendor\Dulluhan\Http\Controllers\SitemapController;
+
+Route::get(config('dulluhan.sitemap.path', 'dulluhan-sitemap.xml'), SitemapController::class)
+    ->name('dulluhan.sitemap');
 
 Route::prefix(config('dulluhan.route_prefix', 'spanel'))
     ->name('dulluhan.admin.')
