@@ -48,7 +48,7 @@
 <body>
     <div class="shell">
         <aside class="sidebar">
-            <div class="brand">Dulluhan</div>
+            <div class="brand">Dulluhan <span style="font-size: 11px; font-weight: normal; opacity: 0.6; margin-left: 4px;">v{{ \YourVendor\Dulluhan\DulluhanServiceProvider::version() }}</span></div>
             <nav class="nav">
                 <a href="{{ route('dulluhan.admin.dashboard') }}">Dashboard</a>
                 <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>

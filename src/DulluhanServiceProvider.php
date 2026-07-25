@@ -13,6 +13,16 @@ use YourVendor\Dulluhan\View\Components\PostList;
 
 class DulluhanServiceProvider extends ServiceProvider
 {
+    public static function version(): string
+    {
+        $composerPath = __DIR__ . '/../composer.json';
+        if (file_exists($composerPath)) {
+            $composer = json_decode(file_get_contents($composerPath), true);
+            return $composer['version'] ?? '0.0.1';
+        }
+        return '1.0.0';
+    }
+
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/dulluhan.php', 'dulluhan');

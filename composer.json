@@ -1,6 +1,7 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "waqas-yousaf/dulluhan",
+    "version": "0.3.3",
     "description": "A Laravel package for managing and publishing rich editorial posts.",
     "type": "library",
     "license": "MIT",
