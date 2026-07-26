@@ -4,25 +4,55 @@ namespace WaqasYousaf\Dulluhan\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
 class DulluhanApiAccess
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! config('dulluhan.api_security.enabled', false)) {
-            return $next($request);
+        $throttleEnabled = config('dulluhan.api_throttle.enabled', true);
+        $rateLimitKey = null;
+        $maxAttempts = 60;
+
+        if ($throttleEnabled) {
+            $rateLimitKey = 'dulluhan_api_limit:' . $request->ip();
+            $maxAttempts = (int) config('dulluhan.api_throttle.max_attempts', 60);
+            $decayMinutes = (int) config('dulluhan.api_throttle.decay_minutes', 1);
+
+            if (RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
+                $seconds = RateLimiter::availableIn($rateLimitKey);
+                return response()->json([
+                    'message' => 'Too many requests. Please try again later.'
+                ], 429, [
+                    'Retry-After' => $seconds,
+                    'X-RateLimit-Limit' => $maxAttempts,
+                    'X-RateLimit-Remaining' => 0,
+                    'X-RateLimit-Reset' => time() + $seconds,
+                ]);
+            }
+
+            RateLimiter::hit($rateLimitKey, $decayMinutes * 60);
         }
 
-        if (! $this->hasValidApiKey($request)) {
-            return response()->json(['message' => 'Invalid or missing Dulluhan API key.'], 401);
+        if (config('dulluhan.api_security.enabled', false)) {
+            if (! $this->hasValidApiKey($request)) {
+                return response()->json(['message' => 'Invalid or missing Dulluhan API key.'], 401);
+            }
+
+            if (! $this->hasAllowedDomain($request)) {
+                return response()->json(['message' => 'This domain is not allowed to access the Dulluhan API.'], 403);
+            }
         }
 
-        if (! $this->hasAllowedDomain($request)) {
-            return response()->json(['message' => 'This domain is not allowed to access the Dulluhan API.'], 403);
+        $response = $next($request);
+
+        if ($throttleEnabled && $rateLimitKey) {
+            $response->headers->set('X-RateLimit-Limit', $maxAttempts);
+            $response->headers->set('X-RateLimit-Remaining', RateLimiter::remaining($rateLimitKey, $maxAttempts));
         }
 
-        return $next($request);
+        return $response;
     }
 
     private function hasValidApiKey(Request $request): bool

@@ -18,6 +18,12 @@ return [
         'query_parameter' => 'api_key',
     ],
 
+    'api_throttle' => [
+        'enabled' => env('DULLUHAN_API_THROTTLE_ENABLED', true),
+        'max_attempts' => (int) env('DULLUHAN_API_THROTTLE_MAX_ATTEMPTS', 60),
+        'decay_minutes' => (int) env('DULLUHAN_API_THROTTLE_DECAY_MINUTES', 1),
+    ],
+
     'sitemap' => [
         'enabled' => env('DULLUHAN_SITEMAP_ENABLED', true),
         'path' => env('DULLUHAN_SITEMAP_PATH', 'blog-sitemap.xml'),
