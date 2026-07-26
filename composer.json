@@ -1,14 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "waqas-yousaf/dulluhan",
+    "name": "waqas-yousaf/dullahan",
     "version": "0.4.4-alpha",
-    "description": "Dulluhan is a lightweight, high-performance, and feature-rich Laravel Headless CMS & Editorial Blog Package. It provides a fully session-isolated admin panel, a rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.",
+    "description": "Dullahan is a lightweight, high-performance, and feature-rich Laravel Headless CMS & Editorial Blog Package. It provides a fully session-isolated admin panel, a rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Waqas Yousaf",
-            "homepage": "https://github.com/waqas-yousaf/dulluhan"
+            "homepage": "https://github.com/waqas-yousaf/dullahan"
         }
     ],
     "require": {
@@ -23,13 +23,13 @@
     },
     "autoload": {
         "psr-4": {
-            "WaqasYousaf\\Dulluhan\\": "src/"
+            "WaqasYousaf\\Dullahan\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "WaqasYousaf\\Dulluhan\\DulluhanServiceProvider"
+                "WaqasYousaf\\Dullahan\\DullahanServiceProvider"
             ]
         }
     },

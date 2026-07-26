@@ -1,15 +1,15 @@
-@extends('dulluhan::admin.layout', ['title' => 'Dulluhan Posts'])
+@extends('dullahan::admin.layout', ['title' => 'Dullahan Posts'])
 
 @section('content')
     <div class="topbar">
         <h1>Posts</h1>
         <div class="actions">
-            <a class="btn secondary" href="{{ route('dulluhan.admin.posts.export') }}">Export CSV</a>
-            <a class="btn" href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
+            <a class="btn secondary" href="{{ route('dullahan.admin.posts.export') }}">Export CSV</a>
+            <a class="btn" href="{{ route('dullahan.admin.posts.create') }}">New Post</a>
         </div>
     </div>
 
-    <form method="get" action="{{ route('dulluhan.admin.posts.index') }}" class="panel" style="margin-bottom: 22px; padding: 16px;">
+    <form method="get" action="{{ route('dullahan.admin.posts.index') }}" class="panel" style="margin-bottom: 22px; padding: 16px;">
         <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
             <div style="flex: 1; min-width: 200px;">
                 <label for="search" style="font-size: 13px; margin-bottom: 4px;">Search</label>
@@ -58,7 +58,7 @@
             <div style="display: flex; gap: 8px;">
                 <button type="submit" class="btn" style="height: 38px; padding: 0 16px;">Filter</button>
                 @if (request()->anyFilled(['search', 'category', 'author', 'type', 'status']))
-                    <a href="{{ route('dulluhan.admin.posts.index') }}" class="btn secondary" style="height: 38px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center;">Reset</a>
+                    <a href="{{ route('dullahan.admin.posts.index') }}" class="btn secondary" style="height: 38px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center;">Reset</a>
                 @endif
             </div>
         </div>
@@ -99,10 +99,10 @@
                             <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank" title="View" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
                                 <span class="material-icons" style="font-size: 18px;">visibility</span>
                             </a>
-                            <a class="btn info" href="{{ route('dulluhan.admin.posts.edit', $post) }}" title="Edit" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                            <a class="btn info" href="{{ route('dullahan.admin.posts.edit', $post) }}" title="Edit" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
                                 <span class="material-icons" style="font-size: 18px;">edit</span>
                             </a>
-                            <form method="post" action="{{ route('dulluhan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')" style="margin: 0; display: inline-flex;">
+                            <form method="post" action="{{ route('dullahan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')" style="margin: 0; display: inline-flex;">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn danger" type="submit" title="Delete" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">

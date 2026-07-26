@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,24 +16,24 @@ class ProfileController extends Controller
 {
     public function edit(): View
     {
-        return view('dulluhan::admin.profile', [
-            'author' => Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user(),
+        return view('dullahan::admin.profile', [
+            'author' => Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user(),
         ]);
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $author = Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user();
-        $mimes = implode(',', config('dulluhan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
+        $author = Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user();
+        $mimes = implode(',', config('dullahan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('dulluhan_authors', 'email')->ignore($author->getKey())],
+            'email' => ['required', 'email', 'max:255', Rule::unique('dullahan_authors', 'email')->ignore($author->getKey())],
             'current_password' => ['nullable', 'required_with:password', 'string'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'job_title' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:2000'],
-            'avatar' => ['nullable', 'image', 'mimes:' . $mimes, 'max:' . config('dulluhan.uploads.max_kb', 4096)],
+            'avatar' => ['nullable', 'image', 'mimes:' . $mimes, 'max:' . config('dullahan.uploads.max_kb', 4096)],
             'website_url' => ['nullable', 'url'],
             'facebook_url' => ['nullable', 'url'],
             'x_url' => ['nullable', 'url'],
@@ -59,7 +59,7 @@ class ProfileController extends Controller
             $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', \Illuminate\Support\Str::ascii($name)), '-');
             $filename = 'avatar-' . now()->format('YmdHis') . '-' . ($safeName ?: 'avatar') . '.' . $extension;
-            $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+            $relativePath = trim(config('dullahan.uploads.path', 'uploads/dullahan'), '/');
             $publicPath = public_path($relativePath);
 
             File::ensureDirectoryExists($publicPath, 0755, true);
@@ -87,7 +87,7 @@ class ProfileController extends Controller
             $request->session()->regenerate();
         }
 
-        return redirect()->route('dulluhan.admin.profile.edit')->with('status', 'Profile updated successfully.');
+        return redirect()->route('dullahan.admin.profile.edit')->with('status', 'Profile updated successfully.');
     }
 
     private function parseSocialLinks(string $value): array

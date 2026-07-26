@@ -1,22 +1,22 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use WaqasYousaf\Dulluhan\Models\Category;
+use WaqasYousaf\Dullahan\Models\Category;
 
 class CategoryController extends Controller
 {
     public function index(): View
     {
-        return view('dulluhan::admin.categories.index', [
+        return view('dullahan::admin.categories.index', [
             'categories' => Category::query()->withCount('posts')->orderBy('name')->paginate(20),
             'category' => new Category(),
-            'action' => route('dulluhan.admin.categories.store'),
+            'action' => route('dullahan.admin.categories.store'),
             'method' => 'POST',
         ]);
     }
@@ -25,15 +25,15 @@ class CategoryController extends Controller
     {
         Category::query()->create($this->validated($request));
 
-        return redirect()->route('dulluhan.admin.categories.index')->with('status', 'Category created.');
+        return redirect()->route('dullahan.admin.categories.index')->with('status', 'Category created.');
     }
 
     public function edit(Category $category): View
     {
-        return view('dulluhan::admin.categories.index', [
+        return view('dullahan::admin.categories.index', [
             'categories' => Category::query()->withCount('posts')->orderBy('name')->paginate(20),
             'category' => $category,
-            'action' => route('dulluhan.admin.categories.update', $category),
+            'action' => route('dullahan.admin.categories.update', $category),
             'method' => 'PUT',
         ]);
     }
@@ -42,14 +42,14 @@ class CategoryController extends Controller
     {
         $category->fill($this->validated($request, $category))->save();
 
-        return redirect()->route('dulluhan.admin.categories.index')->with('status', 'Category updated.');
+        return redirect()->route('dullahan.admin.categories.index')->with('status', 'Category updated.');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
 
-        return redirect()->route('dulluhan.admin.categories.index')->with('status', 'Category deleted.');
+        return redirect()->route('dullahan.admin.categories.index')->with('status', 'Category deleted.');
     }
 
     public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
@@ -76,7 +76,7 @@ class CategoryController extends Controller
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="dulluhan-categories-' . now()->format('YmdHis') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="dullahan-categories-' . now()->format('YmdHis') . '.csv"',
         ]);
 
         return $response;
@@ -90,7 +90,7 @@ class CategoryController extends Controller
                 'nullable',
                 'string',
                 'max:255',
-                Rule::unique('dulluhan_categories', 'slug')->ignore($category?->getKey()),
+                Rule::unique('dullahan_categories', 'slug')->ignore($category?->getKey()),
             ],
             'description' => ['nullable', 'string'],
         ]);

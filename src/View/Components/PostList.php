@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\View\Components;
+namespace WaqasYousaf\Dullahan\View\Components;
 
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,7 +24,7 @@ class PostList extends Component
 
     public function render(): View
     {
-        return view('dulluhan::components.post-list', [
+        return view('dullahan::components.post-list', [
             'filteredPosts' => $this->filteredPosts(),
         ]);
     }
@@ -68,7 +68,7 @@ class PostList extends Component
             ->when($this->limit, fn (Builder $query, int $limit) => $query->limit($limit));
 
         if ($this->paginate) {
-            return $query->paginate($this->perPage ?? config('dulluhan.pagination.posts_per_page', 12));
+            return $query->paginate($this->perPage ?? config('dullahan.pagination.posts_per_page', 12));
         }
 
         return $query->get();

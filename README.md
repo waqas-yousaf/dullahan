@@ -1,8 +1,8 @@
-# Dulluhan
+# Dullahan
 
-Dulluhan is a lightweight, high-performance, and feature-rich **Laravel Headless CMS & Editorial Blog Package**. It provides a fully session-isolated administration panel, a state-of-the-art rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.
+Dullahan is a lightweight, high-performance, and feature-rich **Laravel Headless CMS & Editorial Blog Package**. It provides a fully session-isolated administration panel, a state-of-the-art rich text editor, built-in SEO optimizations, dynamic sitemaps, ready-made Blade components, and a secure headless JSON API.
 
-Whether you want to build a headless blog using modern frontend frameworks (like Next.js, Nuxt, or Astro) or render posts server-side using Laravel's native Blade templates, Dulluhan has everything you need to manage, publish, and distribute your content.
+Whether you want to build a headless blog using modern frontend frameworks (like Next.js, Nuxt, or Astro) or render posts server-side using Laravel's native Blade templates, Dullahan has everything you need to manage, publish, and distribute your content.
 
 ## Features
 
@@ -31,7 +31,7 @@ Whether you want to build a headless blog using modern frontend frameworks (like
 - **SEO Elements**: Includes custom prioritized weightings, update frequencies, custom URL structures, and featured images for media-rich index nodes.
 
 ### 📦 Flexible Rendering (Blade Components)
-- **Pre-Built Blade Components**: Easily render post lists and cards on your frontend using `<x-dulluhan-post-list>` and `<x-dulluhan-post-card>`.
+- **Pre-Built Blade Components**: Easily render post lists and cards on your frontend using `<x-dullahan-post-list>` and `<x-dullahan-post-card>`.
 - **Query & Property Filtering**: Pass Eloquent builders or collections directly and filter by category, post type, search terms, and limit/pagination settings.
 
 ### 👥 Authors & Categories Management
@@ -48,7 +48,7 @@ Whether you want to build a headless blog using modern frontend frameworks (like
 Install the package with Composer:
 
 ```bash
-composer require waqas-yousaf/dulluhan
+composer require waqas-yousaf/dullahan
 ```
 
 Laravel package auto-discovery registers the service provider automatically.
@@ -56,63 +56,63 @@ Laravel package auto-discovery registers the service provider automatically.
 Publish optional overrides:
 
 ```bash
-php artisan vendor:publish --tag=dulluhan-config
-php artisan vendor:publish --tag=dulluhan-views
-php artisan vendor:publish --tag=dulluhan-migrations
+php artisan vendor:publish --tag=dullahan-config
+php artisan vendor:publish --tag=dullahan-views
+php artisan vendor:publish --tag=dullahan-migrations
 ```
 
 Run the installer:
 
 ```bash
-php artisan dulluhan:install
+php artisan dullahan:install
 ```
 
-If Artisan does not list `dulluhan:install` after installing the package, rebuild Laravel package discovery:
+If Artisan does not list `dullahan:install` after installing the package, rebuild Laravel package discovery:
 
 ```bash
 composer dump-autoload
 php artisan package:discover
-php artisan list dulluhan
+php artisan list dullahan
 ```
 
-The host Laravel app must be able to write to `bootstrap/cache`, `storage/logs`, the configured database, and `public/uploads/dulluhan`.
+The host Laravel app must be able to write to `bootstrap/cache`, `storage/logs`, the configured database, and `public/uploads/dullahan`.
 
-The default admin panel is available at `/spanel`. The public API is available at `/api/dulluhan/posts` and `/api/dulluhan/posts/{slug}`.
-The dashboard includes author-box profile editing and password changes for the logged-in Dulluhan author.
+The default admin panel is available at `/spanel`. The public API is available at `/api/dullahan/posts` and `/api/dullahan/posts/{slug}`.
+The dashboard includes author-box profile editing and password changes for the logged-in Dullahan author.
 
 The posts API can be filtered with `?type=news` and `?category=announcements`.
 Each API post includes an `author_box` payload with public author profile fields when enabled from the dashboard.
 The admin post editor includes SEO fields for slug, meta title, meta description, keywords, canonical URL, Open Graph values, robots, and schema JSON.
-The admin panel shows the host Laravel app name in the sidebar and Dulluhan plus its package version in the footer.
+The admin panel shows the host Laravel app name in the sidebar and Dullahan plus its package version in the footer.
 
 ## Configuration
 
-The package comes with a `dulluhan.php` configuration file. If you haven't published it, run `php artisan vendor:publish --tag=dulluhan-config` to copy it to your host application's config directory.
+The package comes with a `dullahan.php` configuration file. If you haven't published it, run `php artisan vendor:publish --tag=dullahan-config` to copy it to your host application's config directory.
 
 Below is a detailed guide to all available configuration parameters and their respective Environment (`.env`) overrides.
 
 ### 1. General Settings
-- **`route_prefix`** (Env: `DULLUHAN_ROUTE_PREFIX`): The base URL prefix for accessing the editorial admin panel.
+- **`route_prefix`** (Env: `DULLAHAN_ROUTE_PREFIX`): The base URL prefix for accessing the editorial admin panel.
   - *Default*: `'spanel'`
-- **`api_prefix`** (Env: `DULLUHAN_API_PREFIX`): The URL prefix for the headless JSON API endpoints.
-  - *Default*: `'api/dulluhan'`
+- **`api_prefix`** (Env: `DULLAHAN_API_PREFIX`): The URL prefix for the headless JSON API endpoints.
+  - *Default*: `'api/dullahan'`
 
 ### 2. Middleware Control
 - **`middleware`**: Customize the middleware stacks applied to routes:
   - **`web`**: Applied to the general package frontend/web endpoints. *Default*: `['web']`.
-  - **`api`**: Applied to public headless endpoints. *Default*: `['api', 'dulluhan.api']`.
-  - **`admin`**: Applied to the session-isolated admin panel. *Default*: `['dulluhan.admin']`.
+  - **`api`**: Applied to public headless endpoints. *Default*: `['api', 'dullahan.api']`.
+  - **`admin`**: Applied to the session-isolated admin panel. *Default*: `['dullahan.admin']`.
 
 ### 3. API Security & Access Keys
 Protect your public headless endpoints from unauthorized access by requiring API keys and restricting client origins.
-- **`api_security.enabled`** (Env: `DULLUHAN_API_SECURITY_ENABLED`): Set to `true` to require credentials.
+- **`api_security.enabled`** (Env: `DULLAHAN_API_SECURITY_ENABLED`): Set to `true` to require credentials.
   - *Default*: `false`
-- **`api_security.keys`** (Env: `DULLUHAN_API_KEYS`): A comma-separated list of keys authorized to query the API.
-  - *Example*: `DULLUHAN_API_KEYS="secret-key-1,secret-key-2"`
-- **`api_security.allowed_domains`** (Env: `DULLUHAN_API_ALLOWED_DOMAINS`): A comma-separated list of domains allowed to request the API.
-  - *Example*: `DULLUHAN_API_ALLOWED_DOMAINS="example.com,www.example.com"`
+- **`api_security.keys`** (Env: `DULLAHAN_API_KEYS`): A comma-separated list of keys authorized to query the API.
+  - *Example*: `DULLAHAN_API_KEYS="secret-key-1,secret-key-2"`
+- **`api_security.allowed_domains`** (Env: `DULLAHAN_API_ALLOWED_DOMAINS`): A comma-separated list of domains allowed to request the API.
+  - *Example*: `DULLAHAN_API_ALLOWED_DOMAINS="example.com,www.example.com"`
 - **`api_security.header`**: The request header key to look for the API key.
-  - *Default*: `'X-Dulluhan-Api-Key'`
+  - *Default*: `'X-Dullahan-Api-Key'`
 - **`api_security.query_parameter`**: Fallback query parameter name for the API key.
   - *Default*: `'api_key'`
 
@@ -120,35 +120,35 @@ Protect your public headless endpoints from unauthorized access by requiring API
 
 ### 4. Dynamic XML Sitemap
 Automatically compile and serve an XML sitemap of all published posts for SEO indexing.
-- **`sitemap.enabled`** (Env: `DULLUHAN_SITEMAP_ENABLED`): Toggles sitemap compilation.
+- **`sitemap.enabled`** (Env: `DULLAHAN_SITEMAP_ENABLED`): Toggles sitemap compilation.
   - *Default*: `true`
-- **`sitemap.path`** (Env: `DULLUHAN_SITEMAP_PATH`): The sitemap XML route endpoint.
+- **`sitemap.path`** (Env: `DULLAHAN_SITEMAP_PATH`): The sitemap XML route endpoint.
   - *Default*: `'blog-sitemap.xml'`
-- **`sitemap.post_url_pattern`** (Env: `DULLUHAN_POST_URL_PATTERN`): The URL structure to construct sitemap links if a post doesn't specify a custom Canonical URL.
+- **`sitemap.post_url_pattern`** (Env: `DULLAHAN_POST_URL_PATTERN`): The URL structure to construct sitemap links if a post doesn't specify a custom Canonical URL.
   - *Default*: `'/blog/{slug}'`
-- **`sitemap.changefreq`** (Env: `DULLUHAN_SITEMAP_CHANGEFREQ`): The `<changefreq>` frequency tag value.
+- **`sitemap.changefreq`** (Env: `DULLAHAN_SITEMAP_CHANGEFREQ`): The `<changefreq>` frequency tag value.
   - *Default*: `'weekly'`
-- **`sitemap.priority`** (Env: `DULLUHAN_SITEMAP_PRIORITY`): The `<priority>` index score.
+- **`sitemap.priority`** (Env: `DULLAHAN_SITEMAP_PRIORITY`): The `<priority>` index score.
   - *Default*: `'0.7'`
-- **`sitemap.include_images`** (Env: `DULLUHAN_SITEMAP_INCLUDE_IMAGES`): Appends post featured images (if present) to the XML sitemap node.
+- **`sitemap.include_images`** (Env: `DULLAHAN_SITEMAP_INCLUDE_IMAGES`): Appends post featured images (if present) to the XML sitemap node.
   - *Default*: `true`
 
 ### 5. Google reCAPTCHA
 Secure the admin login/authentication forms.
-- **`recaptcha.enabled`** (Env: `DULLUHAN_RECAPTCHA_ENABLED`): Toggles CAPTCHA validation.
+- **`recaptcha.enabled`** (Env: `DULLAHAN_RECAPTCHA_ENABLED`): Toggles CAPTCHA validation.
   - *Default*: `false`
-- **`recaptcha.version`** (Env: `DULLUHAN_RECAPTCHA_VERSION`): Target reCAPTCHA version, supporting `'v2'` or `'v3'`.
+- **`recaptcha.version`** (Env: `DULLAHAN_RECAPTCHA_VERSION`): Target reCAPTCHA version, supporting `'v2'` or `'v3'`.
   - *Default*: `'v2'`
-- **`recaptcha.site_key`** (Env: `DULLUHAN_RECAPTCHA_SITE_KEY`): Public client key.
-- **`recaptcha.secret_key`** (Env: `DULLUHAN_RECAPTCHA_SECRET_KEY`): Secret verification key.
-- **`recaptcha.minimum_score`** (Env: `DULLUHAN_RECAPTCHA_MINIMUM_SCORE`): Threshold for spam rejection on v3 actions.
+- **`recaptcha.site_key`** (Env: `DULLAHAN_RECAPTCHA_SITE_KEY`): Public client key.
+- **`recaptcha.secret_key`** (Env: `DULLAHAN_RECAPTCHA_SECRET_KEY`): Secret verification key.
+- **`recaptcha.minimum_score`** (Env: `DULLAHAN_RECAPTCHA_MINIMUM_SCORE`): Threshold for spam rejection on v3 actions.
   - *Default*: `0.5`
 - **`recaptcha.verify_url`**: The validation endpoint.
   - *Default*: `'https://www.google.com/recaptcha/api/siteverify'`
 
 ### 6. Media Uploads
 - **`uploads.path`**: Local destination subdirectory inside the host's `public/` directory where editor images are stored.
-  - *Default*: `'uploads/dulluhan'` (resolves to `public/uploads/dulluhan`)
+  - *Default*: `'uploads/dullahan'` (resolves to `public/uploads/dullahan`)
 - **`uploads.max_kb`**: Maximum allowed image upload size in kilobytes.
   - *Default*: `4096` (4MB)
 - **`uploads.mimes`**: Array of allowed image extensions.
@@ -174,12 +174,12 @@ Secure the admin login/authentication forms.
   - *Default*: `30000` (30 seconds)
 
 ### 9. Default Administrator Account
-Values used during `php artisan dulluhan:install` to initialize the default author.
-- **`admin.name`** (Env: `DULLUHAN_ADMIN_NAME`): Admin full name.
-  - *Default*: `'Dulluhan Admin'`
-- **`admin.email`** (Env: `DULLUHAN_ADMIN_EMAIL`): Admin email username.
+Values used during `php artisan dullahan:install` to initialize the default author.
+- **`admin.name`** (Env: `DULLAHAN_ADMIN_NAME`): Admin full name.
+  - *Default*: `'Dullahan Admin'`
+- **`admin.email`** (Env: `DULLAHAN_ADMIN_EMAIL`): Admin email username.
   - *Default*: `'admin@example.com'`
-- **`admin.password`** (Env: `DULLUHAN_ADMIN_PASSWORD`): Admin initial password.
+- **`admin.password`** (Env: `DULLAHAN_ADMIN_PASSWORD`): Admin initial password.
   - *Default*: random 16-character password generated at install time and printed once.
 
 ### 10. Listing Pagination
@@ -193,14 +193,14 @@ Values used during `php artisan dulluhan:install` to initialize the default auth
 ## Blade Components
 
 ```blade
-<x-dulluhan-post-list :posts="$posts" />
-<x-dulluhan-post-card :post="$post" />
+<x-dullahan-post-list :posts="$posts" />
+<x-dullahan-post-card :post="$post" />
 ```
 
 Filter posts directly through component props:
 
 ```blade
-<x-dulluhan-post-list
+<x-dullahan-post-list
     :posts="$posts"
     search="dubai"
     post-type="news"
@@ -213,8 +213,8 @@ Filter posts directly through component props:
 The `posts` prop may be a collection, paginator, array, or Eloquent query builder. For query builders, the component can paginate the filtered result:
 
 ```blade
-<x-dulluhan-post-list
-    :posts="\WaqasYousaf\Dulluhan\Models\Post::query()->with('categories', 'author')"
+<x-dullahan-post-list
+    :posts="\WaqasYousaf\Dullahan\Models\Post::query()->with('categories', 'author')"
     category="announcements"
     :paginate="true"
     :per-page="9"
@@ -223,12 +223,12 @@ The `posts` prop may be a collection, paginator, array, or Eloquent query builde
 
 ## API Routes
 
-Dulluhan exposes headless JSON API endpoints for retrieving posts. The API base prefix can be customized using `DULLUHAN_API_PREFIX` (defaults to `api/dulluhan`).
+Dullahan exposes headless JSON API endpoints for retrieving posts. The API base prefix can be customized using `DULLAHAN_API_PREFIX` (defaults to `api/dullahan`).
 
 ### 1. List Posts
 Retrieve a paginated list of published posts.
 
-- **Endpoint**: `GET /api/dulluhan/posts`
+- **Endpoint**: `GET /api/dullahan/posts`
 - **Query Parameters**:
   - `type` (string, optional): Filter posts by post type (e.g. `post`, `article`, `news`, `page`).
   - `category` (string, optional): Filter posts by category slug (e.g. `announcements`).
@@ -252,7 +252,7 @@ Retrieve a paginated list of published posts.
 ### 2. View Post
 Retrieve detailed information for a single published post.
 
-- **Endpoint**: `GET /api/dulluhan/posts/{slug}`
+- **Endpoint**: `GET /api/dullahan/posts/{slug}`
 - **Parameters**:
   - `{slug}` (string, required): The unique URL slug of the post.
 - **Response Format**: A wrapper object containing `data` with all the post fields described above. Returns `404 Not Found` if the post is a draft or does not exist.

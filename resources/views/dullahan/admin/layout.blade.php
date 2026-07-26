@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? 'Dulluhan' }}</title>
+    <title>{{ $title ?? 'Dullahan' }}</title>
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('dulluhan-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const savedTheme = localStorage.getItem('dullahan-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
@@ -456,16 +456,16 @@
         <aside class="sidebar">
             <div class="brand">{{ config('app.name', 'Laravel') }}</div>
             <nav class="nav">
-                <a href="{{ route('dulluhan.admin.dashboard') }}">Dashboard</a>
-                <a href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
-                <a href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
-                <a href="{{ route('dulluhan.admin.categories.index') }}">Categories</a>
-                @if (Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email ===
-                config('dulluhan.admin.email'))
-                <a href="{{ route('dulluhan.admin.authors.index') }}">Authors</a>
+                <a href="{{ route('dullahan.admin.dashboard') }}">Dashboard</a>
+                <a href="{{ route('dullahan.admin.posts.index') }}">Posts</a>
+                <a href="{{ route('dullahan.admin.posts.create') }}">New Post</a>
+                <a href="{{ route('dullahan.admin.categories.index') }}">Categories</a>
+                @if (Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user()?->email ===
+                config('dullahan.admin.email'))
+                <a href="{{ route('dullahan.admin.authors.index') }}">Authors</a>
                 @endif
-                <a href="{{ route('dulluhan.admin.profile.edit') }}">Profile</a>
-                <form method="post" action="{{ route('dulluhan.admin.logout') }}">
+                <a href="{{ route('dullahan.admin.profile.edit') }}">Profile</a>
+                <form method="post" action="{{ route('dullahan.admin.logout') }}">
                     @csrf
                     <button type="submit">Logout</button>
                 </form>
@@ -479,7 +479,7 @@
                 @yield('content')
             </div>
             <footer class="footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                <span>Dulluhan v{{ \WaqasYousaf\Dulluhan\DulluhanServiceProvider::version() }}</span>
+                <span>Dullahan v{{ \WaqasYousaf\Dullahan\DullahanServiceProvider::version() }}</span>
                 <button type="button" id="theme-toggle" style="background: none; border: none; padding: 0; margin: 0; color: inherit; font: inherit; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                     <span class="material-icons" style="font-size: 14px;" id="theme-icon">dark_mode</span>
                     <span id="theme-text">Dark Mode</span>
@@ -512,7 +512,7 @@
                     const nextTheme = existing === 'dark' ? 'light' : 'dark';
                     
                     document.documentElement.setAttribute('data-theme', nextTheme);
-                    localStorage.setItem('dulluhan-theme', nextTheme);
+                    localStorage.setItem('dullahan-theme', nextTheme);
                     updateThemeUI(nextTheme);
                 });
             }

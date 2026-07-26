@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('dulluhan_categories', function (Blueprint $table): void {
+        Schema::create('dullahan_categories', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -16,10 +16,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('dulluhan_category_post', function (Blueprint $table): void {
+        Schema::create('dullahan_category_post', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('category_id')->constrained('dulluhan_categories')->cascadeOnDelete();
-            $table->foreignId('post_id')->constrained('dulluhan_posts')->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained('dullahan_categories')->cascadeOnDelete();
+            $table->foreignId('post_id')->constrained('dullahan_posts')->cascadeOnDelete();
             $table->timestamps();
 
             $table->unique(['category_id', 'post_id']);
@@ -28,7 +28,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('dulluhan_category_post');
-        Schema::dropIfExists('dulluhan_categories');
+        Schema::dropIfExists('dullahan_category_post');
+        Schema::dropIfExists('dullahan_categories');
     }
 };

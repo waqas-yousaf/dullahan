@@ -1,9 +1,9 @@
-@extends('dulluhan::admin.layout', ['title' => $author->exists ? 'Edit Author' : 'New Author'])
+@extends('dullahan::admin.layout', ['title' => $author->exists ? 'Edit Author' : 'New Author'])
 
 @section('content')
 <div class="topbar">
     <h1>{{ $author->exists ? 'Edit Author' : 'New Author' }}</h1>
-    <a class="btn secondary" href="{{ route('dulluhan.admin.authors.index') }}">All Authors</a>
+    <a class="btn secondary" href="{{ route('dullahan.admin.authors.index') }}">All Authors</a>
 </div>
 
 <form class="panel" method="post" action="{{ $action }}" enctype="multipart/form-data">

@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('dulluhan_posts', function (Blueprint $table): void {
+        Schema::create('dullahan_posts', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('author_id')->constrained('dulluhan_authors')->cascadeOnDelete();
+            $table->foreignId('author_id')->constrained('dullahan_authors')->cascadeOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('post_type')->default('post')->index();
@@ -25,6 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('dulluhan_posts');
+        Schema::dropIfExists('dullahan_posts');
     }
 };

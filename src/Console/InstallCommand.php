@@ -1,22 +1,22 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Console;
+namespace WaqasYousaf\Dullahan\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use WaqasYousaf\Dulluhan\Models\Author;
+use WaqasYousaf\Dullahan\Models\Author;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'dulluhan:install {--force : Force migrations in production}';
+    protected $signature = 'dullahan:install {--force : Force migrations in production}';
 
-    protected $description = 'Install Dulluhan migrations, upload storage, and the default admin author.';
+    protected $description = 'Install Dullahan migrations, upload storage, and the default admin author.';
 
     public function handle(): int
     {
-        $this->info('Installing Dulluhan...');
+        $this->info('Installing Dullahan...');
 
         $this->call('migrate', [
             '--path' => __DIR__ . '/../../database/migrations',
@@ -24,26 +24,26 @@ class InstallCommand extends Command
             '--force' => $this->option('force'),
         ]);
 
-        $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+        $relativePath = trim(config('dullahan.uploads.path', 'uploads/dullahan'), '/');
         $publicPath = public_path($relativePath);
 
         File::ensureDirectoryExists($publicPath, 0755, true);
         @chmod($publicPath, 0755);
 
-        $configuredPassword = config('dulluhan.admin.password');
+        $configuredPassword = config('dullahan.admin.password');
         $password = $configuredPassword ?: Str::password(16);
 
         $admin = Author::query()->firstOrCreate(
-            ['email' => config('dulluhan.admin.email')],
+            ['email' => config('dullahan.admin.email')],
             [
-                'name' => config('dulluhan.admin.name'),
+                'name' => config('dullahan.admin.name'),
                 'password' => Hash::make($password),
             ]
         );
 
         $this->newLine();
-        $this->info('Dulluhan is ready.');
-        $this->line('Admin URL: ' . url(config('dulluhan.route_prefix', 'spanel')));
+        $this->info('Dullahan is ready.');
+        $this->line('Admin URL: ' . url(config('dullahan.route_prefix', 'spanel')));
         $this->line('Admin email: ' . $admin->email);
         if ($admin->wasRecentlyCreated) {
             $this->line('Admin password: ' . $password);

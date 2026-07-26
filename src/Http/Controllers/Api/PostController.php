@@ -1,10 +1,10 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Api;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use WaqasYousaf\Dulluhan\Models\Post;
+use WaqasYousaf\Dullahan\Models\Post;
 
 class PostController extends Controller
 {
@@ -18,7 +18,7 @@ class PostController extends Controller
                 $query->whereHas('category', fn ($query) => $query->where('slug', $category));
             })
             ->latest('published_at')
-            ->paginate(config('dulluhan.pagination.posts_per_page', 12));
+            ->paginate(config('dullahan.pagination.posts_per_page', 12));
 
         $posts->through(fn (Post $post) => $this->postListPayload($post));
 

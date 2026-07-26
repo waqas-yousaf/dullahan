@@ -1,24 +1,24 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Middleware;
+namespace WaqasYousaf\Dullahan\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
-class DulluhanApiAccess
+class DullahanApiAccess
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $throttleEnabled = config('dulluhan.api_throttle.enabled', true);
+        $throttleEnabled = config('dullahan.api_throttle.enabled', true);
         $rateLimitKey = null;
         $maxAttempts = 60;
 
         if ($throttleEnabled) {
-            $rateLimitKey = 'dulluhan_api_limit:' . $request->ip();
-            $maxAttempts = (int) config('dulluhan.api_throttle.max_attempts', 60);
-            $decayMinutes = (int) config('dulluhan.api_throttle.decay_minutes', 1);
+            $rateLimitKey = 'dullahan_api_limit:' . $request->ip();
+            $maxAttempts = (int) config('dullahan.api_throttle.max_attempts', 60);
+            $decayMinutes = (int) config('dullahan.api_throttle.decay_minutes', 1);
 
             if (RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
                 $seconds = RateLimiter::availableIn($rateLimitKey);
@@ -35,13 +35,13 @@ class DulluhanApiAccess
             RateLimiter::hit($rateLimitKey, $decayMinutes * 60);
         }
 
-        if (config('dulluhan.api_security.enabled', false)) {
+        if (config('dullahan.api_security.enabled', false)) {
             if (! $this->hasValidApiKey($request)) {
-                return response()->json(['message' => 'Invalid or missing Dulluhan API key.'], 401);
+                return response()->json(['message' => 'Invalid or missing Dullahan API key.'], 401);
             }
 
             if (! $this->hasAllowedDomain($request)) {
-                return response()->json(['message' => 'This domain is not allowed to access the Dulluhan API.'], 403);
+                return response()->json(['message' => 'This domain is not allowed to access the Dullahan API.'], 403);
             }
         }
 
@@ -57,14 +57,14 @@ class DulluhanApiAccess
 
     private function hasValidApiKey(Request $request): bool
     {
-        $keys = config('dulluhan.api_security.keys', []);
+        $keys = config('dullahan.api_security.keys', []);
 
         if ($keys === []) {
             return false;
         }
 
-        $header = config('dulluhan.api_security.header', 'X-Dulluhan-Api-Key');
-        $parameter = config('dulluhan.api_security.query_parameter', 'api_key');
+        $header = config('dullahan.api_security.header', 'X-Dullahan-Api-Key');
+        $parameter = config('dullahan.api_security.query_parameter', 'api_key');
         $provided = $request->header($header) ?: $request->query($parameter);
 
         return is_string($provided) && in_array($provided, $keys, true);
@@ -72,7 +72,7 @@ class DulluhanApiAccess
 
     private function hasAllowedDomain(Request $request): bool
     {
-        $domains = config('dulluhan.api_security.allowed_domains', []);
+        $domains = config('dullahan.api_security.allowed_domains', []);
 
         if ($domains === []) {
             return true;

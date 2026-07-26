@@ -1,9 +1,9 @@
-@extends('dulluhan::admin.layout', ['title' => 'Dulluhan Dashboard'])
+@extends('dullahan::admin.layout', ['title' => 'Dullahan Dashboard'])
 
 @section('content')
     <div class="topbar">
         <h1>Dashboard</h1>
-        <a class="btn" href="{{ route('dulluhan.admin.posts.create') }}">New Post</a>
+        <a class="btn" href="{{ route('dullahan.admin.posts.create') }}">New Post</a>
     </div>
 
     <section class="grid" style="margin-bottom: 22px;">
@@ -16,7 +16,7 @@
         <h2 style="margin-top: 0;">Recent posts</h2>
         @forelse ($recentPosts as $post)
             <p>
-                <a href="{{ route('dulluhan.admin.posts.edit', $post) }}"><strong>{{ $post->title }}</strong></a>
+                <a href="{{ route('dullahan.admin.posts.edit', $post) }}"><strong>{{ $post->title }}</strong></a>
                 <span class="muted">by {{ $post->author?->name ?? 'Unknown' }} - {{ ucfirst($post->status) }} - {{ $post->autosaved_at ? 'autosaved ' . $post->autosaved_at->diffForHumans() : 'saved ' . $post->updated_at->diffForHumans() }}</span>
             </p>
         @empty

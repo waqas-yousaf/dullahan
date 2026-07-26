@@ -9,33 +9,33 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('dulluhan_posts', function (Blueprint $table): void {
-            $table->foreignId('category_id')->nullable()->after('author_id')->constrained('dulluhan_categories')->nullOnDelete();
+        Schema::table('dullahan_posts', function (Blueprint $table): void {
+            $table->foreignId('category_id')->nullable()->after('author_id')->constrained('dullahan_categories')->nullOnDelete();
         });
 
-        if (Schema::hasTable('dulluhan_category_post')) {
-            $pivots = DB::table('dulluhan_category_post')->orderBy('id')->get();
+        if (Schema::hasTable('dullahan_category_post')) {
+            $pivots = DB::table('dullahan_category_post')->orderBy('id')->get();
             foreach ($pivots as $pivot) {
-                DB::table('dulluhan_posts')
+                DB::table('dullahan_posts')
                     ->where('id', $pivot->post_id)
                     ->whereNull('category_id')
                     ->update(['category_id' => $pivot->category_id]);
             }
-            Schema::dropIfExists('dulluhan_category_post');
+            Schema::dropIfExists('dullahan_category_post');
         }
     }
 
     public function down(): void
     {
-        Schema::create('dulluhan_category_post', function (Blueprint $table): void {
+        Schema::create('dullahan_category_post', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('category_id')->constrained('dulluhan_categories')->cascadeOnDelete();
-            $table->foreignId('post_id')->constrained('dulluhan_posts')->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained('dullahan_categories')->cascadeOnDelete();
+            $table->foreignId('post_id')->constrained('dullahan_posts')->cascadeOnDelete();
             $table->timestamps();
             $table->unique(['category_id', 'post_id']);
         });
 
-        Schema::table('dulluhan_posts', function (Blueprint $table): void {
+        Schema::table('dullahan_posts', function (Blueprint $table): void {
             $table->dropForeign(['category_id']);
             $table->dropColumn('category_id');
         });

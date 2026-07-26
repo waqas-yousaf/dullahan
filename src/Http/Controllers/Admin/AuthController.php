@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,11 +14,11 @@ class AuthController extends Controller
 {
     public function showLogin(): View|RedirectResponse
     {
-        if (Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->check()) {
-            return redirect()->route('dulluhan.admin.dashboard');
+        if (Auth::guard(config('dullahan.auth.guard', 'dullahan'))->check()) {
+            return redirect()->route('dullahan.admin.dashboard');
         }
 
-        return view('dulluhan::admin.login');
+        return view('dullahan::admin.login');
     }
 
     public function login(Request $request): RedirectResponse
@@ -30,7 +30,7 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->attempt($credentials, $request->boolean('remember'))) {
+        if (! Auth::guard(config('dullahan.auth.guard', 'dullahan'))->attempt($credentials, $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => __('These credentials do not match our records.'),
             ]);
@@ -38,26 +38,26 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dulluhan.admin.dashboard'));
+        return redirect()->intended(route('dullahan.admin.dashboard'));
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->logout();
+        Auth::guard(config('dullahan.auth.guard', 'dullahan'))->logout();
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('dulluhan.admin.login');
+        return redirect()->route('dullahan.admin.login');
     }
 
     private function validateRecaptcha(Request $request): void
     {
-        if (! config('dulluhan.recaptcha.enabled', false)) {
+        if (! config('dullahan.recaptcha.enabled', false)) {
             return;
         }
 
         $token = $request->input('g-recaptcha-response');
-        $secret = config('dulluhan.recaptcha.secret_key');
+        $secret = config('dullahan.recaptcha.secret_key');
 
         if (! $token || ! $secret) {
             throw ValidationException::withMessages([
@@ -65,15 +65,15 @@ class AuthController extends Controller
             ]);
         }
 
-        $response = Http::asForm()->post(config('dulluhan.recaptcha.verify_url'), [
+        $response = Http::asForm()->post(config('dullahan.recaptcha.verify_url'), [
             'secret' => $secret,
             'response' => $token,
             'remoteip' => $request->ip(),
         ]);
 
         $payload = $response->json();
-        $version = config('dulluhan.recaptcha.version', 'v2');
-        $minimumScore = (float) config('dulluhan.recaptcha.minimum_score', 0.5);
+        $version = config('dullahan.recaptcha.version', 'v2');
+        $minimumScore = (float) config('dullahan.recaptcha.minimum_score', 0.5);
 
         if (! $response->ok() || ! ($payload['success'] ?? false)) {
             throw ValidationException::withMessages([

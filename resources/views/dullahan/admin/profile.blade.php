@@ -1,11 +1,11 @@
-@extends('dulluhan::admin.layout', ['title' => 'Profile & Author Settings'])
+@extends('dullahan::admin.layout', ['title' => 'Profile & Author Settings'])
 
 @section('content')
     <div class="topbar">
         <h1>Profile & Author Settings</h1>
     </div>
 
-    <form class="panel" method="post" action="{{ route('dulluhan.admin.profile.update') }}" enctype="multipart/form-data">
+    <form class="panel" method="post" action="{{ route('dullahan.admin.profile.update') }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

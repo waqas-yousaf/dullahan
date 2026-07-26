@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Models;
+namespace WaqasYousaf\Dullahan\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,7 +10,7 @@ class Author extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'dulluhan_authors';
+    protected $table = 'dullahan_authors';
 
     protected $fillable = [
         'name',

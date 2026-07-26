@@ -1,27 +1,27 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use WaqasYousaf\Dulluhan\Models\Post;
+use WaqasYousaf\Dullahan\Models\Post;
 
 class AutosaveController extends Controller
 {
     public function __invoke(Request $request, ?Post $post = null): JsonResponse
     {
-        abort_unless(config('dulluhan.autosave.enabled', true), 404);
+        abort_unless(config('dullahan.autosave.enabled', true), 404);
 
         $data = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('dulluhan_posts', 'slug')->ignore($post?->getKey())],
-            'author_id' => ['nullable', 'integer', 'exists:dulluhan_authors,id'],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('dullahan_posts', 'slug')->ignore($post?->getKey())],
+            'author_id' => ['nullable', 'integer', 'exists:dullahan_authors,id'],
             'content' => ['nullable', 'string'],
             'status' => ['nullable', Rule::in(['draft', 'published'])],
-            'post_type' => ['nullable', Rule::in(array_keys(config('dulluhan.post_types', ['post' => 'Post'])))],
+            'post_type' => ['nullable', Rule::in(array_keys(config('dullahan.post_types', ['post' => 'Post'])))],
             'featured_image' => ['nullable', 'url'],
             'meta_title' => ['nullable', 'string', 'max:70'],
             'meta_description' => ['nullable', 'string', 'max:170'],
@@ -33,7 +33,7 @@ class AutosaveController extends Controller
             'robots' => ['nullable', Rule::in(['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'])],
             'schema_markup' => ['nullable', 'json'],
             'published_at' => ['nullable', 'date'],
-            'category_id' => ['nullable', 'integer', 'exists:dulluhan_categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:dullahan_categories,id'],
         ]);
 
         unset($data['status'], $data['published_at']);
@@ -43,11 +43,11 @@ class AutosaveController extends Controller
             'title' => $post->title ?: 'Untitled Draft',
             'content' => $post->content ?: '<p><br></p>',
             'status' => 'draft',
-            'post_type' => config('dulluhan.default_post_type', 'post'),
+            'post_type' => config('dullahan.default_post_type', 'post'),
         ], array_filter($data, fn ($value) => $value !== null)));
 
         if (! $post->exists) {
-            $post->author_id = Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->id();
+            $post->author_id = Auth::guard(config('dullahan.auth.guard', 'dullahan'))->id();
         }
 
         $post->autosaved_at = now();
@@ -56,9 +56,9 @@ class AutosaveController extends Controller
         return response()->json([
             'id' => $post->getKey(),
             'autosaved_at' => $post->autosaved_at?->toIso8601String(),
-            'edit_url' => route('dulluhan.admin.posts.edit', $post),
-            'update_url' => route('dulluhan.admin.posts.update', $post),
-            'autosave_url' => route('dulluhan.admin.posts.autosave.existing', $post),
+            'edit_url' => route('dullahan.admin.posts.edit', $post),
+            'update_url' => route('dullahan.admin.posts.update', $post),
+            'autosave_url' => route('dullahan.admin.posts.autosave.existing', $post),
         ]);
     }
 }

@@ -1,4 +1,4 @@
-@extends('dulluhan::admin.layout', ['title' => $post->exists ? 'Edit Post' : 'New Post'])
+@extends('dullahan::admin.layout', ['title' => $post->exists ? 'Edit Post' : 'New Post'])
 
 @push('head')
     <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
@@ -13,11 +13,11 @@
             @if ($post->exists)
                 <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank">View Post</a>
             @endif
-            <a class="btn info" href="{{ route('dulluhan.admin.posts.index') }}">All Posts</a>
+            <a class="btn info" href="{{ route('dullahan.admin.posts.index') }}">All Posts</a>
         </div>
     </div>
 
-    <form id="dulluhan-post-form" class="panel" method="post" action="{{ $action }}" novalidate>
+    <form id="dullahan-post-form" class="panel" method="post" action="{{ $action }}" novalidate>
         @csrf
         @if ($method !== 'POST')
             <input id="form-method" type="hidden" name="_method" value="{{ $method }}">
@@ -121,8 +121,8 @@
             </div>
             <input id="content" name="content" type="hidden" value="{{ old('content', $post->content) }}" required>
             <div id="editor-container-wrapper" style="position: relative;">
-                <div id="dulluhan-editor">{!! old('content', $post->content) !!}</div>
-                <textarea id="dulluhan-html-editor" style="display: none; font-family: monospace; font-size: 14px; min-height: 320px; resize: vertical; width: 100%; border: 1px solid var(--line); border-radius: 0 0 6px 6px; padding: 12px; background: var(--panel); color: var(--text);"></textarea>
+                <div id="dullahan-editor">{!! old('content', $post->content) !!}</div>
+                <textarea id="dullahan-html-editor" style="display: none; font-family: monospace; font-size: 14px; min-height: 320px; resize: vertical; width: 100%; border: 1px solid var(--line); border-radius: 0 0 6px 6px; padding: 12px; background: var(--panel); color: var(--text);"></textarea>
             </div>
             <div id="content-client-error" class="error" hidden>Content must be at least 10 characters.</div>
             @error('content') <div class="error">{{ $message }}</div> @enderror
@@ -207,7 +207,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
     <script>
         const contentInput = document.getElementById('content');
-        const form = document.getElementById('dulluhan-post-form');
+        const form = document.getElementById('dullahan-post-form');
         const btnEditSlug = document.getElementById('btn-edit-slug');
         const slugInput = document.getElementById('slug');
 
@@ -227,15 +227,15 @@
         const featuredImageUploadStatus = document.getElementById('featured_image_upload_status');
         const featuredImagePreviewWrap = document.getElementById('featured_image_preview_wrap');
         const featuredImagePreview = document.getElementById('featured_image_preview');
-        const uploadUrl = @json(route('dulluhan.admin.uploads.images'));
-        let autosaveUrl = @json($post->exists ? route('dulluhan.admin.posts.autosave.existing', $post) : route('dulluhan.admin.posts.autosave'));
+        const uploadUrl = @json(route('dullahan.admin.uploads.images'));
+        let autosaveUrl = @json($post->exists ? route('dullahan.admin.posts.autosave.existing', $post) : route('dullahan.admin.posts.autosave'));
         let postExists = @json($post->exists);
         const csrfToken = @json(csrf_token());
-        const autosaveInterval = @json(config('dulluhan.autosave.interval_ms', 30000));
+        const autosaveInterval = @json(config('dullahan.autosave.interval_ms', 30000));
         let autosaveTimer = null;
         let autosavePending = false;
 
-        const quill = new Quill('#dulluhan-editor', {
+        const quill = new Quill('#dullahan-editor', {
             theme: 'snow',
             modules: {
                 toolbar: {
@@ -261,8 +261,8 @@
         let htmlMode = false;
         const btnToggleMode = document.getElementById('btn-toggle-editor-mode');
         const editorModeText = document.getElementById('editor-mode-text');
-        const htmlEditor = document.getElementById('dulluhan-html-editor');
-        const editorContainer = document.getElementById('dulluhan-editor');
+        const htmlEditor = document.getElementById('dullahan-html-editor');
+        const editorContainer = document.getElementById('dullahan-editor');
 
         function syncContent() {
             if (htmlMode) {

@@ -1,27 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthorController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AuthController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\AutosaveController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\CategoryController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\DashboardController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\ProfileController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\PostController;
-use WaqasYousaf\Dulluhan\Http\Controllers\Admin\UploadController;
-use WaqasYousaf\Dulluhan\Http\Controllers\SitemapController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\AuthorController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\AuthController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\AutosaveController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\CategoryController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\DashboardController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\ProfileController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\PostController;
+use WaqasYousaf\Dullahan\Http\Controllers\Admin\UploadController;
+use WaqasYousaf\Dullahan\Http\Controllers\SitemapController;
 
-Route::get(config('dulluhan.sitemap.path', 'dulluhan-sitemap.xml'), SitemapController::class)
-    ->name('dulluhan.sitemap');
+Route::get(config('dullahan.sitemap.path', 'dullahan-sitemap.xml'), SitemapController::class)
+    ->name('dullahan.sitemap');
 
-Route::prefix(config('dulluhan.route_prefix', 'spanel'))
-    ->name('dulluhan.admin.')
-    ->middleware(config('dulluhan.middleware.web', ['web']))
+Route::prefix(config('dullahan.route_prefix', 'spanel'))
+    ->name('dullahan.admin.')
+    ->middleware(config('dullahan.middleware.web', ['web']))
     ->group(function (): void {
         Route::get('login', [AuthController::class, 'showLogin'])->name('login');
         Route::post('login', [AuthController::class, 'login'])->name('login.store');
 
-        Route::middleware(config('dulluhan.middleware.admin', ['web', 'dulluhan.admin']))->group(function (): void {
+        Route::middleware(config('dullahan.middleware.admin', ['web', 'dullahan.admin']))->group(function (): void {
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
             Route::get('/', DashboardController::class)->name('dashboard');
             Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');

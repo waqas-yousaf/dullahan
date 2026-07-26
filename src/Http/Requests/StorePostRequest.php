@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Requests;
+namespace WaqasYousaf\Dullahan\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -18,11 +18,11 @@ class StorePostRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('dulluhan_posts', 'slug')->ignore($post?->getKey())],
-            'author_id' => ['required', 'integer', 'exists:dulluhan_authors,id'],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('dullahan_posts', 'slug')->ignore($post?->getKey())],
+            'author_id' => ['required', 'integer', 'exists:dullahan_authors,id'],
             'content' => ['required', 'string', 'min:10'],
             'status' => ['required', Rule::in(['draft', 'published'])],
-            'post_type' => ['required', Rule::in(array_keys(config('dulluhan.post_types', ['post' => 'Post'])))],
+            'post_type' => ['required', Rule::in(array_keys(config('dullahan.post_types', ['post' => 'Post'])))],
             'featured_image' => ['nullable', 'url'],
             'meta_title' => ['nullable', 'string', 'max:70'],
             'meta_description' => ['nullable', 'string', 'max:170'],
@@ -34,7 +34,7 @@ class StorePostRequest extends FormRequest
             'robots' => ['nullable', Rule::in(['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'])],
             'schema_markup' => ['nullable', 'json'],
             'published_at' => ['nullable', 'date'],
-            'category_id' => ['nullable', 'integer', 'exists:dulluhan_categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:dullahan_categories,id'],
         ];
     }
 }

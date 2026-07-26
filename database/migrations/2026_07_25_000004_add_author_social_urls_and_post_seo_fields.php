@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('dulluhan_authors', function (Blueprint $table): void {
+        Schema::table('dullahan_authors', function (Blueprint $table): void {
             $table->string('facebook_url')->nullable()->after('website_url');
             $table->string('x_url')->nullable()->after('facebook_url');
             $table->string('linkedin_url')->nullable()->after('x_url');
@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('youtube_url')->nullable()->after('instagram_url');
         });
 
-        Schema::table('dulluhan_posts', function (Blueprint $table): void {
+        Schema::table('dullahan_posts', function (Blueprint $table): void {
             $table->string('meta_title')->nullable()->after('featured_image');
             $table->text('meta_description')->nullable()->after('meta_title');
             $table->string('meta_keywords')->nullable()->after('meta_description');
@@ -31,7 +31,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('dulluhan_posts', function (Blueprint $table): void {
+        Schema::table('dullahan_posts', function (Blueprint $table): void {
             $table->dropColumn([
                 'meta_title',
                 'meta_description',
@@ -45,7 +45,7 @@ return new class extends Migration
             ]);
         });
 
-        Schema::table('dulluhan_authors', function (Blueprint $table): void {
+        Schema::table('dullahan_authors', function (Blueprint $table): void {
             $table->dropColumn([
                 'facebook_url',
                 'x_url',

@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The table below lists the versions of Dulluhan that are currently supported with security updates.
+The table below lists the versions of Dullahan that are currently supported with security updates.
 
 | Version | Supported |
 | --- | --- |
@@ -11,7 +11,7 @@ The table below lists the versions of Dulluhan that are currently supported with
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability within Dulluhan, please do not open a public issue. Instead, report it through the GitHub private vulnerability reporting system for this repository.
+If you discover a security vulnerability within Dullahan, please do not open a public issue. Instead, report it through the GitHub private vulnerability reporting system for this repository.
 
 Alternatively, you can contact the maintainers directly to report security-related concerns.
 

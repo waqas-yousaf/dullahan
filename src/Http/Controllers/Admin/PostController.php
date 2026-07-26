@@ -1,15 +1,15 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use WaqasYousaf\Dulluhan\Http\Requests\StorePostRequest;
-use WaqasYousaf\Dulluhan\Models\Author;
-use WaqasYousaf\Dulluhan\Models\Category;
-use WaqasYousaf\Dulluhan\Models\Post;
+use WaqasYousaf\Dullahan\Http\Requests\StorePostRequest;
+use WaqasYousaf\Dullahan\Models\Author;
+use WaqasYousaf\Dullahan\Models\Category;
+use WaqasYousaf\Dullahan\Models\Post;
 
 class PostController extends Controller
 {
@@ -42,30 +42,30 @@ class PostController extends Controller
         }
 
         $posts = $query->orderByDesc('id')
-            ->paginate(config('dulluhan.pagination.admin_posts_per_page', 15))
+            ->paginate(config('dullahan.pagination.admin_posts_per_page', 15))
             ->withQueryString();
 
-        return view('dulluhan::admin.posts.index', [
+        return view('dullahan::admin.posts.index', [
             'posts' => $posts,
             'categories' => Category::query()->orderBy('name')->get(),
             'authors' => Author::query()->orderBy('name')->get(),
-            'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
+            'postTypes' => config('dullahan.post_types', ['post' => 'Post']),
         ]);
     }
 
     public function create(): View
     {
-        return view('dulluhan::admin.posts.form', [
+        return view('dullahan::admin.posts.form', [
             'post' => new Post([
-                'author_id' => Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->id(),
+                'author_id' => Auth::guard(config('dullahan.auth.guard', 'dullahan'))->id(),
                 'status' => 'draft',
-                'post_type' => config('dulluhan.default_post_type', 'post'),
+                'post_type' => config('dullahan.default_post_type', 'post'),
             ]),
-            'action' => route('dulluhan.admin.posts.store'),
+            'action' => route('dullahan.admin.posts.store'),
             'method' => 'POST',
             'categories' => Category::query()->orderBy('name')->get(),
             'authors' => Author::query()->orderBy('name')->get(),
-            'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
+            'postTypes' => config('dullahan.post_types', ['post' => 'Post']),
         ]);
     }
 
@@ -75,18 +75,18 @@ class PostController extends Controller
         $post = new Post($data);
         $post->save();
 
-        return redirect()->route('dulluhan.admin.posts.edit', $post)->with('status', 'Post created.');
+        return redirect()->route('dullahan.admin.posts.edit', $post)->with('status', 'Post created.');
     }
 
     public function edit(Post $post): View
     {
-        return view('dulluhan::admin.posts.form', [
+        return view('dullahan::admin.posts.form', [
             'post' => $post->load('category'),
-            'action' => route('dulluhan.admin.posts.update', $post),
+            'action' => route('dullahan.admin.posts.update', $post),
             'method' => 'PUT',
             'categories' => Category::query()->orderBy('name')->get(),
             'authors' => Author::query()->orderBy('name')->get(),
-            'postTypes' => config('dulluhan.post_types', ['post' => 'Post']),
+            'postTypes' => config('dullahan.post_types', ['post' => 'Post']),
         ]);
     }
 
@@ -95,14 +95,14 @@ class PostController extends Controller
         $data = $request->validated();
         $post->fill($data)->save();
 
-        return redirect()->route('dulluhan.admin.posts.edit', $post)->with('status', 'Post updated.');
+        return redirect()->route('dullahan.admin.posts.edit', $post)->with('status', 'Post updated.');
     }
 
     public function destroy(Post $post): RedirectResponse
     {
         $post->delete();
 
-        return redirect()->route('dulluhan.admin.posts.index')->with('status', 'Post deleted.');
+        return redirect()->route('dullahan.admin.posts.index')->with('status', 'Post deleted.');
     }
 
     public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
@@ -133,7 +133,7 @@ class PostController extends Controller
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="dulluhan-posts-' . now()->format('YmdHis') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="dullahan-posts-' . now()->format('YmdHis') . '.csv"',
         ]);
 
         return $response;

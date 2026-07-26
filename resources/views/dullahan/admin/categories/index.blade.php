@@ -1,11 +1,11 @@
-@extends('dulluhan::admin.layout', ['title' => 'Dulluhan Categories'])
+@extends('dullahan::admin.layout', ['title' => 'Dullahan Categories'])
 
 @section('content')
     <div class="topbar">
         <h1>Categories</h1>
         <div class="actions">
-            <a class="btn secondary" href="{{ route('dulluhan.admin.categories.export') }}">Export CSV</a>
-            <a class="btn secondary" href="{{ route('dulluhan.admin.posts.index') }}">Posts</a>
+            <a class="btn secondary" href="{{ route('dullahan.admin.categories.export') }}">Export CSV</a>
+            <a class="btn secondary" href="{{ route('dullahan.admin.posts.index') }}">Posts</a>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
             <div class="actions">
                 <button class="btn" type="submit">{{ $category->exists ? 'Update Category' : 'Create Category' }}</button>
                 @if ($category->exists)
-                    <a class="btn secondary" href="{{ route('dulluhan.admin.categories.index') }}">Cancel</a>
+                    <a class="btn secondary" href="{{ route('dullahan.admin.categories.index') }}">Cancel</a>
                 @endif
             </div>
         </form>
@@ -64,11 +64,11 @@
                             <td>{{ $item->posts_count }}</td>
                             <td>
                                 <div class="actions">
-                                    <a class="btn success" href="{{ route('dulluhan.admin.posts.index', ['category' => $item->id]) }}" title="View posts in category" style="padding: 6px 8px; display: inline-flex; align-items: center;">
+                                    <a class="btn success" href="{{ route('dullahan.admin.posts.index', ['category' => $item->id]) }}" title="View posts in category" style="padding: 6px 8px; display: inline-flex; align-items: center;">
                                         <span class="material-icons" style="font-size: 18px;">chevron_right</span>
                                     </a>
-                                    <a class="btn info" href="{{ route('dulluhan.admin.categories.edit', $item) }}">Edit</a>
-                                    <form method="post" action="{{ route('dulluhan.admin.categories.destroy', $item) }}" onsubmit="return confirm('Delete this category?')">
+                                    <a class="btn info" href="{{ route('dullahan.admin.categories.edit', $item) }}">Edit</a>
+                                    <form method="post" action="{{ route('dullahan.admin.categories.destroy', $item) }}" onsubmit="return confirm('Delete this category?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn danger" type="submit">Delete</button>

@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use WaqasYousaf\Dulluhan\Models\Author;
+use WaqasYousaf\Dullahan\Models\Author;
 
 class AuthorController extends Controller
 {
@@ -17,7 +17,7 @@ class AuthorController extends Controller
     {
         $this->middleware(function ($request, $next) {
             abort_unless(
-                Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email === config('dulluhan.admin.email'),
+                Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user()?->email === config('dullahan.admin.email'),
                 403,
                 'Only the system administrator can manage authors.'
             );
@@ -28,16 +28,16 @@ class AuthorController extends Controller
 
     public function index(): View
     {
-        return view('dulluhan::admin.authors.index', [
+        return view('dullahan::admin.authors.index', [
             'authors' => Author::query()->withCount('posts')->orderBy('name')->paginate(20),
         ]);
     }
 
     public function create(): View
     {
-        return view('dulluhan::admin.authors.form', [
+        return view('dullahan::admin.authors.form', [
             'author' => new Author(['show_author_box' => true]),
-            'action' => route('dulluhan.admin.authors.store'),
+            'action' => route('dullahan.admin.authors.store'),
             'method' => 'POST',
         ]);
     }
@@ -55,7 +55,7 @@ class AuthorController extends Controller
             $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', \Illuminate\Support\Str::ascii($name)), '-');
             $filename = 'avatar-' . now()->format('YmdHis') . '-' . ($safeName ?: 'avatar') . '.' . $extension;
-            $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+            $relativePath = trim(config('dullahan.uploads.path', 'uploads/dullahan'), '/');
             $publicPath = public_path($relativePath);
 
             \Illuminate\Support\Facades\File::ensureDirectoryExists($publicPath, 0755, true);
@@ -68,14 +68,14 @@ class AuthorController extends Controller
 
         Author::query()->create($data);
 
-        return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Author created.');
+        return redirect()->route('dullahan.admin.authors.index')->with('status', 'Author created.');
     }
 
     public function edit(Author $author): View
     {
-        return view('dulluhan::admin.authors.form', [
+        return view('dullahan::admin.authors.form', [
             'author' => $author,
-            'action' => route('dulluhan.admin.authors.update', $author),
+            'action' => route('dullahan.admin.authors.update', $author),
             'method' => 'PUT',
         ]);
     }
@@ -98,7 +98,7 @@ class AuthorController extends Controller
             $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', \Illuminate\Support\Str::ascii($name)), '-');
             $filename = 'avatar-' . now()->format('YmdHis') . '-' . ($safeName ?: 'avatar') . '.' . $extension;
-            $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+            $relativePath = trim(config('dullahan.uploads.path', 'uploads/dullahan'), '/');
             $publicPath = public_path($relativePath);
 
             \Illuminate\Support\Facades\File::ensureDirectoryExists($publicPath, 0755, true);
@@ -111,28 +111,28 @@ class AuthorController extends Controller
 
         $author->fill($data)->save();
 
-        return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Author updated.');
+        return redirect()->route('dullahan.admin.authors.index')->with('status', 'Author updated.');
     }
 
     public function destroy(Author $author): RedirectResponse
     {
-        if ((int) Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->id() === (int) $author->getKey()) {
-            return redirect()->route('dulluhan.admin.authors.index')->with('status', 'You cannot delete your own author account.');
+        if ((int) Auth::guard(config('dullahan.auth.guard', 'dullahan'))->id() === (int) $author->getKey()) {
+            return redirect()->route('dullahan.admin.authors.index')->with('status', 'You cannot delete your own author account.');
         }
 
         if ($author->posts()->exists()) {
-            return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Move this author posts before deleting the author.');
+            return redirect()->route('dullahan.admin.authors.index')->with('status', 'Move this author posts before deleting the author.');
         }
 
         $author->delete();
 
-        return redirect()->route('dulluhan.admin.authors.index')->with('status', 'Author deleted.');
+        return redirect()->route('dullahan.admin.authors.index')->with('status', 'Author deleted.');
     }
 
     public function export(): \Symfony\Component\HttpFoundation\StreamedResponse
     {
         abort_unless(
-            Auth::guard(config('dulluhan.auth.guard', 'dulluhan'))->user()?->email === config('dulluhan.admin.email'),
+            Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user()?->email === config('dullahan.admin.email'),
             403,
             'Only the system administrator can export authors.'
         );
@@ -162,7 +162,7 @@ class AuthorController extends Controller
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="dulluhan-authors-' . now()->format('YmdHis') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="dullahan-authors-' . now()->format('YmdHis') . '.csv"',
         ]);
 
         return $response;
@@ -170,15 +170,15 @@ class AuthorController extends Controller
 
     private function validated(Request $request, ?Author $author = null): array
     {
-        $mimes = implode(',', config('dulluhan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
+        $mimes = implode(',', config('dullahan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
 
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('dulluhan_authors', 'email')->ignore($author?->getKey())],
+            'email' => ['required', 'email', 'max:255', Rule::unique('dullahan_authors', 'email')->ignore($author?->getKey())],
             'password' => [$author ? 'nullable' : 'required', 'string', 'min:8', 'confirmed'],
             'job_title' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:2000'],
-            'avatar' => ['nullable', 'image', 'mimes:' . $mimes, 'max:' . config('dulluhan.uploads.max_kb', 4096)],
+            'avatar' => ['nullable', 'image', 'mimes:' . $mimes, 'max:' . config('dullahan.uploads.max_kb', 4096)],
             'website_url' => ['nullable', 'url'],
             'facebook_url' => ['nullable', 'url'],
             'x_url' => ['nullable', 'url'],

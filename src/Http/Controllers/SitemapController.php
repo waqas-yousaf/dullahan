@@ -1,16 +1,16 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers;
+namespace WaqasYousaf\Dullahan\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use WaqasYousaf\Dulluhan\Models\Post;
+use WaqasYousaf\Dullahan\Models\Post;
 
 class SitemapController extends Controller
 {
     public function __invoke(): Response
     {
-        abort_unless(config('dulluhan.sitemap.enabled', true), 404);
+        abort_unless(config('dullahan.sitemap.enabled', true), 404);
 
         $urls = Post::query()
             ->published()
@@ -19,7 +19,7 @@ class SitemapController extends Controller
             ->map(fn (Post $post) => $this->urlNode($post))
             ->implode('');
 
-        $imageNamespace = config('dulluhan.sitemap.include_images', true)
+        $imageNamespace = config('dullahan.sitemap.include_images', true)
             ? ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'
             : '';
 
@@ -35,8 +35,8 @@ class SitemapController extends Controller
     {
         $loc = $post->publicUrl();
         $lastmod = ($post->updated_at ?? $post->published_at ?? now())->toAtomString();
-        $changefreq = config('dulluhan.sitemap.changefreq', 'weekly');
-        $priority = config('dulluhan.sitemap.priority', '0.7');
+        $changefreq = config('dullahan.sitemap.changefreq', 'weekly');
+        $priority = config('dullahan.sitemap.priority', '0.7');
         $image = $this->imageNode($post);
 
         return '<url>'
@@ -50,7 +50,7 @@ class SitemapController extends Controller
 
     private function imageNode(Post $post): string
     {
-        if (! config('dulluhan.sitemap.include_images', true)) {
+        if (! config('dullahan.sitemap.include_images', true)) {
             return '';
         }
 

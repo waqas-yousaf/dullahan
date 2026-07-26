@@ -1,11 +1,11 @@
-@extends('dulluhan::admin.layout', ['title' => 'Dulluhan Authors'])
+@extends('dullahan::admin.layout', ['title' => 'Dullahan Authors'])
 
 @section('content')
     <div class="topbar">
         <h1>Authors</h1>
         <div class="actions">
-            <a class="btn secondary" href="{{ route('dulluhan.admin.authors.export') }}">Export CSV</a>
-            <a class="btn" href="{{ route('dulluhan.admin.authors.create') }}">New Author</a>
+            <a class="btn secondary" href="{{ route('dullahan.admin.authors.export') }}">Export CSV</a>
+            <a class="btn" href="{{ route('dullahan.admin.authors.create') }}">New Author</a>
         </div>
     </div>
 
@@ -31,8 +31,8 @@
                     <td>{{ $author->posts_count }}</td>
                     <td>
                         <div class="actions">
-                            <a class="btn info" href="{{ route('dulluhan.admin.authors.edit', $author) }}">Edit</a>
-                            <form method="post" action="{{ route('dulluhan.admin.authors.destroy', $author) }}" onsubmit="return confirm('Delete this author?')">
+                            <a class="btn info" href="{{ route('dullahan.admin.authors.edit', $author) }}">Edit</a>
+                            <form method="post" action="{{ route('dullahan.admin.authors.destroy', $author) }}" onsubmit="return confirm('Delete this author?')">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn danger" type="submit">Delete</button>

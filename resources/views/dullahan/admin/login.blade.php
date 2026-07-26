@@ -15,14 +15,14 @@
         .recaptcha { margin-top: 16px; }
         .footer { color: #6b7280; font-size: 13px; margin-top: 18px; text-align: center; }
     </style>
-    @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key') && config('dulluhan.recaptcha.version') === 'v3')
-        <script src="https://www.google.com/recaptcha/api.js?render={{ config('dulluhan.recaptcha.site_key') }}"></script>
-    @elseif (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key'))
+    @if (config('dullahan.recaptcha.enabled') && config('dullahan.recaptcha.site_key') && config('dullahan.recaptcha.version') === 'v3')
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('dullahan.recaptcha.site_key') }}"></script>
+    @elseif (config('dullahan.recaptcha.enabled') && config('dullahan.recaptcha.site_key'))
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     @endif
 </head>
 <body>
-    <form id="dulluhan-login-form" method="post" action="{{ route('dulluhan.admin.login.store') }}">
+    <form id="dullahan-login-form" method="post" action="{{ route('dullahan.admin.login.store') }}">
         @csrf
         <h1>{{ config('app.name', 'Laravel') }}</h1>
         <label for="email">Email</label>
@@ -33,28 +33,28 @@
         <input id="password" name="password" type="password" required>
         @error('password') <div class="error">{{ $message }}</div> @enderror
 
-        @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key'))
-            @if (config('dulluhan.recaptcha.version') === 'v3')
+        @if (config('dullahan.recaptcha.enabled') && config('dullahan.recaptcha.site_key'))
+            @if (config('dullahan.recaptcha.version') === 'v3')
                 <input id="g-recaptcha-response" type="hidden" name="g-recaptcha-response">
             @else
                 <div class="recaptcha">
-                    <div class="g-recaptcha" data-sitekey="{{ config('dulluhan.recaptcha.site_key') }}"></div>
+                    <div class="g-recaptcha" data-sitekey="{{ config('dullahan.recaptcha.site_key') }}"></div>
                 </div>
             @endif
             @error('g-recaptcha-response') <div class="error">{{ $message }}</div> @enderror
         @endif
 
         <button type="submit">Sign in</button>
-        <div class="footer">Dulluhan v{{ \WaqasYousaf\Dulluhan\DulluhanServiceProvider::version() }}</div>
+        <div class="footer">Dullahan v{{ \WaqasYousaf\Dullahan\DullahanServiceProvider::version() }}</div>
     </form>
 
-    @if (config('dulluhan.recaptcha.enabled') && config('dulluhan.recaptcha.site_key') && config('dulluhan.recaptcha.version') === 'v3')
+    @if (config('dullahan.recaptcha.enabled') && config('dullahan.recaptcha.site_key') && config('dullahan.recaptcha.version') === 'v3')
         <script>
-            const loginForm = document.getElementById('dulluhan-login-form');
+            const loginForm = document.getElementById('dullahan-login-form');
             loginForm.addEventListener('submit', event => {
                 event.preventDefault();
                 grecaptcha.ready(() => {
-                    grecaptcha.execute(@json(config('dulluhan.recaptcha.site_key')), { action: 'dulluhan_login' })
+                    grecaptcha.execute(@json(config('dullahan.recaptcha.site_key')), { action: 'dullahan_login' })
                         .then(token => {
                             document.getElementById('g-recaptcha-response').value = token;
                             loginForm.submit();

@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Models;
+namespace WaqasYousaf\Dullahan\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class Category extends Model
 {
-    protected $table = 'dulluhan_categories';
+    protected $table = 'dullahan_categories';
 
     protected $fillable = [
         'name',

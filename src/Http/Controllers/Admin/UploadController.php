@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Http\Controllers\Admin;
+namespace WaqasYousaf\Dullahan\Http\Controllers\Admin;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,10 +12,10 @@ class UploadController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $mimes = implode(',', config('dulluhan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
+        $mimes = implode(',', config('dullahan.uploads.mimes', ['jpeg', 'png', 'jpg', 'webp', 'svg']));
 
         $request->validate([
-            'image' => ['required', 'file', 'mimes:' . $mimes, 'max:' . config('dulluhan.uploads.max_kb', 4096)],
+            'image' => ['required', 'file', 'mimes:' . $mimes, 'max:' . config('dullahan.uploads.max_kb', 4096)],
         ]);
 
         $file = $request->file('image');
@@ -23,7 +23,7 @@ class UploadController extends Controller
         $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', Str::ascii($name)), '-');
         $filename = now()->format('YmdHis') . '-' . ($safeName ?: 'image') . '.' . $extension;
-        $relativePath = trim(config('dulluhan.uploads.path', 'uploads/dulluhan'), '/');
+        $relativePath = trim(config('dullahan.uploads.path', 'uploads/dullahan'), '/');
         $publicPath = public_path($relativePath);
 
         File::ensureDirectoryExists($publicPath, 0755, true);

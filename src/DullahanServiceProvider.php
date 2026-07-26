@@ -1,18 +1,18 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan;
+namespace WaqasYousaf\Dullahan;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use WaqasYousaf\Dulluhan\Console\InstallCommand;
-use WaqasYousaf\Dulluhan\Http\Middleware\DulluhanApiAccess;
-use WaqasYousaf\Dulluhan\Http\Middleware\DulluhanAdminAuth;
-use WaqasYousaf\Dulluhan\Models\Author;
-use WaqasYousaf\Dulluhan\View\Components\PostCard;
-use WaqasYousaf\Dulluhan\View\Components\PostList;
+use WaqasYousaf\Dullahan\Console\InstallCommand;
+use WaqasYousaf\Dullahan\Http\Middleware\DullahanApiAccess;
+use WaqasYousaf\Dullahan\Http\Middleware\DullahanAdminAuth;
+use WaqasYousaf\Dullahan\Models\Author;
+use WaqasYousaf\Dullahan\View\Components\PostCard;
+use WaqasYousaf\Dullahan\View\Components\PostList;
 
-class DulluhanServiceProvider extends ServiceProvider
+class DullahanServiceProvider extends ServiceProvider
 {
     public static function version(): string
     {
@@ -26,35 +26,35 @@ class DulluhanServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/dulluhan.php', 'dulluhan');
+        $this->mergeConfigFrom(__DIR__ . '/../config/dullahan.php', 'dullahan');
     }
 
     public function boot(Router $router): void
     {
         $this->injectAuthConfiguration();
 
-        $router->aliasMiddleware('dulluhan.admin', DulluhanAdminAuth::class);
-        $router->aliasMiddleware('dulluhan.api', DulluhanApiAccess::class);
+        $router->aliasMiddleware('dullahan.admin', DullahanAdminAuth::class);
+        $router->aliasMiddleware('dullahan.api', DullahanApiAccess::class);
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/dulluhan', 'dulluhan');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/dullahan', 'dullahan');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        Blade::component('dulluhan-post-card', PostCard::class);
-        Blade::component('dulluhan-post-list', PostList::class);
+        Blade::component('dullahan-post-card', PostCard::class);
+        Blade::component('dullahan-post-list', PostList::class);
 
         $this->publishes([
-            __DIR__ . '/../config/dulluhan.php' => config_path('dulluhan.php'),
-        ], 'dulluhan-config');
+            __DIR__ . '/../config/dullahan.php' => config_path('dullahan.php'),
+        ], 'dullahan-config');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/dulluhan' => resource_path('views/vendor/dulluhan'),
-        ], 'dulluhan-views');
+            __DIR__ . '/../resources/views/dullahan' => resource_path('views/vendor/dullahan'),
+        ], 'dullahan-views');
 
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
-        ], 'dulluhan-migrations');
+        ], 'dullahan-migrations');
 
         if ($this->app->runningInConsole()) {
             $this->commands([InstallCommand::class]);
@@ -63,8 +63,8 @@ class DulluhanServiceProvider extends ServiceProvider
 
     private function injectAuthConfiguration(): void
     {
-        $guard = config('dulluhan.auth.guard', 'dulluhan');
-        $provider = config('dulluhan.auth.provider', 'dulluhan_authors');
+        $guard = config('dullahan.auth.guard', 'dullahan');
+        $provider = config('dullahan.auth.provider', 'dullahan_authors');
 
         config()->set("auth.guards.$guard", array_merge([
             'driver' => 'session',

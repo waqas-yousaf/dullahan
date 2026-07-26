@@ -1,6 +1,6 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\Models;
+namespace WaqasYousaf\Dullahan\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    protected $table = 'dulluhan_posts';
+    protected $table = 'dullahan_posts';
 
     protected $fillable = [
         'author_id',
@@ -113,7 +113,7 @@ class Post extends Model
             return $this->canonical_url;
         }
 
-        $pattern = config('dulluhan.sitemap.post_url_pattern', '/blog/{category}/{slug}');
+        $pattern = config('dullahan.sitemap.post_url_pattern', '/blog/{category}/{slug}');
         $categorySlug = $this->category ? $this->category->slug : 'uncategorized';
 
         $path = str_replace(

@@ -1,10 +1,10 @@
 <?php
 
-namespace WaqasYousaf\Dulluhan\View\Components;
+namespace WaqasYousaf\Dullahan\View\Components;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use WaqasYousaf\Dulluhan\Models\Post;
+use WaqasYousaf\Dullahan\Models\Post;
 
 class PostCard extends Component
 {
@@ -14,6 +14,6 @@ class PostCard extends Component
 
     public function render(): View
     {
-        return view('dulluhan::components.post-card');
+        return view('dullahan::components.post-card');
     }
 }
