@@ -262,4 +262,5 @@ Retrieve detailed information for a single published post.
 
 ## Credits & Author
 
-Developed by Waqas Yousaf. Follow me on Twitter/X: [@imakewebapps](https://x.com/imakewebapps).
+Follow Waqas Yousaf on X/Twitter: [@imakewebapps](https://x.com/imakewebapps).
+
