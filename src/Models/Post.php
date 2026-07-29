@@ -114,17 +114,44 @@ class Post extends Model
         }
 
         $pattern = config('dullahan.sitemap.post_url_pattern', '/blog/{category}/{slug}');
-        $categorySlug = $this->category ? $this->category->slug : 'uncategorized';
 
+        return $this->replaceUrlTokens($pattern);
+    }
+
+    public function blogViewUrl(): ?string
+    {
+        $base = trim((string) config('dullahan.blog_view_url', ''));
+
+        if ($base === '') {
+            return null;
+        }
+
+        if (str_contains($base, '{slug}') || str_contains($base, '{category}')) {
+            return $this->replaceUrlTokens($base);
+        }
+
+        return rtrim($base, '/') . '/' . $this->categorySlug() . '/' . $this->slug;
+    }
+
+    private function replaceUrlTokens(string $pattern): string
+    {
         $path = str_replace(
-            ['{category}', '{slug}'],
-            [$categorySlug, $this->slug],
+            ['{category}', '{slug}', '{id}', '{type}'],
+            [$this->categorySlug(), $this->slug, $this->getKey(), $this->post_type],
             $pattern
         );
+
+        if (preg_match('/^https?:\/\//i', $path)) {
+            return $path;
+        }
 
         return url($path);
     }
 
+    private function categorySlug(): string
+    {
+        return $this->category ? $this->category->slug : 'uncategorized';
+    }
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $base = Str::slug($title) ?: 'post';

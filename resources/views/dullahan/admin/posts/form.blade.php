@@ -10,8 +10,8 @@
         <h1>{{ $post->exists ? 'Edit Post' : 'New Post' }}</h1>
         <div class="actions">
             <span id="autosave-status" class="muted">{{ $post->autosaved_at ? 'Autosaved ' . $post->autosaved_at->diffForHumans() : 'Autosave ready' }}</span>
-            @if ($post->exists)
-                <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank">View Post</a>
+            @if ($post->exists && $post->blogViewUrl())
+                <a class="btn success" href="{{ $post->blogViewUrl() }}" target="_blank" rel="noopener">View in browser</a>
             @endif
             <a class="btn info" href="{{ route('dullahan.admin.posts.index') }}">All Posts</a>
         </div>

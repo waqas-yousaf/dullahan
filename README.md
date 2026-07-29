@@ -96,7 +96,10 @@ Below is a detailed guide to all available configuration parameters and their re
   - *Default*: `'spanel'`
 - **`api_prefix`** (Env: `DULLAHAN_API_PREFIX`): The URL prefix for the headless JSON API endpoints.
   - *Default*: `'api/dullahan'`
-
+- **`blog_view_url`** (Env: `DULLAHAN_BLOG_VIEW_URL`): Optional base frontend blog URL used to show admin `View in browser` links.
+  - *Default*: empty, so browser view links are hidden.
+  - Plain base example: `https://example.com/blog` renders `https://example.com/blog/{category}/{slug}`.
+  - Pattern example: `https://example.com/articles/{slug}`.
 ### 2. Middleware Control
 - **`middleware`**: Customize the middleware stacks applied to routes:
   - **`web`**: Applied to the general package frontend/web endpoints. *Default*: `['web']`.

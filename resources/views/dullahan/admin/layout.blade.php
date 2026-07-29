@@ -311,15 +311,52 @@
             min-height: 320px;
             background: var(--panel);
             color: var(--text);
+            font-size: 16px;
+            line-height: 1.75;
+            padding: 18px 20px;
+            letter-spacing: 0;
+        }
+
+        .ql-editor p,
+        .ql-editor ol,
+        .ql-editor ul,
+        .ql-editor blockquote,
+        .ql-editor pre {
+            margin-bottom: 1em;
+        }
+
+        .ql-editor h1 {
+            font-size: 32px;
+            line-height: 1.25;
+            margin: 0.75em 0 0.45em;
+        }
+
+        .ql-editor h2 {
+            font-size: 26px;
+            line-height: 1.3;
+            margin: 0.75em 0 0.45em;
+        }
+
+        .ql-editor h3 {
+            font-size: 22px;
+            line-height: 1.35;
+            margin: 0.75em 0 0.45em;
+        }
+
+        .ql-editor blockquote {
+            line-height: 1.7;
+            padding: 10px 16px;
         }
 
         .ql-toolbar.ql-snow {
             background: var(--panel) !important;
             border-color: var(--line) !important;
+            padding: 10px;
         }
 
         .ql-container.ql-snow {
             border-color: var(--line) !important;
+            font-size: 16px;
         }
 
         .ql-snow .ql-stroke {

@@ -3,6 +3,7 @@
 return [
     'route_prefix' => env('DULLAHAN_ROUTE_PREFIX', 'spanel'),
     'api_prefix' => env('DULLAHAN_API_PREFIX', 'api/dullahan'),
+    'blog_view_url' => env('DULLAHAN_BLOG_VIEW_URL', ''),
 
     'middleware' => [
         'web' => ['web'],

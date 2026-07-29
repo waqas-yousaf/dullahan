@@ -96,9 +96,11 @@
                     <td>{{ $post->autosaved_at?->diffForHumans() ?? $post->updated_at?->diffForHumans() }}</td>
                     <td>
                         <div class="actions" style="display: flex; align-items: center; gap: 6px; flex-wrap: nowrap;">
-                            <a class="btn success" href="{{ $post->publicUrl() }}" target="_blank" title="View" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
-                                <span class="material-icons" style="font-size: 18px;">visibility</span>
-                            </a>
+                            @if ($post->blogViewUrl())
+                                <a class="btn success" href="{{ $post->blogViewUrl() }}" target="_blank" rel="noopener" title="View in browser" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 18px;">visibility</span>
+                                </a>
+                            @endif
                             <a class="btn info" href="{{ route('dullahan.admin.posts.edit', $post) }}" title="Edit" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
                                 <span class="material-icons" style="font-size: 18px;">edit</span>
                             </a>
