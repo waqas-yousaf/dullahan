@@ -1,34 +1,70 @@
-name: Release & Deploy
+name: Release & Publish
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PACKAGE_NAME: waqas-yousaf/dullahan
+  PHP_VERSION: '8.3'
+
 jobs:
-  test:
-    name: Run Tests
+  validate:
+    name: Validate Package
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup PHP`
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
-          extensions: dom, curl, libxml, mbstring, zip
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: curl, dom, json, libxml, mbstring, zip
           coverage: none
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Validate composer metadata
+        run: composer validate --no-check-publish
 
-  release:
-    name: Create Release
-    needs: test
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
+
+      - name: Validate tag matches composer version
+        id: version
+        shell: bash
+        run: |
+          COMPOSER_VERSION="$(php -r "echo json_decode(file_get_contents('composer.json'), true)['version'] ?? ''; ")"
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+
+          if [ -z "$COMPOSER_VERSION" ]; then
+            echo "composer.json must contain a version field before publishing."
+            exit 1
+          fi
+
+          if [ "$TAG_VERSION" != "$COMPOSER_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION) does not match composer.json version ($COMPOSER_VERSION)."
+            echo "Create the tag as v$COMPOSER_VERSION or bump composer.json."
+            exit 1
+          fi
+
+          echo "version=$COMPOSER_VERSION" >> "$GITHUB_OUTPUT"
+
+  github-release:
+    name: Create GitHub Release
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -37,6 +73,46 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
+          name: Dullahan v${{ needs.validate.outputs.version }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  packagist:
+    name: Publish Packagist Version
+    needs:
+      - validate
+      - github-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require Packagist secrets
+        shell: bash
+        env:
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_API_TOKEN: ${{ secrets.PACKAGIST_API_TOKEN }}
+        run: |
+          if [ -z "$PACKAGIST_USERNAME" ] || [ -z "$PACKAGIST_API_TOKEN" ]; then
+            echo "Missing PACKAGIST_USERNAME or PACKAGIST_API_TOKEN repository secret."
+            exit 1
+          fi
+
+      - name: Notify Packagist
+        shell: bash
+        env:
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_API_TOKEN: ${{ secrets.PACKAGIST_API_TOKEN }}
+        run: |
+          RESPONSE_FILE="$(mktemp)"
+          HTTP_STATUS="$(curl --silent --show-error --write-out '%{http_code}' --output "$RESPONSE_FILE" \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --data '{"repository":{"url":"https://github.com/${{ github.repository }}"}}' \
+            "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_API_TOKEN}")"
+
+          cat "$RESPONSE_FILE"
+
+          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
+            echo "Packagist update failed with HTTP $HTTP_STATUS."
+            exit 1
+          fi
