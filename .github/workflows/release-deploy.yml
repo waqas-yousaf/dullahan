@@ -5,12 +5,17 @@ on:
     tags:
       - 'v*.*.*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to publish, for example v0.5.2'
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 env:
@@ -23,10 +28,12 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
           fetch-depth: 0
 
       - name: Setup PHP
@@ -45,12 +52,20 @@ jobs:
       - name: Validate tag matches composer version
         id: version
         shell: bash
+        env:
+          MANUAL_TAG: ${{ github.event.inputs.tag }}
         run: |
+          RELEASE_TAG="${MANUAL_TAG:-$GITHUB_REF_NAME}"
           COMPOSER_VERSION="$(php -r "echo json_decode(file_get_contents('composer.json'), true)['version'] ?? ''; ")"
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          TAG_VERSION="${RELEASE_TAG#v}"
 
           if [ -z "$COMPOSER_VERSION" ]; then
             echo "composer.json must contain a version field before publishing."
+            exit 1
+          fi
+
+          if [ "$RELEASE_TAG" = "$TAG_VERSION" ]; then
+            echo "Release tags must start with v, for example v$COMPOSER_VERSION."
             exit 1
           fi
 
@@ -61,6 +76,7 @@ jobs:
           fi
 
           echo "version=$COMPOSER_VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
 
   github-release:
     name: Create GitHub Release
@@ -69,11 +85,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.validate.outputs.tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ needs.validate.outputs.tag }}
           name: Dullahan v${{ needs.validate.outputs.version }}
           generate_release_notes: true
         env:
