@@ -135,6 +135,18 @@
             padding: 20px;
         }
 
+        details.panel > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.panel > summary .seo-toggle-icon {
+            transition: transform 0.2s;
+        }
+
+        details.panel[open] > summary .seo-toggle-icon {
+            transform: rotate(180deg);
+        }
+
         .grid {
             display: grid;
             gap: 16px;

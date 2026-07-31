@@ -130,9 +130,12 @@
             @error('content') <div class="error">{{ $message }}</div> @enderror
         </div>
 
-        <section class="panel" style="padding:16px;margin:22px 0 0;">
-            <h2 style="margin-top:0;">SEO Options</h2>
-            <div class="grid">
+        <details class="panel" open style="padding:16px;margin:22px 0 0;">
+            <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">
+                <h2 style="margin:0;">SEO Options</h2>
+                <span class="material-icons seo-toggle-icon" style="color:var(--muted);">expand_more</span>
+            </summary>
+            <div class="grid" style="margin-top:16px;">
                 <div class="field">
                     <label for="meta_title">Meta title</label>
                     <input id="meta_title" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" maxlength="70">
@@ -198,7 +201,7 @@
                 <textarea id="schema_markup" name="schema_markup" placeholder='{"@@context":"https://schema.org","@@type":"Article"}'>{{ $schemaMarkup }}</textarea>
                 @error('schema_markup') <div class="error">{{ $message }}</div> @enderror
             </div>
-        </section>
+        </details>
 
         <button class="btn" type="submit">Save Post</button>
     </form>
