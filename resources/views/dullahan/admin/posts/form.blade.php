@@ -144,7 +144,8 @@
 
             <div class="field">
                 <label for="published_at">Publish at</label>
-                <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}">
+                <input id="published_at" name="published_at" type="datetime-local" data-utc="{{ $post->published_at?->toIso8601String() }}" value="{{ old('published_at') }}">
+                <input type="hidden" id="timezone" name="timezone" value="">
                 @error('published_at') <div class="error">{{ $message }}</div> @enderror
             </div>
         </div>
@@ -545,6 +546,26 @@
                 contentInput.value = htmlEditor.value;
                 markAutosavePending();
             });
+        }
+
+        // Set local timezone
+        const timezoneInput = document.getElementById('timezone');
+        if (timezoneInput) {
+            timezoneInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        }
+
+        // Convert UTC to local datetime for display
+        const publishedAtInput = document.getElementById('published_at');
+        if (publishedAtInput) {
+            const rawUtc = publishedAtInput.dataset.utc;
+            if (rawUtc && !publishedAtInput.value) {
+                const date = new Date(rawUtc);
+                if (!isNaN(date.getTime())) {
+                    const pad = num => String(num).padStart(2, '0');
+                    const localString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+                    publishedAtInput.value = localString;
+                }
+            }
         }
 
         form.addEventListener('submit', event => {

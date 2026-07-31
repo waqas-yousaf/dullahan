@@ -3,6 +3,7 @@
 namespace WaqasYousaf\Dullahan\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class StorePostRequest extends FormRequest
@@ -38,5 +39,26 @@ class StorePostRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
             'category_id' => ['nullable', 'integer', 'exists:dullahan_categories,id'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('published_at') && $this->filled('timezone')) {
+            try {
+                $localTime = $this->input('published_at');
+                $timezone = $this->input('timezone');
+
+                if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $localTime)) {
+                    $utcDate = Carbon::createFromFormat('Y-m-d\TH:i', $localTime, $timezone)
+                        ->setTimezone(config('app.timezone', 'UTC'));
+
+                    $this->merge([
+                        'published_at' => $utcDate->toDateTimeString(),
+                    ]);
+                }
+            } catch (\Exception $e) {
+                // Let validation handle parsing errors
+            }
+        }
     }
 }
