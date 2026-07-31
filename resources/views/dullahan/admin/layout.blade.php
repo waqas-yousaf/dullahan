@@ -308,7 +308,7 @@
         }
 
         .ql-editor {
-            min-height: 320px;
+            min-height: 640px;
             background: var(--panel);
             color: var(--text);
             font-size: 16px;
@@ -317,7 +317,10 @@
             letter-spacing: 0;
         }
 
-        .ql-editor p,
+        .ql-editor p {
+            margin: 0 0 1em;
+        }
+
         .ql-editor ol,
         .ql-editor ul,
         .ql-editor blockquote,
@@ -340,6 +343,18 @@
         .ql-editor h3 {
             font-size: 22px;
             line-height: 1.35;
+            margin: 0.75em 0 0.45em;
+        }
+
+        .ql-editor h4 {
+            font-size: 19px;
+            line-height: 1.4;
+            margin: 0.75em 0 0.45em;
+        }
+
+        .ql-editor h5 {
+            font-size: 17px;
+            line-height: 1.45;
             margin: 0.75em 0 0.45em;
         }
 

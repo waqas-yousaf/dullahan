@@ -29,16 +29,32 @@
             @error('title') <div class="error">{{ $message }}</div> @enderror
         </div>
 
-        <div class="field">
-            <label for="slug">Slug</label>
-            <div style="display: flex; gap: 8px;">
-                <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" maxlength="255" placeholder="generated-from-title" {!! $post->exists ? 'readonly style="background: var(--bg);"' : '' !!}>
-                @if ($post->exists)
-                    <button id="btn-edit-slug" class="btn secondary" type="button" style="height: 38px; white-space: nowrap;">Edit Slug</button>
-                @endif
+        <div class="grid">
+            <div class="field">
+                <label for="slug">Slug</label>
+                <div style="display: flex; gap: 8px;">
+                    <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" maxlength="255" placeholder="generated-from-title" {!! $post->exists ? 'readonly style="background: var(--bg);"' : '' !!}>
+                    @if ($post->exists)
+                        <button id="btn-edit-slug" class="btn secondary" type="button" style="height: 38px; white-space: nowrap;">Edit Slug</button>
+                    @endif
+                </div>
+                <div class="muted">Leave empty to generate it from the title.</div>
+                @error('slug') <div class="error">{{ $message }}</div> @enderror
             </div>
-            <div class="muted">Leave empty to generate it from the title.</div>
-            @error('slug') <div class="error">{{ $message }}</div> @enderror
+
+            <div class="field">
+                <label for="featured_image">Featured image URL</label>
+                <input id="featured_image" name="featured_image" type="url" value="{{ old('featured_image', $post->featured_image) }}">
+                <div class="actions" style="margin-top:10px;">
+                    <input id="featured_image_file" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml" style="display:none;">
+                    <button id="featured_image_upload" class="btn secondary" type="button">Upload Featured Image</button>
+                    <span id="featured_image_upload_status" class="muted"></span>
+                </div>
+                <div id="featured_image_preview_wrap" style="margin-top:12px;{{ old('featured_image', $post->featured_image) ? '' : 'display:none;' }}">
+                    <img id="featured_image_preview" src="{{ old('featured_image', $post->featured_image) }}" alt="" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid #e5e7eb;border-radius:8px;">
+                </div>
+                @error('featured_image') <div class="error">{{ $message }}</div> @enderror
+            </div>
         </div>
 
         <div class="grid">
@@ -70,20 +86,6 @@
                 </select>
                 @error('status') <div class="error">{{ $message }}</div> @enderror
             </div>
-        </div>
-
-        <div class="field">
-            <label for="featured_image">Featured image URL</label>
-            <input id="featured_image" name="featured_image" type="url" value="{{ old('featured_image', $post->featured_image) }}">
-            <div class="actions" style="margin-top:10px;">
-                <input id="featured_image_file" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml" style="display:none;">
-                <button id="featured_image_upload" class="btn secondary" type="button">Upload Featured Image</button>
-                <span id="featured_image_upload_status" class="muted"></span>
-            </div>
-            <div id="featured_image_preview_wrap" style="margin-top:12px;{{ old('featured_image', $post->featured_image) ? '' : 'display:none;' }}">
-                <img id="featured_image_preview" src="{{ old('featured_image', $post->featured_image) }}" alt="" style="display:block;width:min(360px,100%);aspect-ratio:16/9;object-fit:cover;border:1px solid #e5e7eb;border-radius:8px;">
-            </div>
-            @error('featured_image') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -122,7 +124,7 @@
             <input id="content" name="content" type="hidden" value="{{ old('content', $post->content) }}" required>
             <div id="editor-container-wrapper" style="position: relative;">
                 <div id="dullahan-editor">{!! old('content', $post->content) !!}</div>
-                <textarea id="dullahan-html-editor" style="display: none; font-family: monospace; font-size: 14px; min-height: 320px; resize: vertical; width: 100%; border: 1px solid var(--line); border-radius: 0 0 6px 6px; padding: 12px; background: var(--panel); color: var(--text);"></textarea>
+                <textarea id="dullahan-html-editor" style="display: none; font-family: monospace; font-size: 14px; min-height: 640px; resize: vertical; width: 100%; border: 1px solid var(--line); border-radius: 0 0 6px 6px; padding: 12px; background: var(--panel); color: var(--text);"></textarea>
             </div>
             <div id="content-client-error" class="error" hidden>Content must be at least 10 characters.</div>
             @error('content') <div class="error">{{ $message }}</div> @enderror
