@@ -11,7 +11,7 @@ use WaqasYousaf\Dullahan\Http\Controllers\Admin\PostController;
 use WaqasYousaf\Dullahan\Http\Controllers\Admin\UploadController;
 use WaqasYousaf\Dullahan\Http\Controllers\SitemapController;
 
-Route::get(config('dullahan.sitemap.path', 'dullahan-sitemap.xml'), SitemapController::class)
+Route::get(config('dullahan.sitemap.path', 'blog-sitemap.xml'), SitemapController::class)
     ->name('dullahan.sitemap');
 
 Route::prefix(config('dullahan.route_prefix', 'spanel'))
