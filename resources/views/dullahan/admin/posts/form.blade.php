@@ -4,6 +4,31 @@
     <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.2/dist/css/quill-blot-formatter2.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --btn-submit: #4f46e5;
+            --btn-submit-hover: #4338ca;
+            --seo-sub-border: #f1f5f9;
+        }
+        html[data-theme="dark"] {
+            --btn-submit: #6366f1;
+            --btn-submit-hover: #4f46e5;
+            --seo-sub-border: #1e293b;
+        }
+        .btn.submit-primary {
+            background: var(--btn-submit);
+            color: #ffffff;
+        }
+        .btn.submit-primary:hover {
+            background: var(--btn-submit-hover);
+        }
+        .seo-panel[open] {
+            border-color: var(--accent) !important;
+        }
+        .seo-panel summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -14,6 +39,9 @@
             @if ($post->exists && $post->blogViewUrl())
                 <a class="btn success" href="{{ $post->blogViewUrl() }}" target="_blank" rel="noopener">View in browser</a>
             @endif
+            <button type="submit" form="dullahan-post-form" class="btn submit-primary">
+                {{ $post->exists ? 'Update Post' : 'Save Post' }}
+            </button>
             <a class="btn info" href="{{ route('dullahan.admin.posts.index') }}">All Posts</a>
         </div>
     </div>
@@ -144,80 +172,113 @@
             @error('content') <div class="error">{{ $message }}</div> @enderror
         </div>
 
-        <details class="panel" open style="padding:16px;margin:22px 0 0;">
-            <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">
-                <h2 style="margin:0;">SEO Options</h2>
-                <span class="material-icons seo-toggle-icon" style="color:var(--muted);">expand_more</span>
+        <details class="panel seo-panel" open style="padding: 24px; margin: 28px 0 0; background: var(--panel);">
+            <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; outline: none; user-select: none;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="material-icons" style="color: var(--accent); font-size: 24px; vertical-align: middle;">travel_explore</span>
+                    <h2 style="margin: 0; font-size: 18px; font-weight: 600; vertical-align: middle;">SEO Options</h2>
+                </div>
+                <span class="material-icons seo-toggle-icon" style="color: var(--muted); font-size: 24px; transition: transform 0.2s;">expand_more</span>
             </summary>
-            <div class="grid" style="margin-top:16px;">
-                <div class="field">
-                    <label for="meta_title">Meta title</label>
-                    <input id="meta_title" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" minlength="50" maxlength="70">
-                    <div class="muted">Must be between 50 and 70 characters.</div>
-                    @error('meta_title') <div class="error">{{ $message }}</div> @enderror
+
+            <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 24px;">
+                <!-- Section 1: Standard Meta Tags -->
+                <div style="border-bottom: 1px solid var(--seo-sub-border); padding-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span class="material-icons" style="color: var(--muted); font-size: 18px; vertical-align: middle;">search</span>
+                        <h3 style="margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); vertical-align: middle;">Standard Meta Tags</h3>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div class="field" style="margin-bottom: 0;">
+                            <label for="meta_title" style="font-size: 14px;">Meta Title</label>
+                            <input id="meta_title" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" minlength="50" maxlength="70" placeholder="Enter meta title...">
+                            <div class="muted" style="font-size: 12px; margin-top: 4px;">Must be between 50 and 70 characters.</div>
+                            @error('meta_title') <div class="error">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="field" style="margin-bottom: 0;">
+                            <label for="canonical_url" style="font-size: 14px;">Canonical URL</label>
+                            <input id="canonical_url" name="canonical_url" type="url" value="{{ old('canonical_url', $post->canonical_url) }}" placeholder="https://example.com/canonical-url">
+                            @error('canonical_url') <div class="error">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <div class="field" style="margin-top: 16px; margin-bottom: 0;">
+                        <label for="meta_description" style="font-size: 14px;">Meta Description</label>
+                        <textarea id="meta_description" name="meta_description" maxlength="170" placeholder="Brief summary of the page for search engines..." style="min-height: 80px;">{{ old('meta_description', $post->meta_description) }}</textarea>
+                        <div class="muted" style="font-size: 12px; margin-top: 4px;">Best around 140-160 characters.</div>
+                        @error('meta_description') <div class="error">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+                        <div class="field" style="margin-bottom: 0;">
+                            <label for="meta_keywords" style="font-size: 14px;">Meta Keywords</label>
+                            <input id="meta_keywords" name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords) }}" maxlength="255" placeholder="keywords, separated, by, commas">
+                            @error('meta_keywords') <div class="error">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="field" style="margin-bottom: 0;">
+                            <label for="robots" style="font-size: 14px;">Robots</label>
+                            <select id="robots" name="robots">
+                                @foreach (['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'] as $robotsOption)
+                                    <option value="{{ $robotsOption }}" @selected(old('robots', $post->robots ?: 'index,follow') === $robotsOption)>{{ $robotsOption }}</option>
+                                @endforeach
+                            </select>
+                            @error('robots') <div class="error">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
                 </div>
 
-                <div class="field">
-                    <label for="canonical_url">Canonical URL</label>
-                    <input id="canonical_url" name="canonical_url" type="url" value="{{ old('canonical_url', $post->canonical_url) }}">
-                    @error('canonical_url') <div class="error">{{ $message }}</div> @enderror
+                <!-- Section 2: Open Graph (Social Sharing) -->
+                <div style="border-bottom: 1px solid var(--seo-sub-border); padding-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span class="material-icons" style="color: var(--muted); font-size: 18px; vertical-align: middle;">share</span>
+                        <h3 style="margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); vertical-align: middle;">Social Sharing (Open Graph)</h3>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div class="field" style="margin-bottom: 0;">
+                            <label for="og_title" style="font-size: 14px;">Open Graph Title</label>
+                            <input id="og_title" name="og_title" value="{{ old('og_title', $post->og_title) }}" maxlength="95" placeholder="Social media post title...">
+                            @error('og_title') <div class="error">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="field" style="margin-bottom: 0;">
+                            <label for="og_image" style="font-size: 14px;">Open Graph Image URL</label>
+                            <input id="og_image" name="og_image" type="url" value="{{ old('og_image', $post->og_image) }}" placeholder="https://example.com/share-image.jpg">
+                            @error('og_image') <div class="error">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <div class="field" style="margin-top: 16px; margin-bottom: 0;">
+                        <label for="og_description" style="font-size: 14px;">Open Graph Description</label>
+                        <textarea id="og_description" name="og_description" maxlength="200" placeholder="Social media post description..." style="min-height: 80px;">{{ old('og_description', $post->og_description) }}</textarea>
+                        @error('og_description') <div class="error">{{ $message }}</div> @enderror
+                    </div>
                 </div>
-            </div>
 
-            <div class="field">
-                <label for="meta_description">Meta description</label>
-                <textarea id="meta_description" name="meta_description" maxlength="170">{{ old('meta_description', $post->meta_description) }}</textarea>
-                <div class="muted">Best around 140-160 characters.</div>
-                @error('meta_description') <div class="error">{{ $message }}</div> @enderror
-            </div>
+                <!-- Section 3: Schema Markup / JSON-LD -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <span class="material-icons" style="color: var(--muted); font-size: 18px; vertical-align: middle;">code</span>
+                        <h3 style="margin: 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); vertical-align: middle;">Schema JSON-LD</h3>
+                    </div>
 
-            <div class="field">
-                <label for="meta_keywords">Meta keywords</label>
-                <input id="meta_keywords" name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords) }}" maxlength="255">
-                @error('meta_keywords') <div class="error">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="grid">
-                <div class="field">
-                    <label for="og_title">Open Graph title</label>
-                    <input id="og_title" name="og_title" value="{{ old('og_title', $post->og_title) }}" maxlength="95">
-                    @error('og_title') <div class="error">{{ $message }}</div> @enderror
+                    <div class="field" style="margin-bottom: 0;">
+                        <label for="schema_markup" style="font-size: 14px;">Structured Data Schema</label>
+                        @php
+                            $schemaMarkup = old('schema_markup', is_array($post->schema_markup) ? json_encode($post->schema_markup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $post->schema_markup);
+                        @endphp
+                        <textarea id="schema_markup" name="schema_markup" placeholder='{"@context":"https://schema.org","@type":"Article"}' style="font-family: monospace; font-size: 13px; min-height: 120px;">{{ $schemaMarkup }}</textarea>
+                        <div class="muted" style="font-size: 12px; margin-top: 4px;">Valid JSON-LD schema markup block.</div>
+                        @error('schema_markup') <div class="error">{{ $message }}</div> @enderror
+                    </div>
                 </div>
-
-                <div class="field">
-                    <label for="og_image">Open Graph image URL</label>
-                    <input id="og_image" name="og_image" type="url" value="{{ old('og_image', $post->og_image) }}">
-                    @error('og_image') <div class="error">{{ $message }}</div> @enderror
-                </div>
-            </div>
-
-            <div class="field">
-                <label for="og_description">Open Graph description</label>
-                <textarea id="og_description" name="og_description" maxlength="200">{{ old('og_description', $post->og_description) }}</textarea>
-                @error('og_description') <div class="error">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="field">
-                <label for="robots">Robots</label>
-                <select id="robots" name="robots">
-                    @foreach (['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'] as $robotsOption)
-                        <option value="{{ $robotsOption }}" @selected(old('robots', $post->robots ?: 'index,follow') === $robotsOption)>{{ $robotsOption }}</option>
-                    @endforeach
-                </select>
-                @error('robots') <div class="error">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="field">
-                <label for="schema_markup">Schema JSON</label>
-                @php
-                    $schemaMarkup = old('schema_markup', is_array($post->schema_markup) ? json_encode($post->schema_markup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $post->schema_markup);
-                @endphp
-                <textarea id="schema_markup" name="schema_markup" placeholder='{"@@context":"https://schema.org","@@type":"Article"}'>{{ $schemaMarkup }}</textarea>
-                @error('schema_markup') <div class="error">{{ $message }}</div> @enderror
             </div>
         </details>
 
-        <button class="btn" type="submit">Save Post</button>
+        <button class="btn submit-primary" type="submit">{{ $post->exists ? 'Update Post' : 'Save Post' }}</button>
     </form>
 @endsection
 
