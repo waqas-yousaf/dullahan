@@ -179,13 +179,12 @@ Secure the admin login/authentication forms.
   - *Default*: `30000` (30 seconds)
 
 ### 9. Default Administrator Account
-Values used during `php artisan dullahan:install` to initialize the default author.
-- **`admin.name`** (Env: `DULLAHAN_ADMIN_NAME`): Admin full name.
+`php artisan dullahan:install` always prompts interactively for the admin name, email, and password (with confirmation). These values only pre-fill the name/email prompts; the password has no default and must be entered at install time.
+- **`admin.name`** (Env: `DULLAHAN_ADMIN_NAME`): Default shown for the "Super admin full name" prompt.
   - *Default*: `'Dullahan Admin'`
-- **`admin.email`** (Env: `DULLAHAN_ADMIN_EMAIL`): Admin email username.
+- **`admin.email`** (Env: `DULLAHAN_ADMIN_EMAIL`): Default shown for the "Super admin email" prompt.
   - *Default*: `'admin@example.com'`
-- **`admin.password`** (Env: `DULLAHAN_ADMIN_PASSWORD`): Admin initial password.
-  - *Default*: random 16-character password generated at install time and printed once.
+- **`admin.password`** (Env: `DULLAHAN_ADMIN_PASSWORD`): Reserved; not currently read by the installer. The password is always entered interactively.
 
 ### 10. Listing Pagination
 - **`pagination.posts_per_page`**: Limit of posts fetched per page by the public headless API.
