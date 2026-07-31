@@ -1,9 +1,9 @@
 @extends('dullahan::admin.layout', ['title' => $post->exists ? 'Edit Post' : 'New Post'])
 
 @push('head')
-    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@@quilljs/theme-snow@2/dist/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.2/dist/css/quill-blot-formatter2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@@enzedonline/quill-blot-formatter2@3.2/dist/css/quill-blot-formatter2.min.css" rel="stylesheet">
     <style>
         :root {
             --btn-submit: #4f46e5;
@@ -285,7 +285,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.2/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@enzedonline/quill-blot-formatter2@3.2/dist/index.min.js"></script>
     <script>
         const contentInput = document.getElementById('content');
         const form = document.getElementById('dullahan-post-form');
