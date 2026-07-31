@@ -152,8 +152,8 @@
             <div class="grid" style="margin-top:16px;">
                 <div class="field">
                     <label for="meta_title">Meta title</label>
-                    <input id="meta_title" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" maxlength="70">
-                    <div class="muted">Best around 50-60 characters.</div>
+                    <input id="meta_title" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" minlength="50" maxlength="70">
+                    <div class="muted">Must be between 50 and 70 characters.</div>
                     @error('meta_title') <div class="error">{{ $message }}</div> @enderror
                 </div>
 
