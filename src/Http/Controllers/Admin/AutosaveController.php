@@ -51,8 +51,8 @@ class AutosaveController extends Controller
         $post->fill(array_merge([
             'title' => $post->title ?: 'Untitled Draft',
             'content' => $post->content ?: '<p><br></p>',
-            'status' => 'draft',
-            'post_type' => config('dullahan.default_post_type', 'post'),
+            'status' => $post->status ?: 'draft',
+            'post_type' => $post->post_type ?: config('dullahan.default_post_type', 'post'),
         ], array_filter($data, fn ($value) => $value !== null)));
 
         if (! $post->exists) {
