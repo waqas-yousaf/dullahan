@@ -20,8 +20,14 @@ class UploadController extends Controller
 
         $file = $request->file('image');
         $extension = strtolower($file->getClientOriginalExtension());
-        $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', Str::ascii($name)), '-');
+        
+        if ($request->filled('title')) {
+            $safeName = Str::slug($request->input('title'));
+        } else {
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeName = trim(preg_replace('/[^A-Za-z0-9_-]+/', '-', Str::ascii($name)), '-');
+        }
+        
         $filename = now()->format('YmdHis') . '-' . ($safeName ?: 'image') . '.' . $extension;
         $relativePath = trim(config('dullahan.uploads.path', 'uploads/dullahan'), '/');
         $publicPath = public_path($relativePath);

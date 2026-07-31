@@ -43,7 +43,9 @@ class PostController extends Controller
             'title' => $post->title,
             'slug' => $post->slug,
             'post_type' => $post->post_type,
+            'excerpt' => $post->excerpt,
             'featured_image' => $post->featured_image,
+            'featured_image_alt' => $post->featured_image_alt,
             'published_at' => $post->published_at,
             'updated_at' => $post->updated_at,
             'category' => $post->category ? [
@@ -65,8 +67,10 @@ class PostController extends Controller
             'title' => $post->title,
             'slug' => $post->slug,
             'post_type' => $post->post_type,
+            'excerpt' => $post->excerpt,
             'content' => $post->content,
             'featured_image' => $post->featured_image,
+            'featured_image_alt' => $post->featured_image_alt,
             'published_at' => $post->published_at,
             'updated_at' => $post->updated_at,
             'category' => $post->category ? [

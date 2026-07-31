@@ -3,6 +3,7 @@
 @push('head')
     <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.0/dist/css/quill-blot-formatter2.min.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -51,9 +52,15 @@
                     <span id="featured_image_upload_status" class="muted"></span>
                 </div>
                 <div id="featured_image_preview_wrap" style="margin-top:12px;{{ old('featured_image', $post->featured_image) ? '' : 'display:none;' }}">
-                    <img id="featured_image_preview" src="{{ old('featured_image', $post->featured_image) }}" alt="" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid #e5e7eb;border-radius:8px;">
+                    <img id="featured_image_preview" src="{{ old('featured_image', $post->featured_image) }}" alt="{{ old('featured_image_alt', $post->featured_image_alt) }}" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid #e5e7eb;border-radius:8px;">
                 </div>
                 @error('featured_image') <div class="error">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="field">
+                <label for="featured_image_alt">Featured image alt text</label>
+                <input id="featured_image_alt" name="featured_image_alt" type="text" value="{{ old('featured_image_alt', $post->featured_image_alt) }}">
+                @error('featured_image_alt') <div class="error">{{ $message }}</div> @enderror
             </div>
         </div>
 
@@ -111,6 +118,12 @@
                 <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}">
                 @error('published_at') <div class="error">{{ $message }}</div> @enderror
             </div>
+        </div>
+
+        <div class="field">
+            <label for="excerpt">Excerpt</label>
+            <textarea id="excerpt" name="excerpt" placeholder="Brief summary of the post...">{{ old('excerpt', $post->excerpt) }}</textarea>
+            @error('excerpt') <div class="error">{{ $message }}</div> @enderror
         </div>
 
         <div class="field">
@@ -210,6 +223,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.0/dist/index.min.js"></script>
     <script>
         const contentInput = document.getElementById('content');
         const form = document.getElementById('dullahan-post-form');
@@ -227,6 +241,7 @@
         const contentError = document.getElementById('content-client-error');
         const autosaveStatus = document.getElementById('autosave-status');
         const featuredImageInput = document.getElementById('featured_image');
+        const featuredImageAltInput = document.getElementById('featured_image_alt');
         const featuredImageFile = document.getElementById('featured_image_file');
         const featuredImageUpload = document.getElementById('featured_image_upload');
         const featuredImageUploadStatus = document.getElementById('featured_image_upload_status');
@@ -239,6 +254,11 @@
         const autosaveInterval = @json(config('dullahan.autosave.interval_ms', 30000));
         let autosaveTimer = null;
         let autosavePending = false;
+
+        if (typeof QuillBlotFormatter2 !== 'undefined') {
+            QuillBlotFormatter2.default.registerFormats(Quill);
+            Quill.register('modules/blotFormatter2', QuillBlotFormatter2.default);
+        }
 
         const quill = new Quill('#dullahan-editor', {
             theme: 'snow',
@@ -258,6 +278,12 @@
                     ],
                     handlers: {
                         image: imageHandler
+                    }
+                },
+                blotFormatter2: {
+                    image: {
+                        allowAltTitleEdit: true,
+                        registerImageTitleBlot: true
                     }
                 }
             }
@@ -367,6 +393,19 @@
             if (!file) return;
             const formData = new FormData();
             formData.append('image', file);
+
+            const titleInput = document.getElementById('title');
+            const metaTitleInput = document.getElementById('meta_title');
+            let seoTitle = '';
+            if (metaTitleInput && metaTitleInput.value.trim() !== '') {
+                seoTitle = metaTitleInput.value.trim();
+            } else if (titleInput && titleInput.value.trim() !== '') {
+                seoTitle = titleInput.value.trim();
+            }
+            if (seoTitle !== '') {
+                formData.append('title', seoTitle);
+            }
+
             featuredImageUploadStatus.textContent = 'Uploading...';
 
             fetch(uploadUrl, {
@@ -406,6 +445,11 @@
             featuredImagePreview.src = featuredImageInput.value;
             featuredImagePreviewWrap.style.display = featuredImageInput.value ? 'block' : 'none';
         });
+        if (featuredImageAltInput) {
+            featuredImageAltInput.addEventListener('input', () => {
+                featuredImagePreview.alt = featuredImageAltInput.value;
+            });
+        }
 
         form.querySelectorAll('input, select, textarea').forEach(input => {
             if (input !== htmlEditor) {

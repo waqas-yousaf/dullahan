@@ -60,9 +60,12 @@ class SitemapController extends Controller
             return '';
         }
 
+        $caption = $post->featured_image_alt ? ('<image:caption>' . e($post->featured_image_alt) . '</image:caption>') : '';
+
         return '<image:image>'
             . '<image:loc>' . e($image) . '</image:loc>'
             . '<image:title>' . e($post->title) . '</image:title>'
+            . $caption
             . '</image:image>';
     }
 }
