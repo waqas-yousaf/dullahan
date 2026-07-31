@@ -80,6 +80,8 @@ class PostController extends Controller
 
     public function edit(Post $post): View
     {
+        $this->authorizePost($post);
+
         return view('dullahan::admin.posts.form', [
             'post' => $post->load('category'),
             'action' => route('dullahan.admin.posts.update', $post),
@@ -92,6 +94,8 @@ class PostController extends Controller
 
     public function update(StorePostRequest $request, Post $post): RedirectResponse
     {
+        $this->authorizePost($post);
+
         $data = $request->validated();
         $post->fill($data)->save();
 
@@ -100,6 +104,8 @@ class PostController extends Controller
 
     public function destroy(Post $post): RedirectResponse
     {
+        $this->authorizePost($post);
+
         $post->delete();
 
         return redirect()->route('dullahan.admin.posts.index')->with('status', 'Post deleted.');
@@ -137,5 +143,14 @@ class PostController extends Controller
         ]);
 
         return $response;
+    }
+
+    protected function authorizePost(Post $post): void
+    {
+        $user = Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user();
+        
+        if ($user && $user->email !== config('dullahan.admin.email') && $post->author_id !== $user->id) {
+            abort(403, 'You are not authorized to edit this post.');
+        }
     }
 }

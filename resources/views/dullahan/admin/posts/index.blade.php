@@ -101,16 +101,22 @@
                                     <span class="material-icons" style="font-size: 18px;">visibility</span>
                                 </a>
                             @endif
-                            <a class="btn info" href="{{ route('dullahan.admin.posts.edit', $post) }}" title="Edit" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
-                                <span class="material-icons" style="font-size: 18px;">edit</span>
-                            </a>
-                            <form method="post" action="{{ route('dullahan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')" style="margin: 0; display: inline-flex;">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn danger" type="submit" title="Delete" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
-                                    <span class="material-icons" style="font-size: 18px;">delete</span>
-                                </button>
-                            </form>
+                            @php
+                                $currentUser = Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user();
+                                $canEdit = $currentUser && ($currentUser->email === config('dullahan.admin.email') || $post->author_id === $currentUser->id);
+                            @endphp
+                            @if ($canEdit)
+                                <a class="btn info" href="{{ route('dullahan.admin.posts.edit', $post) }}" title="Edit" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 18px;">edit</span>
+                                </a>
+                                <form method="post" action="{{ route('dullahan.admin.posts.destroy', $post) }}" onsubmit="return confirm('Delete this post?')" style="margin: 0; display: inline-flex;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn danger" type="submit" title="Delete" style="padding: 6px 8px; display: inline-flex; align-items: center; justify-content: center;">
+                                        <span class="material-icons" style="font-size: 18px;">delete</span>
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

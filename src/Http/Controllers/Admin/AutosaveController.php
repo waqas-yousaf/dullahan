@@ -15,6 +15,13 @@ class AutosaveController extends Controller
     {
         abort_unless(config('dullahan.autosave.enabled', true), 404);
 
+        if ($post) {
+            $user = Auth::guard(config('dullahan.auth.guard', 'dullahan'))->user();
+            if ($user && $user->email !== config('dullahan.admin.email') && $post->author_id !== $user->id) {
+                abort(403, 'You are not authorized to edit this post.');
+            }
+        }
+
         $data = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('dullahan_posts', 'slug')->ignore($post?->getKey())],

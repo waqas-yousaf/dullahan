@@ -70,7 +70,7 @@ return [
 
     'admin' => [
         'name' => env('DULLAHAN_ADMIN_NAME', 'Dullahan Admin'),
-        'email' => env('DULLAHAN_ADMIN_EMAIL', 'admin@example.com'),
+        'email' => env('DULLAHAN_ADMIN_EMAIL', 'admin@gmail.com'),
         'password' => env('DULLAHAN_ADMIN_PASSWORD'),
     ],
 
