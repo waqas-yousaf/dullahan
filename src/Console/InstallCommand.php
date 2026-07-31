@@ -5,7 +5,6 @@ namespace WaqasYousaf\Dullahan\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use WaqasYousaf\Dullahan\Models\Author;
 
 class InstallCommand extends Command
@@ -30,16 +29,20 @@ class InstallCommand extends Command
         File::ensureDirectoryExists($publicPath, 0755, true);
         @chmod($publicPath, 0755);
 
-        $configuredPassword = config('dullahan.admin.password');
-        $password = $configuredPassword ?: Str::password(16);
+        [$name, $email, $password] = $this->promptSuperAdmin();
 
         $admin = Author::query()->firstOrCreate(
-            ['email' => config('dullahan.admin.email')],
+            ['email' => $email],
             [
-                'name' => config('dullahan.admin.name'),
+                'name' => $name,
                 'password' => Hash::make($password),
             ]
         );
+
+        if (! $admin->wasRecentlyCreated && $admin->name !== $name) {
+            $admin->name = $name;
+            $admin->save();
+        }
 
         $this->newLine();
         $this->info('Dullahan is ready.');
@@ -53,5 +56,38 @@ class InstallCommand extends Command
         $this->line('Uploads path: public/' . $relativePath);
 
         return self::SUCCESS;
+    }
+
+    private function promptSuperAdmin(): array
+    {
+        $name = $this->ask('Super admin full name', config('dullahan.admin.name', 'Dullahan Admin'));
+
+        while (! filled($name)) {
+            $this->error('Full name is required.');
+            $name = $this->ask('Super admin full name', config('dullahan.admin.name', 'Dullahan Admin'));
+        }
+
+        $email = $this->ask('Super admin email', config('dullahan.admin.email', 'admin@example.com'));
+
+        while (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->error('Please enter a valid email address.');
+            $email = $this->ask('Super admin email', config('dullahan.admin.email', 'admin@example.com'));
+        }
+
+        $password = $this->secret('Super admin password');
+        $confirm = $this->secret('Confirm password');
+
+        while (! filled($password) || $password !== $confirm) {
+            if (! filled($password)) {
+                $this->error('Password is required.');
+            } else {
+                $this->error('Passwords do not match.');
+            }
+
+            $password = $this->secret('Super admin password');
+            $confirm = $this->secret('Confirm password');
+        }
+
+        return [$name, $email, $password];
     }
 }

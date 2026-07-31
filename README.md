@@ -67,6 +67,8 @@ Run the installer:
 php artisan dullahan:install
 ```
 
+The command now prompts for the super admin full name, email, and password during installation.
+
 If Artisan does not list `dullahan:install` after installing the package, rebuild Laravel package discovery:
 
 ```bash
