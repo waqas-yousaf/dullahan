@@ -3,7 +3,7 @@
 @push('head')
     <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.0/dist/css/quill-blot-formatter2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.2/dist/css/quill-blot-formatter2.min.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -42,22 +42,23 @@
                 <div class="muted">Leave empty to generate it from the title.</div>
                 @error('slug') <div class="error">{{ $message }}</div> @enderror
             </div>
+        </div>
 
-            <div class="field">
-                <label for="featured_image">Featured image URL</label>
+        <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 16px;">
+            <div class="field" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                <label for="featured_image">Featured image (URL)</label>
                 <input id="featured_image" name="featured_image" type="url" value="{{ old('featured_image', $post->featured_image) }}">
-                <div class="actions" style="margin-top:10px;">
-                    <input id="featured_image_file" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml" style="display:none;">
-                    <button id="featured_image_upload" class="btn secondary" type="button">Upload Featured Image</button>
-                    <span id="featured_image_upload_status" class="muted"></span>
-                </div>
-                <div id="featured_image_preview_wrap" style="margin-top:12px;{{ old('featured_image', $post->featured_image) ? '' : 'display:none;' }}">
-                    <img id="featured_image_preview" src="{{ old('featured_image', $post->featured_image) }}" alt="{{ old('featured_image_alt', $post->featured_image_alt) }}" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid #e5e7eb;border-radius:8px;">
-                </div>
                 @error('featured_image') <div class="error">{{ $message }}</div> @enderror
             </div>
 
-            <div class="field">
+            <div style="margin-bottom: 0; display: flex; align-items: center; gap: 8px; position: relative;">
+                <input id="featured_image_file" type="file" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml" style="display:none;">
+                <button id="featured_image_upload" class="btn secondary" type="button" style="height: 42px; white-space: nowrap;">Upload Image</button>
+                <a id="featured_image_view" class="btn secondary" href="{{ old('featured_image', $post->featured_image) }}" target="_blank" rel="noopener" style="height: 42px; white-space: nowrap; {{ old('featured_image', $post->featured_image) ? '' : 'display: none;' }}">View Image</a>
+                <span id="featured_image_upload_status" class="muted" style="position: absolute; bottom: -20px; left: 0; font-size: 12px; white-space: nowrap;"></span>
+            </div>
+
+            <div class="field" style="flex: 1.5; min-width: 200px; margin-bottom: 0;">
                 <label for="featured_image_alt">Featured image alt text</label>
                 <input id="featured_image_alt" name="featured_image_alt" type="text" value="{{ old('featured_image_alt', $post->featured_image_alt) }}">
                 @error('featured_image_alt') <div class="error">{{ $message }}</div> @enderror
@@ -223,7 +224,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.0/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@enzedonline/quill-blot-formatter2@3.2/dist/index.min.js"></script>
     <script>
         const contentInput = document.getElementById('content');
         const form = document.getElementById('dullahan-post-form');
@@ -245,8 +246,7 @@
         const featuredImageFile = document.getElementById('featured_image_file');
         const featuredImageUpload = document.getElementById('featured_image_upload');
         const featuredImageUploadStatus = document.getElementById('featured_image_upload_status');
-        const featuredImagePreviewWrap = document.getElementById('featured_image_preview_wrap');
-        const featuredImagePreview = document.getElementById('featured_image_preview');
+        const featuredImageView = document.getElementById('featured_image_view');
         const uploadUrl = @json(route('dullahan.admin.uploads.images'));
         let autosaveUrl = @json($post->exists ? route('dullahan.admin.posts.autosave.existing', $post) : route('dullahan.admin.posts.autosave'));
         let postExists = @json($post->exists);
@@ -419,8 +419,10 @@
                 })
                 .then(({ url }) => {
                     featuredImageInput.value = url;
-                    featuredImagePreview.src = url;
-                    featuredImagePreviewWrap.style.display = 'block';
+                    if (featuredImageView) {
+                        featuredImageView.href = url;
+                        featuredImageView.style.display = 'inline-flex';
+                    }
                     featuredImageUploadStatus.textContent = 'Uploaded';
                     markAutosavePending();
                 })
@@ -442,14 +444,11 @@
         featuredImageUpload.addEventListener('click', () => featuredImageFile.click());
         featuredImageFile.addEventListener('change', () => uploadFeaturedImage(featuredImageFile.files[0]));
         featuredImageInput.addEventListener('input', () => {
-            featuredImagePreview.src = featuredImageInput.value;
-            featuredImagePreviewWrap.style.display = featuredImageInput.value ? 'block' : 'none';
+            if (featuredImageView) {
+                featuredImageView.href = featuredImageInput.value;
+                featuredImageView.style.display = featuredImageInput.value ? 'inline-flex' : 'none';
+            }
         });
-        if (featuredImageAltInput) {
-            featuredImageAltInput.addEventListener('input', () => {
-                featuredImagePreview.alt = featuredImageAltInput.value;
-            });
-        }
 
         form.querySelectorAll('input, select, textarea').forEach(input => {
             if (input !== htmlEditor) {
