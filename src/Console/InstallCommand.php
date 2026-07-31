@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use WaqasYousaf\Dullahan\Models\Author;
+use WaqasYousaf\Dullahan\Models\Category;
 
 class InstallCommand extends Command
 {
@@ -43,6 +44,8 @@ class InstallCommand extends Command
             $admin->name = $name;
             $admin->save();
         }
+
+        Category::query()->firstOrCreate(['slug' => 'misc'], ['name' => 'Misc']);
 
         $this->newLine();
         $this->info('Dullahan is ready.');
